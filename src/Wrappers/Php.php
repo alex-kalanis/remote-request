@@ -1,0 +1,29 @@
+<?php
+
+namespace RemoteRequest\Wrappers;
+
+use RemoteRequest;
+
+/**
+ * Properties for query to resource - wrapper for internal calls wit available read and write props
+ */
+class Php extends AWrapper
+{
+    const HOST_MEMORY = 'memory';
+    const HOST_TEMP = 'temp';
+
+    public function getSchemaType(): string
+    {
+        return static::SCHEMA_PHP;
+    }
+
+    public function getPort(): ?int
+    {
+        return null;
+    }
+
+    public function getTimeout(): ?int
+    {
+        return null;
+    }
+}
