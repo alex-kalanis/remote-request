@@ -165,7 +165,7 @@ class Answer extends Protocols\Dummy\Answer
 
     /**
      * Dump all obtained headers - usually for DEVEL
-     * @return string[][]
+     * @return \string[][]
      */
     public function getAllHeaders()
     {

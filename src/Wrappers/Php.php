@@ -5,7 +5,7 @@ namespace RemoteRequest\Wrappers;
 use RemoteRequest;
 
 /**
- * Properties for query to resource - wrapper for internal calls wit available read and write props
+ * Properties for query to resource - wrapper for internal calls with available read and write props
  */
 class Php extends AWrapper
 {

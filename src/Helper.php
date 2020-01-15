@@ -6,8 +6,8 @@ use RemoteRequest\Connection;
 use RemoteRequest\Wrappers;
 
 /**
- * Zjednodusene nacitani ze vzdaleneho stroje pomoci cele sily RemoteRequest a hlavne streamu dole
- * aneb cele prcani s curl patri do /dev/null
+ * Simplified reading from remote machine with a whole power of RemoteRequest and mainly streams underneath
+ * -> throw Curl into /dev/null
  */
 class Helper
 {
@@ -24,7 +24,7 @@ class Helper
 
     /**
      * @param string $link link to remote source (server, page, ...)
-     * @param string|string[] $postContent array(key=>value) for http, string otherwise
+     * @param string|string[] $postContent array(key=>value) for http or fsp, string otherwise
      * @param array $connectionParams overwrite default values for connection
      * @param array $contextParams added to stream context (like skipping ssl checkup)
      * @return string
@@ -127,6 +127,7 @@ class Helper
             case 'tcp':
                 return new Wrappers\Tcp();
             case 'udp':
+            case 'fsp':
                 return new Wrappers\Udp();
             case 'http':
                 return new Wrappers\Tcp();
@@ -156,6 +157,11 @@ class Helper
                 $query->maxLength = $this->connectionParams['maxLength'];
                 $query->body = $this->postContent;
                 return $query;
+//            case 'fsp':
+//                $query = new Protocols\Fsp\Query();
+//                $query->maxLength = $this->connectionParams['maxLength'];
+//                $query->body = $this->postContent;
+//                return $query;
             case 'http':
             case 'https':
                 $query = new Protocols\Http\Query();
@@ -190,6 +196,8 @@ class Helper
             case 'udp':
             case 'file':
                 return new Protocols\Dummy\Answer();
+//            case 'fsp':
+//                return new Protocols\Fsp\Answer();
             case 'http':
             case 'https':
                 return new Protocols\Http\Answer();

@@ -46,11 +46,6 @@ class Query extends Protocols\Dummy\Query implements Connection\ISettings
         $this->addHeader('Connection', 'close');
     }
 
-    public function __toString(): string
-    {
-        return $this->getData();
-    }
-
     public function setMethod(string $method)
     {
         $method = strtoupper($method);
