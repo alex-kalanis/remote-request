@@ -1,8 +1,12 @@
 <?php
 
-use \RemoteRequest\Protocols\Http;
+use RemoteRequest\Connection;
+use RemoteRequest\Protocols\Dummy;
+use RemoteRequest\Protocols\Http;
+use RemoteRequest\RequestException;
+use RemoteRequest\Wrappers;
 
-class TestProcessor extends \RemoteRequest\Connection\Processor
+class TestProcessor extends Connection\Processor
 {
     public function getResponse(): string
     {
@@ -22,6 +26,7 @@ class HttpQueryTest extends CommonTestClass
 {
     /**
      * When the answer is empty
+     * @throws RequestException
      */
     public function testSetsSimple()
     {
@@ -32,6 +37,7 @@ class HttpQueryTest extends CommonTestClass
 
     /**
      * When the answer contains something
+     * @throws RequestException
      */
     public function testSetsBody()
     {
@@ -41,15 +47,15 @@ class HttpQueryTest extends CommonTestClass
     }
 
     /**
-     * @param \RemoteRequest\Connection\Processor $processor cim vrati vzdalena data
-     * @return \RemoteRequest\Protocols\Http\Answer
-     * @throws \RemoteRequest\RequestException
+     * @param Connection\Processor $processor cim vrati vzdalena data
+     * @return Http\Answer
+     * @throws RequestException
      */
-    protected function queryOnMock(\RemoteRequest\Connection\Processor $processor)
+    protected function queryOnMock(Connection\Processor $processor)
     {
-        $processor->setData(new \RemoteRequest\Protocols\Dummy\Query());
-        $processor->setProtocolWrapper(new \RemoteRequest\Wrappers\Tcp());
-        $answer = new \RemoteRequest\Protocols\Http\Answer();
+        $processor->setData(new Dummy\Query());
+        $processor->setProtocolWrapper(new Wrappers\Tcp());
+        $answer = new Http\Answer();
         return $answer->setResponse($processor->getResponse());
     }
 

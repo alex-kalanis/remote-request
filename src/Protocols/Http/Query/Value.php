@@ -14,11 +14,6 @@ class Value
         $this->content = $content;
     }
 
-    public function __toString(): string
-    {
-        return $this->getContent();
-    }
-
     public function setContent($content)
     {
         $this->content = $content;
@@ -27,6 +22,6 @@ class Value
 
     public function getContent(): string
     {
-        return '' . $this->content;
+        return (string)$this->content;
     }
 }

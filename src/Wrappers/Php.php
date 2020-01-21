@@ -12,7 +12,7 @@ class Php extends AWrapper
     const HOST_MEMORY = 'memory';
     const HOST_TEMP = 'temp';
 
-    public function getSchemaType(): string
+    protected function getSchemaType(): string
     {
         return static::SCHEMA_PHP;
     }

@@ -1,8 +1,10 @@
 <?php
 
-use \RemoteRequest\Protocols\Http;
+use RemoteRequest\Connection;
+use RemoteRequest\Protocols\Http;
+use RemoteRequest\Wrappers;
 
-class HttpProcessorMock extends \RemoteRequest\Connection\Processor
+class HttpProcessorMock extends Connection\Processor
 {
     public function getResponseSimple(): string
     {
@@ -50,7 +52,7 @@ class HttpProcessorMock extends \RemoteRequest\Connection\Processor
     }
 }
 
-class ProtocolQueryMock extends \RemoteRequest\Protocols\Http\Query
+class ProtocolQueryMock extends Http\Query
 {
     /**
      * Overwrite because random string in testing does not work
@@ -62,24 +64,26 @@ class ProtocolQueryMock extends \RemoteRequest\Protocols\Http\Query
     }
 }
 
-class HttpProcessingTest extends CommonTestClass
+class HttpProtocolTest extends CommonTestClass
 {
     public function testValueSimple()
     {
-        $libValue1 = new \RemoteRequest\Protocols\Http\Query\Value();
-        $this->assertEquals('', $libValue1);
+        $libValue1 = new Http\Query\Value();
+        $this->assertEquals('', $libValue1->getContent());
+        $libValue1->setContent('poiuz');
+        $this->assertEquals('poiuz', $libValue1->getContent());
         $libValue2 = $this->prepareTestValue('lkjhg');
-        $this->assertEquals('lkjhg', $libValue2);
+        $this->assertEquals('lkjhg', $libValue2->getContent());
     }
 
     public function testValueFile()
     {
-        $libValue1 = new \RemoteRequest\Protocols\Http\Query\File();
-        $this->assertEquals('', $libValue1);
+        $libValue1 = new Http\Query\File();
+        $this->assertEquals('', $libValue1->getContent());
         $this->assertEquals('binary', $libValue1->getFilename());
         $this->assertEquals('octet/stream', $libValue1->getMimeType());
         $libValue2 = $this->prepareTestFile('lkjhgfdsa');
-        $this->assertEquals('lkjhgfdsa', $libValue2);
+        $this->assertEquals('lkjhgfdsa', $libValue2->getContent());
         $this->assertEquals('dummy.txt', $libValue2->getFilename());
         $this->assertEquals('text/plain', $libValue2->getMimeType());
     }
@@ -89,11 +93,30 @@ class HttpProcessingTest extends CommonTestClass
         $lib = $this->prepareQuerySimple();
         $lib->setHost('somewhere.example');
         $lib->setPort(80);
-        $this->assertEquals("GET /example HTTP/1.1\r\nHost: somewhere.example\r\n\r\n", '' . $lib);
+        $this->assertEquals("GET /example HTTP/1.1\r\nHost: somewhere.example\r\n\r\n", $lib->getData());
         $lib->setPort(444);
-        $this->assertEquals("GET /example HTTP/1.1\r\nHost: somewhere.example:444\r\n\r\n", '' . $lib);
+        $this->assertEquals("GET /example HTTP/1.1\r\nHost: somewhere.example:444\r\n\r\n", $lib->getData());
         $lib->setRequestSettings($this->prepareProtocolWrapper('disable.example', 60));
-        $this->assertEquals("GET /example HTTP/1.1\r\nHost: disable.example:60\r\n\r\n", '' . $lib);
+        $this->assertEquals("GET /example HTTP/1.1\r\nHost: disable.example:60\r\n\r\n", $lib->getData());
+        $this->assertEquals("PUT", $lib->setMethod('put')->getMethod());
+        $this->assertEquals("PUT", $lib->setMethod('unknown')->getMethod());
+
+        $this->assertTrue($lib->setMultipart(null)->isInline());
+        $this->assertFalse($lib->setMultipart(null)->isMultipart());
+        $this->assertFalse($lib->setMultipart(true)->isInline());
+        $this->assertTrue($lib->setMultipart(true)->isMultipart());
+        $this->assertFalse($lib->setMultipart(false)->isInline());
+        $this->assertFalse($lib->setMultipart(false)->isMultipart());
+
+        $lib->addHeader('some', 'value');
+        $this->assertContains('some: value', $lib->getData());
+        $lib->removeHeader('some');
+        $this->assertNotContains('some: value', $lib->getData());
+        $sett = new Wrappers\Ssl();
+        $sett->setTarget('elsewhere.example', 2121);
+        $lib->setRequestSettings($sett);
+        $this->assertEquals('elsewhere.example', $lib->getHost());
+        $this->assertEquals(2121, $lib->getPort());
     }
 
     public function testQueryWithInline()
@@ -102,9 +125,9 @@ class HttpProcessingTest extends CommonTestClass
         $lib->setHost('somewhere.example');
         $lib->setPort(80);
         $lib->addValue('foo', 'bar');
-        $this->assertEquals("GET /example?foo=bar HTTP/1.1\r\nHost: somewhere.example\r\n\r\n", '' . $lib);
+        $this->assertEquals("GET /example?foo=bar HTTP/1.1\r\nHost: somewhere.example\r\n\r\n", $lib->getData());
         $lib->setPath('/example?baz=abc');
-        $this->assertEquals("GET /example?baz=abc&foo=bar HTTP/1.1\r\nHost: somewhere.example\r\n\r\n", '' . $lib);
+        $this->assertEquals("GET /example?baz=abc&foo=bar HTTP/1.1\r\nHost: somewhere.example\r\n\r\n", $lib->getData());
     }
 
     public function testQueryWithContent()
@@ -116,15 +139,15 @@ class HttpProcessingTest extends CommonTestClass
         $lib->addValue('foo', 'bar');
         $this->assertEquals(
             "GET /example HTTP/1.1\r\nHost: somewhere.example\r\n"
-            . "Content-Length: 7\r\n\r\nfoo=bar", '' . $lib);
+            . "Content-Length: 7\r\n\r\nfoo=bar", $lib->getData());
         $lib->setPath('/example?baz=abc');
         $this->assertEquals(
             "GET /example?baz=abc HTTP/1.1\r\nHost: somewhere.example\r\n"
-            . "Content-Length: 7\r\n\r\nfoo=bar", '' . $lib);
+            . "Content-Length: 7\r\n\r\nfoo=bar", $lib->getData());
         $lib->addValues(['bar' => 'def', 'bay' => 'ghi']);
         $this->assertEquals(
             "GET /example?baz=abc HTTP/1.1\r\nHost: somewhere.example\r\n"
-            . "Content-Length: 23\r\n\r\nfoo=bar&bar=def&bay=ghi", '' . $lib);
+            . "Content-Length: 23\r\n\r\nfoo=bar&bar=def&bay=ghi", $lib->getData());
     }
 
     public function testQueryWithContentPost()
@@ -137,17 +160,22 @@ class HttpProcessingTest extends CommonTestClass
         $this->assertEquals(
             "POST /example HTTP/1.1\r\nHost: somewhere.example\r\n"
             . "Content-Length: 7\r\nContent-Type: application/x-www-form-urlencoded\r\n\r\n"
-            . "foo=bar", '' . $lib);
+            . "foo=bar", $lib->getData());
         $lib->setPath('/example?baz=abc');
         $this->assertEquals(
             "POST /example?baz=abc HTTP/1.1\r\nHost: somewhere.example\r\n"
             . "Content-Length: 7\r\nContent-Type: application/x-www-form-urlencoded\r\n\r\n"
-            . "foo=bar", '' . $lib);
+            . "foo=bar", $lib->getData());
         $lib->addValue('bar', 'def');
         $this->assertEquals(
             "POST /example?baz=abc HTTP/1.1\r\nHost: somewhere.example\r\n"
             . "Content-Length: 15\r\nContent-Type: application/x-www-form-urlencoded\r\n\r\n"
-            . "foo=bar&bar=def", '' . $lib);
+            . "foo=bar&bar=def", $lib->getData());
+        $lib->removeValue('bar');
+        $this->assertEquals(
+            "POST /example?baz=abc HTTP/1.1\r\nHost: somewhere.example\r\n"
+            . "Content-Length: 7\r\nContent-Type: application/x-www-form-urlencoded\r\n\r\n"
+            . "foo=bar", $lib->getData());
     }
 
     public function testQueryWithContentFiles()
@@ -159,7 +187,7 @@ class HttpProcessingTest extends CommonTestClass
             "GET /example HTTP/1.1\r\nHost: somewhere.example:512\r\nContent-Length: 202\r\n\r\n"
             . "----PHPFSock--\r\nContent-Disposition: form-data; name=\"foo\"\r\n\r\nbar\r\n"
             . "----PHPFSock--\r\nContent-Disposition: form-data; name=\"up\"; filename=\"dummy.txt\"\r\nContent-Type: text/plain\r\n\r\nmnbvcx\r\n"
-            . "----PHPFSock----\r\n", '' . $lib);
+            . "----PHPFSock----\r\n", $lib->getData());
     }
 
     public function testAnswerSimple()
@@ -186,6 +214,13 @@ class HttpProcessingTest extends CommonTestClass
         $this->assertEquals('abcdefghijkl', $lib->getContent());
         $this->assertEquals('text/plain', $lib->getHeader('Content-Type'));
         $this->assertEquals('Closed', $lib->getHeader('Connection'));
+        $this->assertEquals('unknown', $lib->getHeader('what', 'unknown'));
+
+        $this->assertNotEmpty($lib->getHeaders('Connection'));
+        $this->assertEmpty($lib->getHeaders('unknown'));
+        $this->assertArrayHasKey('Connection', $lib->getAllHeaders());
+        $this->assertArrayNotHasKey('unknown', $lib->getAllHeaders());
+        $this->assertFalse($lib->isSuccessful());
     }
 
     public function testAnswerChunked()
@@ -222,17 +257,17 @@ class HttpProcessingTest extends CommonTestClass
 
     protected function prepareAnswerSimple(string $content)
     {
-        return (new \RemoteRequest\Protocols\Http\Answer())->setResponse($content);
+        return (new Http\Answer())->setResponse($content);
     }
 
     protected function prepareTestValue($content)
     {
-        return new \RemoteRequest\Protocols\Http\Query\Value($content);
+        return new Http\Query\Value($content);
     }
 
     protected function prepareTestFile($content)
     {
-        $libValue = new \RemoteRequest\Protocols\Http\Query\File($content);
+        $libValue = new Http\Query\File($content);
         $libValue->filename = 'dummy.txt';
         $libValue->mime = 'text/plain';
         return $libValue;
@@ -240,7 +275,7 @@ class HttpProcessingTest extends CommonTestClass
 
     protected function prepareProtocolWrapper(string $host = 'unable.example', int $port = 80)
     {
-        $request = new \RemoteRequest\Wrappers\Tcp();
+        $request = new Wrappers\Tcp();
         return $request->setTarget($host, $port);
     }
 }

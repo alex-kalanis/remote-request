@@ -10,6 +10,12 @@ use RemoteRequest\Wrappers\AWrapper;
  */
 class Fsocket extends APointer
 {
+    /**
+     * @param AWrapper $protocolWrapper
+     * @return false|resource
+     * @throws RequestException
+     * @codeCoverageIgnore because accessing remote source
+     */
     public function getRemotePointer(AWrapper $protocolWrapper)
     {
         // Make the request to the server

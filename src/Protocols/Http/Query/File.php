@@ -13,11 +13,11 @@ class File extends Value
 
     public function getFilename(): string
     {
-        return '' . $this->filename;
+        return (string)$this->filename;
     }
 
     public function getMimeType(): string
     {
-        return '' . $this->mime;
+        return (string)$this->mime;
     }
 }

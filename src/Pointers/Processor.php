@@ -27,6 +27,7 @@ class Processor
      * @param $filePointer
      * @return $this
      * @throws RemoteRequest\RequestException
+     * @codeCoverageIgnore because accessing remote resources
      */
     public function processPointer($filePointer)
     {

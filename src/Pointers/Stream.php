@@ -20,6 +20,12 @@ class Stream extends APointer
         return $this;
     }
 
+    /**
+     * @param AWrapper $protocolWrapper
+     * @return bool|resource
+     * @throws RequestException
+     * @codeCoverageIgnore because accessing remote source
+     */
     public function getRemotePointer(AWrapper $protocolWrapper)
     {
         // Make the request to the server

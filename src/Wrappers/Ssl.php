@@ -9,7 +9,7 @@ use RemoteRequest;
  */
 class Ssl extends AWrapper
 {
-    public function getSchemaType(): string
+    protected function getSchemaType(): string
     {
         return static::SCHEMA_SSL;
     }

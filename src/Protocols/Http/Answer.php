@@ -57,6 +57,7 @@ class Answer extends Protocols\Dummy\Answer
      * Due changes by content encoding there is a way to expand to the original content
      * @param string $content
      * @link https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Encoding
+     * @-codeCoverageIgnore why usage not found?!
      */
     protected function parseBody(string $content): void
     {
@@ -123,6 +124,8 @@ class Answer extends Protocols\Dummy\Answer
      * Unzip zipped content - Lempel-Ziv coding (LZ77); contains crc32
      * @param string $content
      * @return string
+     * search and add zipped content first
+     * @codeCoverageIgnore
      */
     protected function parseZipped(string $content): string
     {
@@ -133,6 +136,8 @@ class Answer extends Protocols\Dummy\Answer
      * Unzip zipped content - Lempel-Ziv-Welch (LZW)
      * @param string $content
      * @return string
+     * search and add compressed content first
+     * @codeCoverageIgnore
      */
     protected function parseCompressed(string $content): string
     {

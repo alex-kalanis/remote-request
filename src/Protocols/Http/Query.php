@@ -166,7 +166,7 @@ class Query extends Protocols\Dummy\Query implements Connection\ISettings
      */
     public function addValue(string $key, $value)
     {
-        $this->content[$key] = ($value instanceof Query\Value) ? $value : new Query\Value('' . $value);
+        $this->content[$key] = ($value instanceof Query\Value) ? $value : new Query\Value((string)$value);
         return $this;
     }
 
@@ -290,10 +290,10 @@ class Query extends Protocols\Dummy\Query implements Connection\ISettings
                 $filename = empty($value->getFilename()) ? '' : '; filename="' . urlencode($value->getFilename()) . '"';
                 $tempContent .= 'Content-Disposition: form-data; name="' . urlencode($key) . '"' . $filename . Http::DELIMITER;
                 $tempContent .= 'Content-Type: ' . $value->getMimeType() . Http::DELIMITER . Http::DELIMITER;
-                $tempContent .= $value . Http::DELIMITER;
+                $tempContent .= $value->getContent() . Http::DELIMITER;
             } else {
                 $tempContent .= 'Content-Disposition: form-data; name="' . urlencode($key) . '"' . Http::DELIMITER . Http::DELIMITER;
-                $tempContent .= $value . Http::DELIMITER;
+                $tempContent .= $value->getContent() . Http::DELIMITER;
             }
         }
         $tempContent .= '--' . $this->boundary . '--' . Http::DELIMITER;
@@ -354,8 +354,8 @@ class Query extends Protocols\Dummy\Query implements Connection\ISettings
      */
     protected function getSimpleRequest(): string
     {
-        return implode('&', array_map(function ($key, $value) {
-            return sprintf('%s=%s', urlencode($key), urlencode($value));
+        return implode('&', array_map(function ($key, Http\Query\Value $value) {
+            return sprintf('%s=%s', urlencode($key), urlencode($value->getContent()));
         }, array_keys($this->content), array_values($this->content)));
     }
 }

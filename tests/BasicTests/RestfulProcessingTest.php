@@ -41,13 +41,13 @@ class RestfulProcessingTest extends CommonTestClass
         $lib->addValues(['foo' => 'bar', 'abc' => 'def',]);
 
         $this->assertEquals("GET /example HTTP/1.1\r\nHost: somewhere.example\r\nContent-Length: 25\r\n\r\n"
-            . '{"foo":"bar","abc":"def"}', '' . $lib);
+            . '{"foo":"bar","abc":"def"}', $lib->getData());
         $lib->setPort(444);
         $this->assertEquals("GET /example HTTP/1.1\r\nHost: somewhere.example:444\r\nContent-Length: 25\r\n\r\n"
-            . '{"foo":"bar","abc":"def"}', '' . $lib);
+            . '{"foo":"bar","abc":"def"}', $lib->getData());
         $lib->setPath('/example?baz=abc');
         $this->assertEquals("GET /example?baz=abc HTTP/1.1\r\nHost: somewhere.example:444\r\nContent-Length: 25\r\n\r\n"
-            . '{"foo":"bar","abc":"def"}', '' . $lib);
+            . '{"foo":"bar","abc":"def"}', $lib->getData());
     }
 
     public function testQueryWithContentFiles()
@@ -57,11 +57,11 @@ class RestfulProcessingTest extends CommonTestClass
             ->addValues(['foo' => 'bar', 'up' => $this->prepareTestFile('mnbvcx')]);
         $this->assertEquals(
             "GET /example HTTP/1.1\r\nHost: somewhere.example:512\r\nContent-Length: 105\r\n\r\n"
-            . '{"foo":"bar","up":{"type":"file","filename":"dummy.txt","mimetype":"text\/plain","content64":"bW5idmN4"}}', '' . $lib);
+            . '{"foo":"bar","up":{"type":"file","filename":"dummy.txt","mimetype":"text\/plain","content64":"bW5idmN4"}}', $lib->getData());
         $lib->setPath('/example?baz=abc');
         $this->assertEquals(
             "GET /example?baz=abc HTTP/1.1\r\nHost: somewhere.example:512\r\nContent-Length: 105\r\n\r\n"
-            . '{"foo":"bar","up":{"type":"file","filename":"dummy.txt","mimetype":"text\/plain","content64":"bW5idmN4"}}', '' . $lib);
+            . '{"foo":"bar","up":{"type":"file","filename":"dummy.txt","mimetype":"text\/plain","content64":"bW5idmN4"}}', $lib->getData());
     }
 
     public function testAnswerSimple()

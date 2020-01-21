@@ -95,9 +95,9 @@ Variant for UDP
     );
 ```
 
-Thanks to inheritance it's possible to make tons of interesting changes. For change targeting
-it's possible to set it directly or make a child and set connection params there. Next - there
-is possible by only exchange of result classes process XML or JSON.
+Thanks to the inheritance it's possible to make a tons of interesting changes. For change
+targeting it's possible to set it directly or make a child and set connection params there.
+Next - there is possible by only exchange of result classes process XML or JSON.
 
 Operator (both FSocket and Stream) send agent "php-agent/1.3", but it is also possible
 to change it.

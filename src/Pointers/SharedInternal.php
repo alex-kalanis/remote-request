@@ -14,6 +14,12 @@ class SharedInternal extends APointer
     /** @var resource|null */
     protected $resourcePointer = null;
 
+    /**
+     * @param AWrapper $protocolWrapper
+     * @return bool|resource|null
+     * @throws RequestException
+     * @codeCoverageIgnore because accessing volume
+     */
     public function getRemotePointer(AWrapper $protocolWrapper)
     {
         if (is_null($this->resourcePointer)) {

@@ -9,7 +9,7 @@ use RemoteRequest;
  */
 class Tcp extends AWrapper
 {
-    public function getSchemaType(): string
+    protected function getSchemaType(): string
     {
         return static::SCHEMA_TCP;
     }

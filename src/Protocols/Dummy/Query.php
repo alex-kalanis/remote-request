@@ -12,7 +12,7 @@ class Query implements Connection\IQuery
     public $body = '';
     public $maxLength = null;
 
-    public function setExpectedAnswerSize(int $maxLength = null)
+    public function setExpectedAnswerSize(?int $maxLength = null)
     {
         $this->maxLength = !is_null($maxLength) ? $maxLength : $this->maxLength;
         return $this;

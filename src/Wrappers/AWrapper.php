@@ -26,7 +26,7 @@ abstract class AWrapper implements RemoteRequest\Connection\ISettings
     /** @var int */
     protected $timeout = 30;
 
-    abstract public function getSchemaType(): string;
+    abstract protected function getSchemaType(): string;
 
     public function setTarget(string $host = null, int $port = null, int $timeout = null)
     {
@@ -73,7 +73,7 @@ abstract class AWrapper implements RemoteRequest\Connection\ISettings
      * default behavior falls into TCP by PHP
      * @return string
      */
-    public function getSchemaProtocol(): string
+    protected function getSchemaProtocol(): string
     {
         return in_array($this->getSchemaType(), [
                 static::SCHEMA_FILE,
@@ -87,9 +87,14 @@ abstract class AWrapper implements RemoteRequest\Connection\ISettings
         ;
     }
 
-    public static function getWrapper(int $type): AWrapper
+    /**
+     * @param string $schema
+     * @return AWrapper
+     * @throws RemoteRequest\RequestException
+     */
+    public static function getWrapper(string $schema): AWrapper
     {
-        switch ($type) {
+        switch ($schema) {
             case static::SCHEMA_FILE:
                 return new File();
             case static::SCHEMA_PHP:
