@@ -19,6 +19,7 @@ class Helper
         'method' => 'get',
         'multipart' => false,
         'permanent' => false,
+        'secret' => '',
     ];
     protected $contextParams = [];
 
@@ -157,11 +158,12 @@ class Helper
                 $query->maxLength = $this->connectionParams['maxLength'];
                 $query->body = $this->postContent;
                 return $query;
-//            case 'fsp':
-//                $query = new Protocols\Fsp\Query();
-//                $query->maxLength = $this->connectionParams['maxLength'];
-//                $query->body = $this->postContent;
-//                return $query;
+            case 'fsp':
+                $query = new Protocols\Fsp\Query();
+                $query->XheadCommand = $this->connectionParams['method'];
+                $query->setKey((int)$this->connectionParams['secret']);
+                $query->body = $this->postContent;
+                return $query;
             case 'http':
             case 'https':
                 $query = new Protocols\Http\Query();
@@ -196,8 +198,8 @@ class Helper
             case 'udp':
             case 'file':
                 return new Protocols\Dummy\Answer();
-//            case 'fsp':
-//                return new Protocols\Fsp\Answer();
+            case 'fsp':
+                return new Protocols\Fsp\Answer();
             case 'http':
             case 'https':
                 return new Protocols\Http\Answer();

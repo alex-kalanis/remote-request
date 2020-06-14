@@ -1,8 +1,11 @@
 <?php
 
-use \RemoteRequest\Protocols\Http;
+use RemoteRequest\Connection;
+use RemoteRequest\Protocols\Http;
+use RemoteRequest\Protocols\Restful;
+use RemoteRequest\Wrappers;
 
-class RestfulProcessorMock extends \RemoteRequest\Connection\Processor
+class RestfulProcessorMock extends Connection\Processor
 {
     public function getResponseSimple(): string
     {
@@ -27,7 +30,7 @@ class RestfulProcessorMock extends \RemoteRequest\Connection\Processor
     }
 }
 
-class RestProtocolQueryMock extends \RemoteRequest\Protocols\Restful\Query
+class RestProtocolQueryMock extends Restful\Query
 {
 }
 
@@ -106,17 +109,17 @@ class RestfulProcessingTest extends CommonTestClass
 
     protected function prepareAnswerSimple(string $content)
     {
-        return (new \RemoteRequest\Protocols\Restful\Answer())->setResponse($content);
+        return (new Restful\Answer())->setResponse($content);
     }
 
     protected function prepareTestValue($content)
     {
-        return new \RemoteRequest\Protocols\Http\Query\Value($content);
+        return new Http\Query\Value($content);
     }
 
     protected function prepareTestFile($content)
     {
-        $libValue = new \RemoteRequest\Protocols\Http\Query\File($content);
+        $libValue = new Http\Query\File($content);
         $libValue->filename = 'dummy.txt';
         $libValue->mime = 'text/plain';
         return $libValue;
@@ -124,7 +127,7 @@ class RestfulProcessingTest extends CommonTestClass
 
     protected function prepareProtocolWrapper(string $host = 'unable.example', int $port = 80)
     {
-        $request = new \RemoteRequest\Wrappers\Tcp();
+        $request = new Wrappers\Tcp();
         return $request->setTarget($host, $port);
     }
 }
