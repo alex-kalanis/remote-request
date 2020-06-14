@@ -1,6 +1,6 @@
 <?php
 
-namespace RemoteRequest\Protocols\Fsp;
+namespace RemoteRequest\Protocols\Fsp\Traits;
 
 /**
  * Process checksums

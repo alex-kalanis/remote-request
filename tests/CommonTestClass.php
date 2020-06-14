@@ -1,5 +1,9 @@
 <?php
 
+function fspMakeDummyQuery(array $values) {
+    return implode('', array_map('chr', $values));
+}
+
 class CommonTestClass extends \PHPUnit\Framework\TestCase
 {
 //    public function providerBasic()

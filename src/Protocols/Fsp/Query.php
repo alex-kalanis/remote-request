@@ -5,18 +5,18 @@ namespace RemoteRequest\Protocols\Fsp;
 use RemoteRequest\Protocols;
 
 /**
- * Simple FSP query to remote source
+ * Simple FSP query to remote source - create packet
  */
 class Query extends Protocols\Dummy\Query
 {
-    use THeader;
-    use TChecksum;
+    use Traits\THeader;
+    use Traits\TChecksum;
 
     protected $headCommand = 0;
     protected $headServerKey = 0;
     protected $headSequence = 0;
     protected $headFilePosition = 0;
-    public $contentXtraData = '';
+    protected $contentExtraData = '';
 
     public function setKey(int $key = 0)
     {
@@ -30,39 +30,21 @@ class Query extends Protocols\Dummy\Query
         return $this;
     }
 
-    /**
-     * @return $this
-     * @codeCoverageIgnore
-     */
-    public function wantVersion()
+    public function setCommand(int $command)
     {
-        $this->headCommand = Protocols\Fsp::CC_VERSION;
+        $this->headCommand = $command;
         return $this;
     }
 
-    /**
-     * @return $this
-     * @codeCoverageIgnore
-     */
-    public function wantError()
+    public function setData(string $data): self
     {
-        $this->headCommand = Protocols\Fsp::CC_ERR;
+        $this->body = $data;
         return $this;
     }
 
-    /**
-     * @return $this
-     * @codeCoverageIgnore
-     */
-    public function wantFile()
+    public function setExtraData(string $extraData): self
     {
-        $this->headCommand = Protocols\Fsp::CC_GET_FILE;
-        return $this;
-    }
-
-    public function wantDir()
-    {
-        $this->headCommand = Protocols\Fsp::CC_GET_DIR;
+        $this->contentExtraData = $extraData;
         return $this;
     }
 
@@ -104,6 +86,6 @@ class Query extends Protocols\Dummy\Query
 
     protected function getExtraData(): string
     {
-        return (string)$this->contentXtraData;
+        return (string)$this->contentExtraData;
     }
 }

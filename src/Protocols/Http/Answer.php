@@ -68,10 +68,14 @@ class Answer extends Protocols\Dummy\Answer
         $encode = $this->encodings($this->getHeader('Content-Encoding'));
         foreach ($encode as $coding) {
             if (in_array($coding, ['gzip', 'x-gzip'])) {
+                // @codeCoverageIgnoreStart
                 $content = $this->parseZipped($content);
+                // @codeCoverageIgnoreEnd
             }
             if (in_array($coding, ['compress', 'x-compress'])) {
+                // @codeCoverageIgnoreStart
                 $content = $this->parseCompressed($content);
+                // @codeCoverageIgnoreEnd
             }
             if (in_array($coding, ['deflate', 'x-deflate'])) {
                 $content = $this->parseDeflated($content);

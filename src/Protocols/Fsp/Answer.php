@@ -6,12 +6,12 @@ use RemoteRequest\Protocols;
 use RemoteRequest\RequestException;
 
 /**
- * Process server's answer - FSP
+ * Process server's answer - FSP packet
  */
 class Answer extends Protocols\Dummy\Answer
 {
-    use THeader;
-    use TChecksum;
+    use Traits\THeader;
+    use Traits\TChecksum;
 
     protected $headChecksum = 0;
     protected $headCommand = 0;
@@ -22,6 +22,8 @@ class Answer extends Protocols\Dummy\Answer
     protected $header = '';
     protected $content = '';
     protected $extra = '';
+
+    public $canDump = false; // for dump info about checksums
 
     /**
      * @return Answer
@@ -59,12 +61,18 @@ class Answer extends Protocols\Dummy\Answer
     }
 
     /**
+     * Generate server checksum from data and compare them
      * @throws RequestException
      */
     protected function checkResponse(): void
     {
-        // generate server checksum from data and compare them
-        if ($this->computeCheckSum() != $this->headChecksum) {
+        // @codeCoverageIgnoreStart
+        // necessary dumper - who can math checksums from their head?
+        if ($this->canDump) {
+            var_dump(['chksums', 'calc' => $this->computeCheckSum(), 'got' => $this->headChecksum ]);
+        }
+        // @codeCoverageIgnoreEnd
+        if ($this->computeCheckSum() != $this->headChecksum ) {
             throw new RequestException('Invalid checksum');
         }
     }
@@ -109,12 +117,4 @@ class Answer extends Protocols\Dummy\Answer
     {
         return (string)$this->extra;
     }
-
-//    public function getObject()
-//    {
-//        switch ($this->headCommand) {
-//            default:
-//                return Answer\DefaultAnswer($this);
-//        }
-//    }
 }

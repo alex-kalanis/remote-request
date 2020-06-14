@@ -8,6 +8,7 @@ use RemoteRequest;
  * Properties for query to remote server - method FSP
  * @link http://fsp.sourceforge.net
  * @link http://fsp.sourceforge.net/doc/PROTOCOL.txt
+ * @link https://sourceforge.net/p/fsp/code/ci/master/tree/doc/PROTOCOL
  */
 class Fsp extends Udp
 {
@@ -35,18 +36,18 @@ class Fsp extends Udp
     const CC_LIMIT     = 0x80;
     const CC_TEST      = 0x81;
 
-    # RDIRENT Type Codes
+    # RDIRENT Type Codes - directory blocks
     const RDTYPE_END    = 0x00;
     const RDTYPE_FILE   = 0x01;
     const RDTYPE_DIR    = 0x02;
     const RDTYPE_SKIP   = 0x2a;
 
-    const FLAG_VERSION_LOGGING = 1;
-    const FLAG_VERSION_READ_ONLY = 2;
-    const FLAG_VERSION_REVERSE_LOOKUP = 4;
-    const FLAG_VERSION_PRIVATE = 8;
-    const FLAG_VERSION_THRUPUT = 16;
-    const FLAG_VERSION_ACCEPT_XTRA = 32;
+//    const FLAG_VERSION_LOGGING = 1;
+//    const FLAG_VERSION_READ_ONLY = 2;
+//    const FLAG_VERSION_REVERSE_LOOKUP = 4;
+//    const FLAG_VERSION_PRIVATE = 8;
+//    const FLAG_VERSION_THRUPUT = 16;
+//    const FLAG_VERSION_ACCEPT_XTRA = 32;
 
     protected function loadQuery(): RemoteRequest\Protocols\Dummy\Query
     {
