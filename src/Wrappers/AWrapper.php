@@ -18,6 +18,7 @@ abstract class AWrapper implements RemoteRequest\Connection\ISettings
     const SCHEMA_UDP = 'udp';
     const SCHEMA_UDP6 = 'udp6'; // prepared
     const SCHEMA_SSL = 'ssl';
+    const SCHEMA_SCTP = 'sctp'; // available only somewhere
 
     /** @var string */
     protected $host = '';
@@ -81,6 +82,7 @@ abstract class AWrapper implements RemoteRequest\Connection\ISettings
                 static::SCHEMA_TCP,
                 static::SCHEMA_UDP,
                 static::SCHEMA_SSL,
+                static::SCHEMA_SCTP,
             ])
             ? ($this->getSchemaType() . '://')
             : ''
@@ -105,6 +107,8 @@ abstract class AWrapper implements RemoteRequest\Connection\ISettings
                 return new Udp();
             case static::SCHEMA_SSL:
                 return new Ssl();
+            case static::SCHEMA_SCTP:
+                return new Sctp();
             default:
                 throw new RemoteRequest\RequestException('Unknown packet wrapper type');
         }
