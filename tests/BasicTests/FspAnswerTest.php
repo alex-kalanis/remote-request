@@ -33,17 +33,20 @@ class FspAnswerMock extends Connection\Processor
         ]);
     }
 
-    /**
-     * What we send into server
-     * @return string
-     */
-    public function getResponseStructureForDir(): string
+    public function getResponseDir(): string
     {
         return fspMakeDummyQuery([
+            0x41, # CC_GET_DIR
+            0x2E, # checksum
+            0x01, 0x02, # key
+            0x03, 0x04, # sequence
+            0x00, 0x19, # data_length
+            0x00, 0x00, 0x00, 0x0C, # position
+            # content...
             0x12, 0x34, 0x56, 0x78, # time
             0x00, 0x00, 0x04, 0x00, # size
             0x01,                   # type
-            'foobar/baz', 0x00      # path - "foobar/baz\0"
+            'foo-bar-baz.txt', 0x00 # filename - "foo-bar-baz\0"
         ]);
     }
 
@@ -200,6 +203,22 @@ class FspAnswerTest extends CommonTestClass
         $this->assertTrue($process->canThruControl());
         $this->assertEquals(1024, $process->thruControlMaxAllowed());
         $this->assertEquals(512, $process->thruControlMaxPayload());
+    }
+
+    /**
+     * @throws \RemoteRequest\RequestException
+     */
+    public function testAnswerDir()
+    {
+        $mock = new FspAnswerMock();
+        $read = new Fsp\Answer();
+        $read->setResponse($mock->getResponseDir())->process();
+        $process = Fsp\Answer\AnswerFactory::getObject($read)->process();
+        /** @var Fsp\Answer\GetDir $process */
+        $this->assertEquals('foo-bar-baz.txt', $process->getFileName());
+        $this->assertEquals(305419896, $process->getTime());
+        $this->assertEquals(1024, $process->getSize());
+        $this->assertEquals(Fsp::RDTYPE_FILE, $process->getType());
     }
 
     /**

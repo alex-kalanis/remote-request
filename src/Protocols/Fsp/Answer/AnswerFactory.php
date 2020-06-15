@@ -14,8 +14,8 @@ class AnswerFactory
         switch ($answer->getCommand()) {
             case Fsp::CC_VERSION:
                 return new Version($answer);
-//            case Fsp::CC_GET_DIR:
-//                return new GetDir($answer); // !!
+            case Fsp::CC_GET_DIR:
+                return new GetDir($answer);
             case Fsp::CC_GET_FILE:
             case Fsp::CC_GRAB_FILE:
                 return new GetFile($answer);

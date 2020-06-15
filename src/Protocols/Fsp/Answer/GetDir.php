@@ -2,38 +2,47 @@
 
 namespace RemoteRequest\Protocols\Fsp\Answer;
 
+use RemoteRequest\Protocols\Fsp;
+
 /**
  * Process Get Directory
  */
 class GetDir extends AAnswer
 {
     protected $position = 0;
-    protected $listing = [];
+    protected $name = '';
+    protected $time = 0;
+    protected $size = 0;
+    protected $type = null;
 
     public function process(): parent
     {
         $this->position = $this->answer->getFilePosition();
-        $this->listing = $this->parseStructure($this->answer->getContent());
-        /*
-            struct RDIRENT {
-                struct HEADER {
-                    long  time;
-                    long  size;
-                    byte  type;
-                }
-                ASCIIZ name;
-            }
-         */
+        $data = $this->answer->getContent();
+        $this->time = Fsp\Strings::mb_ord(substr($data, 0, 4));
+        $this->size = Fsp\Strings::mb_ord(substr($data, 4, 4));
+        $this->type = Fsp\Strings::mb_ord($data[8]);
+        $this->name = substr($data, 9, -1);
         return $this;
     }
 
-    protected function parseStructure(string $data): array
+    public function getFileName(): string
     {
-        return [];
-//        while (strlen($data) >= _DIRHEADER_LEN + 1) {
-//            $dirent = RDirent($data);
-//            $data = $data[$dirent.packed_size():];
-//            yield $dirent;
-//        }
+        return $this->name;
+    }
+
+    public function getTime(): int
+    {
+        return $this->time;
+    }
+
+    public function getSize(): int
+    {
+        return $this->size;
+    }
+
+    public function getType(): ?int
+    {
+        return $this->type;
     }
 }
