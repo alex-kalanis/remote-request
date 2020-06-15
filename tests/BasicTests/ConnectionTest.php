@@ -112,6 +112,37 @@ class ConnectionTest extends CommonTestClass
         $this->assertEquals('Hello.', $this->queryOnMock('Hello.'));
     }
 
+    /**
+     * @expectedException \RemoteRequest\RequestException
+     */
+    public function testSetsNoSocket()
+    {
+        $this->queryOnMock(null);
+    }
+
+    public function testSetsLongData()
+    {
+        $content = str_repeat('ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz', 200);
+        $this->assertEquals($content, $this->queryOnMock($content));
+    }
+
+    /**
+     * @throws RequestException
+     */
+    public function testSetsLongDataCut()
+    {
+        $content = str_repeat('ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz', 100);
+        $query = new Protocols\Dummy\Query();
+        $query->body = $content;
+        $query->maxLength = 2000;
+        $wrapper = new Wrappers\Php();
+        $wrapper->setTarget(Wrappers\Php::HOST_MEMORY);
+        $processor = new ConnectProcessorMock(new Pointers\SharedInternal());
+        $processor->setProtocolWrapper($wrapper);
+        $processor->setData($query);
+        $this->assertEquals(substr($content, 0, 2000), $processor->getResponse());
+    }
+
     public function testPointersInit()
     {
         $this->assertInstanceOf('\RemoteRequest\Pointers\SharedInternal', Pointers\APointer::getPointer(Pointers\APointer::POINTER_INTERNAL));
@@ -158,19 +189,21 @@ class ConnectionTest extends CommonTestClass
     }
 
     /**
-     * @param string $message what to send to remote machine
+     * @param string|null $message what to send to remote machine
      * @return string
      * @throws RequestException
      */
-    protected function queryOnMock(string $message)
+    protected function queryOnMock(?string $message)
     {
-        $query = new Protocols\Dummy\Query();
-        $query->body = $message;
         $wrapper = new Wrappers\Php();
         $wrapper->setTarget(Wrappers\Php::HOST_MEMORY);
         $processor = new ConnectProcessorMock(new Pointers\SharedInternal());
         $processor->setProtocolWrapper($wrapper);
-        $processor->setData($query);
+        if (!is_null($message)) {
+            $query = new Protocols\Dummy\Query();
+            $query->body = $message;
+            $processor->setData($query);
+        }
         return $processor->getResponse();
     }
 }
