@@ -24,7 +24,7 @@ trait THeader
     protected function headerFill(int $input, int $length): string
     {
         return str_pad(
-            Fsp\Strings::mb_chr($input),
+            substr(Fsp\Strings::mb_chr($input), 0, $length),
             $length,
             chr(0),
             STR_PAD_LEFT);

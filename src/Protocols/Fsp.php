@@ -26,9 +26,9 @@ class Fsp extends Udp
     const CC_DEL_DIR   = 0x46;
     const CC_GET_PRO   = 0x47;
     const CC_SET_PRO   = 0x48;
-    const CC_GRAB_FILE = 0x48;
     const CC_MAKE_DIR  = 0x49;
     const CC_BYE       = 0x4A;
+    const CC_GRAB_FILE = 0x4B;
     const CC_GRAB_DONE = 0x4C;
     const CC_STAT      = 0x4D;
     const CC_RENAME    = 0x4E;

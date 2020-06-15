@@ -3,7 +3,7 @@
 use RemoteRequest\Connection;
 use RemoteRequest\Protocols\Fsp;
 
-class FspProtocolQueryMock extends Fsp\Query
+class FspProtocolQueryMock
 {
     /**
      * What we send into server
@@ -65,14 +65,16 @@ class FspProtocolTest extends CommonTestClass
 {
     public function testQuerySimple()
     {
-        $lib = new FspProtocolQueryMock();
-        $lib->setCommand(RemoteRequest\Protocols\Fsp::CC_GET_DIR);
-        $lib->setKey(258);
-        $lib->setSequence(772);
-        $lib->setData('DATA' . chr(0));
-        $lib->setExtraData(chr(01) . chr(0));
+        $mock = new FspProtocolQueryMock();
+        $lib = new Fsp\Query();
+        $lib->setCommand(RemoteRequest\Protocols\Fsp::CC_GET_DIR)
+            ->setKey(258)
+            ->setSequence(772)
+            ->setFilePosition(0)
+            ->setData('DATA' . chr(0))
+            ->setExtraData(chr(01) . chr(0));
 
-        $this->assertEquals($lib->getRequestSimple(), $lib->getData());
+        $this->assertEquals($mock->getRequestSimple(), $lib->getData());
     }
 
     /**

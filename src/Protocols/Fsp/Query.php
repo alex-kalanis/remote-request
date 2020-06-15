@@ -36,6 +36,12 @@ class Query extends Protocols\Dummy\Query
         return $this;
     }
 
+    public function setFilePosition(int $filePosition)
+    {
+        $this->headFilePosition = $filePosition;
+        return $this;
+    }
+
     public function setData(string $data): self
     {
         $this->body = $data;
