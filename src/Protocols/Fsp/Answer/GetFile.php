@@ -13,7 +13,7 @@ class GetFile extends AAnswer
     public function process(): parent
     {
         $this->seek = $this->answer->getFilePosition();
-        $this->load = $this->answer->getContent();
+        $this->load = substr($this->answer->getContent(), 0, -1);
         return $this;
     }
 

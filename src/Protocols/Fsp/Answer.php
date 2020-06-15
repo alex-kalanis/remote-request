@@ -69,7 +69,7 @@ class Answer extends Protocols\Dummy\Answer
         // @codeCoverageIgnoreStart
         // necessary dumper - who can math checksums from their head?
         if ($this->canDump) {
-            var_dump(['chksums', 'calc' => $this->computeCheckSum(), 'got' => $this->headChecksum ]);
+            var_dump(['chksums', 'calc' => dechex($this->computeCheckSum()), 'got' => dechex($this->headChecksum) ]);
         }
         // @codeCoverageIgnoreEnd
         if ($this->computeCheckSum() != $this->headChecksum ) {

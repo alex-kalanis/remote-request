@@ -21,7 +21,7 @@ class Protection extends AAnswer
 
     public function process(): parent
     {
-        $this->directory = $this->answer->getContent();
+        $this->directory = substr($this->answer->getContent(), 0, -1);
         $extraData = $this->answer->getExtraData();
         $settings = Fsp\Strings::mb_ord($extraData[0]);
         $this->isOwnedByMe = $this->parseBit($settings, 0x01);

@@ -1,7 +1,11 @@
 <?php
 
 function fspMakeDummyQuery(array $values) {
-    return implode('', array_map('chr', $values));
+    return implode('', array_map('fspMakeDummyChars', $values));
+}
+
+function fspMakeDummyChars($input) {
+    return (is_int($input)) ? chr($input) : (string)$input;
 }
 
 class CommonTestClass extends \PHPUnit\Framework\TestCase

@@ -21,7 +21,7 @@ class Version extends AAnswer
 
     public function process(): parent
     {
-        $this->version = $this->answer->getContent();
+        $this->version = substr($this->answer->getContent(), 0, -1);
         $extraSize = $this->answer->getFilePosition();
         $extraData = $this->answer->getExtraData();
         if ($extraSize && $extraData) {

@@ -22,7 +22,7 @@ class Error extends AAnswer
 
     public function process(): parent
     {
-        $this->errorMessage = $this->answer->getContent();
+        $this->errorMessage = substr($this->answer->getContent(), 0, -1);
         $extra = $this->answer->getExtraData();
         if (!empty($extra)) {
             $this->errorCode = Fsp\Strings::mb_ord($extra);

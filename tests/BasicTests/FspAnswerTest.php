@@ -9,28 +9,28 @@ class FspAnswerMock extends Connection\Processor
     {
         return fspMakeDummyQuery([
             0x10, # CC_VERSION
-            0x30, # checksum
+            0x31, # checksum
             0x01, 0x02, # key
             0x03, 0x04, # sequence
-            0x00, 0x09, # data_length
+            0x00, 0x0A, # data_length
             0x00, 0x00, 0x00, 0x01, # position
-            0x54, 0x65, 0x73, 0x74, 0x20, 0x76, 0x30, 0x2E, 0x31, # content "Test v0.1"
-            0x44, # extra data - settings
-        ]); // 01000100
+            'Test v0.1', 0x00, # content
+            0b01000100, # extra data - settings
+        ]);
     }
 
     public function getResponseVersionPayload(): string
     {
         return fspMakeDummyQuery([
             0x10, # CC_VERSION
-            0x93, # checksum
+            0x94, # checksum
             0x01, 0x02, # key
             0x03, 0x04, # sequence
-            0x00, 0x09, # data_length
+            0x00, 0x0A, # data_length
             0x00, 0x00, 0x00, 0x05, # position
-            0x54, 0x65, 0x73, 0x74, 0x20, 0x76, 0x30, 0x2E, 0x32, # content "Test v0.2"
-            0x9C, 0x00, 0x00, 0x04, 0x00, 0x02, 0x00 # extra data - settings
-        ]); // 10011100
+            'Test v0.2', 0x00, # content
+            0b10011100, 0x00, 0x00, 0x04, 0x00, 0x02, 0x00 # extra data - settings
+        ]);
     }
 
     /**
@@ -40,10 +40,10 @@ class FspAnswerMock extends Connection\Processor
     public function getResponseStructureForDir(): string
     {
         return fspMakeDummyQuery([
-            0x12,0x34,0x56,0x78,   # time
-            0x00,0x00,0x04,0x00,   # size
-            0x01,                  # type
-            0x66,0x6F,0x6F,0x62,0x61,0x72,0x2F,0x62,0x61,0x7A,0x00       # path - "foobar/baz\0"
+            0x12, 0x34, 0x56, 0x78, # time
+            0x00, 0x00, 0x04, 0x00, # size
+            0x01,                   # type
+            'foobar/baz', 0x00      # path - "foobar/baz\0"
         ]);
     }
 
@@ -51,12 +51,12 @@ class FspAnswerMock extends Connection\Processor
     {
         return fspMakeDummyQuery([
             0x40, # CC_ERR
-            0xD7, # checksum
+            0xD8, # checksum
             0x01, 0x02, # key
             0x03, 0x04, # sequence
-            0x00, 0x0F, # data_length
+            0x00, 0x10, # data_length
             0x00, 0x00, 0x00, 0x00, # position
-            0x54, 0x65, 0x73, 0x74, 0x69, 0x6E, 0x67, 0x20, 0x65, 0x72, 0x72, 0x6F, 0x72, 0x20, 0x31, # content "Testing error 1"
+            'Testing error 1', 0x00, # content
              # extra data - empty
         ]);
     }
@@ -65,12 +65,12 @@ class FspAnswerMock extends Connection\Processor
     {
         return fspMakeDummyQuery([
             0x40, # CC_ERR
-            0x18, # checksum
+            0x19, # checksum
             0x01, 0x02, # key
             0x03, 0x04, # sequence
-            0x00, 0x0F, # data_length
+            0x00, 0x10, # data_length
             0x00, 0x00, 0x00, 0x00, # position
-            0x54, 0x65, 0x73, 0x74, 0x69, 0x6E, 0x67, 0x20, 0x65, 0x72, 0x72, 0x6F, 0x72, 0x20, 0x32, # content "Testing error 2"
+            'Testing error 2', 0x00, # content
             0x3F, # extra data - code 63 - "?"
         ]);
     }
@@ -107,12 +107,12 @@ class FspAnswerMock extends Connection\Processor
     {
         return fspMakeDummyQuery([
             0x42, # CC_GET_FILE
-            0x4C, # checksum
+            0x4D, # checksum
             0x01, 0x02, # key
             0x03, 0x04, # sequence
-            0x00, 0x0E, # data_length
+            0x00, 0x0F, # data_length
             0x00, 0x00, 0x04, 0x00, # position
-            0x54, 0x65, 0x73, 0x74, 0x69, 0x6E, 0x67, 0x20, 0x64, 0x61, 0x74, 0x61, 0x20, 0x31, # content "Testing data 1"
+            'Testing data 1', 0x00, # content
             # no extra data
         ]);
     }
@@ -128,6 +128,20 @@ class FspAnswerMock extends Connection\Processor
             0x00, 0x00, 0x02, 0x00, # position
             # no content
             # no extra data
+        ]);
+    }
+
+    public function getResponseProtection(): string
+    {
+        return fspMakeDummyQuery([
+            0x47, # CC_GET_PRO
+            0xEB, # checksum
+            0x01, 0x02, # key
+            0x03, 0x04, # sequence
+            0x00, 0x08, # data_length
+            0x00, 0x00, 0x00, 0x01, # position
+            'foo/bar', 0x00, # content - directory "foo/bar"
+            0b11100110, # no extra data
         ]);
     }
 
@@ -281,6 +295,27 @@ class FspAnswerTest extends CommonTestClass
         $process = Fsp\Answer\AnswerFactory::getObject($read)->process();
         /** @var Fsp\Answer\Upload $process */
         $this->assertEquals(512, $process->getSeek());
+    }
+
+    /**
+     * @throws \RemoteRequest\RequestException
+     */
+    public function testAnswerProtection()
+    {
+        $mock = new FspAnswerMock();
+        $read = new Fsp\Answer();
+        $read->setResponse($mock->getResponseProtection())->process();
+        $process = Fsp\Answer\AnswerFactory::getObject($read)->process();
+        /** @var Fsp\Answer\Protection $process */
+        $this->assertEquals('foo/bar', $process->getDirectory());
+        $this->assertFalse($process->isMy());
+        $this->assertTrue($process->canList());
+        $this->assertFalse($process->canReadOnlyOwner());
+        $this->assertTrue($process->canCreateFile());
+        $this->assertTrue($process->canRenameFile());
+        $this->assertTrue($process->canDeleteFile());
+        $this->assertFalse($process->canCreateDir());
+        $this->assertTrue($process->containsReadme());
     }
 
     /**
