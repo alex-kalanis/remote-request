@@ -17,7 +17,7 @@ class Processor
     /** @var string */
     protected $remoteResponse = '';
 
-    public function setQuery(RemoteRequest\Connection\IQuery $content)
+    public function setQuery(?RemoteRequest\Connection\IQuery $content)
     {
         $this->remoteQuery = $content;
         return $this;

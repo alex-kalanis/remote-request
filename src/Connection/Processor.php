@@ -18,7 +18,7 @@ class Processor
     protected $processor = null;
     /** @var RemoteRequest\Wrappers\AWrapper */
     protected $wrapper = null;
-    /** @var RemoteRequest\Connection\IQuery */
+    /** @var RemoteRequest\Connection\IQuery|null */
     protected $data = null;
 
     public function __construct(RemoteRequest\Pointers\APointer $method = null)
@@ -33,7 +33,7 @@ class Processor
         return $this;
     }
 
-    public function setData(RemoteRequest\Connection\IQuery $request)
+    public function setData(?RemoteRequest\Connection\IQuery $request)
     {
         $this->data = $request;
         return $this;
