@@ -12,8 +12,8 @@ use RemoteRequest;
  */
 class Processor
 {
-    /** @var RemoteRequest\Pointers\APointer */
-    protected $pointer = null;
+    /** @var RemoteRequest\Pointers\ASocket */
+    protected $socketPointer = null;
     /** @var RemoteRequest\Pointers\Processor */
     protected $processor = null;
     /** @var RemoteRequest\Wrappers\AWrapper */
@@ -21,10 +21,13 @@ class Processor
     /** @var RemoteRequest\Connection\IQuery|null */
     protected $data = null;
 
-    public function __construct(RemoteRequest\Pointers\APointer $method = null)
+    public function __construct(RemoteRequest\Pointers\ASocket $method = null)
     {
-        $this->pointer = (empty($method)) ? new RemoteRequest\Pointers\Fsocket() : $method ;
-        $this->processor = new RemoteRequest\Pointers\Processor();
+        $this->socketPointer = (empty($method)) ? new RemoteRequest\Pointers\Fsocket() : $method ;
+        $this->processor = ($this->socketPointer instanceof RemoteRequest\Pointers\Socket)
+            ? new RemoteRequest\Pointers\SockProcessor()
+            : new RemoteRequest\Pointers\Processor()
+        ;
     }
 
     public function setProtocolWrapper(RemoteRequest\Wrappers\AWrapper $wrapper)
@@ -48,7 +51,7 @@ class Processor
     {
         return $this->processor
                 ->setQuery($this->data)
-                ->processPointer($this->pointer->getRemotePointer($this->wrapper))
+                ->processPointer($this->socketPointer->getRemotePointer($this->wrapper), $this->wrapper)
                 ->getContent()
             ;
     }

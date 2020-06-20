@@ -24,25 +24,27 @@ class Processor
     }
 
     /**
-     * @param $filePointer
+     * @param resource $filePointer
+     * @param RemoteRequest\Wrappers\AWrapper $wrapper
      * @return $this
      * @throws RemoteRequest\RequestException
-     * @codeCoverageIgnore because accessing remote resources
+     * @codeCoverageIgnore because accessing remote resources, similar code is in overwrite
      */
-    public function processPointer($filePointer)
+    public function processPointer($filePointer, RemoteRequest\Wrappers\AWrapper $wrapper)
     {
         $this->checkQuery();
         $this->checkPointer($filePointer);
-        $this->writeRequest($filePointer);
+        $this->writeRequest($filePointer, $wrapper);
         $this->readResponse($filePointer);
         return $this;
     }
 
     /**
      * @param resource $filePointer
+     * @param RemoteRequest\Wrappers\AWrapper $wrapper
      * @return $this
      */
-    protected function writeRequest($filePointer)
+    protected function writeRequest($filePointer, RemoteRequest\Wrappers\AWrapper $wrapper)
     {
         fwrite($filePointer, $this->remoteQuery->getData());
         return $this;

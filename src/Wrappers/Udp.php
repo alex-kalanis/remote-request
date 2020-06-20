@@ -13,4 +13,9 @@ class Udp extends AWrapper
     {
         return static::SCHEMA_UDP;
     }
+
+    public function getProtocol(): int
+    {
+        return SOL_UDP;
+    }
 }

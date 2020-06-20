@@ -8,12 +8,13 @@ use RemoteRequest\Wrappers\AWrapper;
 /**
  * Network pointer to the remote server - base abstract method
  */
-abstract class APointer
+abstract class ASocket
 {
-    const POINTER_INTERNAL = 1;
-    const POINTER_STREAM = 2;
-    const POINTER_FSOCKET = 3;
-    const POINTER_PFSOCKET = 4;
+    const SOCKET_INTERNAL = 1;
+    const SOCKET_STREAM = 2;
+    const SOCKET_FSOCKET = 3;
+    const SOCKET_PFSOCKET = 4;
+    const SOCKET_SOCKET = 5;
 
     /**
      * @param AWrapper $protocolWrapper
@@ -22,16 +23,18 @@ abstract class APointer
      */
     abstract public function getRemotePointer(AWrapper $protocolWrapper);
 
-    public static function getPointer(int $type = self::POINTER_STREAM): APointer
+    public static function getPointer(int $type = self::SOCKET_STREAM): ASocket
     {
         switch ($type) {
-            case static::POINTER_INTERNAL:
+            case static::SOCKET_INTERNAL:
                 return new SharedInternal();
-            case static::POINTER_STREAM:
+            case static::SOCKET_STREAM:
                 return new Stream();
-            case static::POINTER_PFSOCKET:
+            case static::SOCKET_PFSOCKET:
                 return new Pfsocket();
-            case static::POINTER_FSOCKET:
+            case static::SOCKET_SOCKET:
+                return new Socket();
+            case static::SOCKET_FSOCKET:
             default:
                 return new Fsocket();
         }

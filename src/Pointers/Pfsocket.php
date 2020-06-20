@@ -8,7 +8,7 @@ use RemoteRequest\Wrappers\AWrapper;
 /**
  * Network pointer to the remote server - method PermaFsocket
  */
-class Pfsocket extends APointer
+class Pfsocket extends ASocket
 {
     /**
      * @param AWrapper $protocolWrapper
