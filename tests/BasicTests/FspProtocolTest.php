@@ -2,6 +2,7 @@
 
 use RemoteRequest\Connection;
 use RemoteRequest\Protocols\Fsp;
+use RemoteRequest\Wrappers;
 
 class FspProtocolQueryMock
 {
@@ -100,5 +101,34 @@ class FspProtocolTest extends CommonTestClass
         $lib = new FspProcessorMock();
         $read = new Fsp\Answer();
         $read->setResponse($lib->getResponseFailedChk())->process();
+    }
+
+    /**
+     * Direct call for testing from CLI; just comment that return
+     * ./phpunit --filter FspProtocolTest::testRemoteRound
+     * @throws \RemoteRequest\RequestException
+     */
+    public function testRemoteRound()
+    {
+        $this->assertTrue(true);
+        return;
+
+        $wrapper = Wrappers\AWrapper::getWrapper(Wrappers\AWrapper::SCHEMA_UDP);
+//        $wrapper->setTarget('ftp.vslib.cz', 21);
+//        $wrapper->setTarget('www.720k.net', 21, 60);
+//        $wrapper->setTarget('fsp.720k.net', 21, 60);
+        $wrapper->setTarget('10.0.0.30', 54321, 10);
+        $processor = new RemoteRequest\Connection\Processor(new RemoteRequest\Pointers\Socket());
+        $query = new Fsp\Query();
+        $answer = new Fsp\Answer();
+        $version = new Fsp\Query\Version($query);
+        $version->setKey(75)->setSequence(92)->compile();
+
+        $result = Fsp\Answer\AnswerFactory::getObject(
+            $answer->setResponse(
+                $processor->setProtocolWrapper($wrapper)->setData($query)->getResponse()
+            )->process()
+        );
+var_dump($result);
     }
 }

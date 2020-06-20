@@ -6,7 +6,7 @@ machines - more universal way than Curl and more verbose than file_get_contents(
 
 # Installation
 
-```
+```json
 {
     "require": {
         "alex-kalanis/remote-request": "dev-master"
@@ -136,10 +136,15 @@ Pointers
 Nothing so fancy, but just only sources of pointers from stream processors. Both on remote
 machine and/or local storage.
 
+### Socket
+
+The most specific one. Usable mainly for connecting with UDP schema. It does not need to wait
+after receive data packet which happens with others.
+
 ### FSocket, PFsocket
 
-The most stupid ones. You cannot convice them with context about your truth like
-"That connection IS correctly secured".
+The most stupid ones and most known ones. You cannot convice them with context about your
+truth like "That connection IS correctly secured".
 
 ### Stream
 
@@ -164,11 +169,14 @@ Extended, edited HTTP, which in message body has a JSON data package instead of 
 of HTTP data. It can also pass files - uses base64 for transfer. But it cannot compile it back
 due unknown definition of data which came from the server.
 
+### FSP
+
+File Sharing Protocol a.k.a. FTP-over-UDP. Old, hackish, slow, but interesting protocol,
+which shows that there is no problem with making anything readable what is set into the
+files in layers. You could find more about it online. Here is simple wrapper for PHP which
+allows you use it transparently.
+
 Tests
 -----
 
-Uses PhpUnit tests. In directory ```tests/``` run:
-```
-phpunit --bootstrap _bootstrap.php --no-configuration --no-coverage HttpTest
-```
-Or just run phpunit form root.
+Uses PhpUnit tests. Download Phpunit.phar, save it to the root, make it executable and run.

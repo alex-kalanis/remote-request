@@ -16,5 +16,10 @@ abstract class AAnswer
         $this->answer = $answer;
     }
 
+    public function getDataClass(): Fsp\Answer
+    {
+        return $this->answer;
+    }
+
     abstract public function process(): self;
 }

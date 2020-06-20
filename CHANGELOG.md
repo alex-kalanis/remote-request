@@ -1,6 +1,12 @@
 Changelog
 =========
 
+#### 3.1.0 - 2010-06-20
+
+* Pointers are now Sockets
+* Add older socket Socket
+* Add basics for FSP
+
 #### 3.0.0 - 2019-12-26
 
 * Changes for Composer and publication

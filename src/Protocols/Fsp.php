@@ -42,13 +42,6 @@ class Fsp extends Udp
     const RDTYPE_DIR    = 0x02;
     const RDTYPE_SKIP   = 0x2a;
 
-//    const FLAG_VERSION_LOGGING = 1;
-//    const FLAG_VERSION_READ_ONLY = 2;
-//    const FLAG_VERSION_REVERSE_LOOKUP = 4;
-//    const FLAG_VERSION_PRIVATE = 8;
-//    const FLAG_VERSION_THRUPUT = 16;
-//    const FLAG_VERSION_ACCEPT_XTRA = 32;
-
     protected function loadQuery(): RemoteRequest\Protocols\Dummy\Query
     {
         return new Fsp\Query();
