@@ -44,7 +44,7 @@ Basic usage (http query):
     $libQuery
         ->setMultipart(true)
         ->setMethod('post')
-        ->setRequestSettings($libWrapper)
+        ->setRequestSettings($libSchema)
         ->setPath('/api/hook/')
         ->addValues([
             'service_id' => $serviceId,
@@ -77,14 +77,13 @@ Basic usage (http query):
 Variant for UDP
 ```php
     $libSchema = new RemoteRequest\Schemas\Udp(); # parametry dotazu
-    $libSchema->host = 'udp-listener.' . DOMAIN;
-    $libSchema->port = 514;
+    $libSchema->setTarget('udp-listener.' . DOMAIN, 514);
 
-    $message = new Protocols\Dummy\Query();
+    $message = new RemoteRequest\Protocols\Dummy\Query();
     $message->maxLength = 0; // expects no response
     $message->body = 'Post message to them!';
 
-    $libProtocol = new Connection\Processor();
+    $libProtocol = new RemoteRequest\Connection\Processor();
     $libProtocol->setProtocolSchema($libSchema)->setData($message);
     $libProtocol->getResponse(); // just execute
 ```
