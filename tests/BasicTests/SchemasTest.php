@@ -19,6 +19,7 @@ class SchemasTest extends CommonTestClass
         $this->assertInstanceOf('\RemoteRequest\Schemas\Tcp', Schemas\ASchema::getSchema(Schemas\ASchema::SCHEMA_TCP));
         $this->assertInstanceOf('\RemoteRequest\Schemas\Udp', Schemas\ASchema::getSchema(Schemas\ASchema::SCHEMA_UDP));
         $this->assertInstanceOf('\RemoteRequest\Schemas\Ssl', Schemas\ASchema::getSchema(Schemas\ASchema::SCHEMA_SSL));
+        $this->assertInstanceOf('\RemoteRequest\Schemas\Sctp', Schemas\ASchema::getSchema(Schemas\ASchema::SCHEMA_SCTP));
     }
 
     public function testSimple()
@@ -56,6 +57,12 @@ class SchemasTest extends CommonTestClass
         $schema = new Schemas\Ssl();
         $this->assertEquals('ssl://', $schema->getHostname());
         $this->assertEquals(SOL_TCP, $schema->getProtocol());
+    }
+
+    public function testSctp()
+    {
+        $schema = new Schemas\Sctp();
+        $this->assertEquals('sctp://', $schema->getHostname());
     }
 
     public function testPhp()
