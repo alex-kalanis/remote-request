@@ -3,7 +3,8 @@
 namespace RemoteRequest;
 
 use RemoteRequest\Connection;
-use RemoteRequest\Wrappers;
+use RemoteRequest\Schemas;
+use RemoteRequest\Sockets;
 
 /**
  * Simplified reading from remote machine with a whole power of RemoteRequest and mainly streams underneath
@@ -19,7 +20,9 @@ class Helper
         'method' => 'get',
         'multipart' => false,
         'permanent' => false,
-        'secret' => '',
+        'sequence' => 0,
+        'secret' => 0,
+        'seek' => 0,
     ];
     protected $contextParams = [];
 
@@ -74,42 +77,44 @@ class Helper
     {
         $parsedLink = parse_url($this->link);
         $schema = strtolower($parsedLink["scheme"]);
-        $libWrapper = $this->getLibWrapper($schema, $parsedLink);
-        $libQuery = $this->getLibRequest($schema, $parsedLink, $libWrapper);
+        $libSchema = $this->getLibSchema($schema, $parsedLink);
+        $libQuery = $this->getLibRequest($schema, $parsedLink, $libSchema);
         return $this->getLibResponseProcessor($schema)->setResponse(
-            $this->getLibConnection()
-                ->setProtocolWrapper($libWrapper)
+            $this->getLibConnection($libQuery)
+                ->setProtocolSchema($libSchema)
                 ->setData($libQuery)
                 ->getResponse()
         );
     }
 
-    protected function getLibConnection(): Connection\Processor
+    protected function getLibConnection(Protocols\Dummy\Query $libQuery): Connection\Processor
     {
-        return new Connection\Processor($this->getLibPointers());
+        return new Connection\Processor($this->getLibSockets($libQuery));
     }
 
-    protected function getLibPointers(): Pointers\ASocket
+    protected function getLibSockets(Protocols\Dummy\Query $libQuery): ?Sockets\ASocket
     {
         if (!empty($this->contextParams)) {
-            $processing = new Pointers\Stream();
+            $processing = new Sockets\Stream();
             return $processing->setContextOptions($this->contextParams);
         } elseif ($this->connectionParams['permanent']) {
-            return new Pointers\Pfsocket();
+            return new Sockets\Pfsocket();
+        } elseif ($libQuery instanceof Protocols\Fsp\Query) {
+            return new Sockets\Socket();
         } else {
-            return new Pointers\Fsocket();
+            return new Sockets\Fsocket();
         }
     }
 
     /**
      * @param string $schema
      * @param array $parsedLink
-     * @return Wrappers\AWrapper
+     * @return Schemas\ASchema
      * @throws RequestException
      */
-    protected function getLibWrapper(string $schema, $parsedLink): Wrappers\AWrapper
+    protected function getLibSchema(string $schema, $parsedLink): Schemas\ASchema
     {
-        $libWrapper = $this->getWrapper($schema);
+        $libWrapper = $this->getSchema($schema);
         return $libWrapper->setTarget(
             $parsedLink["host"],
             empty($parsedLink["port"]) ? $libWrapper->getPort() : $parsedLink["port"],
@@ -119,36 +124,36 @@ class Helper
 
     /**
      * @param string $schema
-     * @return Wrappers\AWrapper
+     * @return Schemas\ASchema
      * @throws RequestException
      */
-    protected function getWrapper(string $schema): Wrappers\AWrapper
+    protected function getSchema(string $schema): Schemas\ASchema
     {
         switch ($schema) {
             case 'tcp':
-                return new Wrappers\Tcp();
+                return new Schemas\Tcp();
             case 'udp':
             case 'fsp':
-                return new Wrappers\Udp();
+                return new Schemas\Udp();
             case 'http':
-                return new Wrappers\Tcp();
+                return new Schemas\Tcp();
             case 'https':
-                return new Wrappers\Ssl();
+                return new Schemas\Ssl();
             case 'file':
-                return new Wrappers\File();
+                return new Schemas\File();
             default:
-                throw new RequestException('Unknown protocol wrapper for schema ' . $schema);
+                throw new RequestException('Unknown protocol schema for known schema ' . $schema);
         }
     }
 
     /**
      * @param string $schema
      * @param array $parsed from parse_url()
-     * @param Connection\ISettings $settings
+     * @param Connection\ITarget $settings
      * @return Protocols\Dummy\Query
      * @throws RequestException
      */
-    protected function getLibRequest(string $schema, array $parsed, Connection\ISettings $settings): Protocols\Dummy\Query
+    protected function getLibRequest(string $schema, array $parsed, Connection\ITarget $settings): Protocols\Dummy\Query
     {
         switch ($schema) {
             case 'tcp':
@@ -160,10 +165,13 @@ class Helper
                 return $query;
             case 'fsp':
                 $query = new Protocols\Fsp\Query();
-                $query->XheadCommand = $this->connectionParams['method'];
-                $query->setKey((int)$this->connectionParams['secret']);
-                $query->body = $this->postContent;
-                return $query;
+                return $query
+                    ->setCommand((int)$this->connectionParams['method'])
+                    ->setSequence((int)$this->connectionParams['sequence'])
+                    ->setKey((int)$this->connectionParams['secret'])
+                    ->setFilePosition((int)$this->connectionParams['seek'])
+                    ->setData($this->postContent)
+                ;
             case 'http':
             case 'https':
                 $query = new Protocols\Http\Query();

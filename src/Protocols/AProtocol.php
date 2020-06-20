@@ -11,7 +11,7 @@ abstract class AProtocol
 {
     /** @var RemoteRequest\Connection\Processor */
     protected $processor = null;
-    /** @var RemoteRequest\Wrappers\AWrapper */
+    /** @var RemoteRequest\Schemas\ASchema */
     protected $target = null;
     /** @var Dummy\Query */
     protected $query = null;
@@ -21,21 +21,21 @@ abstract class AProtocol
     public function __construct(array $contextOptions = [], bool $long = false)
     {
         $pointer = empty($contextParams)
-            ? ($long ? new RemoteRequest\Pointers\Pfsocket() : new RemoteRequest\Pointers\Fsocket())
-            : (new RemoteRequest\Pointers\Stream())->setContextOptions($contextOptions) ;
+            ? ($long ? new RemoteRequest\Sockets\Pfsocket() : new RemoteRequest\Sockets\Fsocket())
+            : (new RemoteRequest\Sockets\Stream())->setContextOptions($contextOptions) ;
         $this->processor = new RemoteRequest\Connection\Processor($pointer);
         $this->target = $this->loadTarget();
         $this->query = $this->loadQuery();
         $this->answer = $this->loadAnswer();
     }
 
-    abstract protected function loadTarget(): RemoteRequest\Wrappers\AWrapper;
+    abstract protected function loadTarget(): RemoteRequest\Schemas\ASchema;
 
     abstract protected function loadQuery(): Dummy\Query;
 
     abstract protected function loadAnswer(): Dummy\Answer;
 
-    public function getTarget(): RemoteRequest\Wrappers\AWrapper
+    public function getTarget(): RemoteRequest\Schemas\ASchema
     {
         return $this->target;
     }
@@ -52,13 +52,13 @@ abstract class AProtocol
     public function getAnswer(): Dummy\Answer
     {
         if (empty($this->target->getHost())
-            && ($this->query instanceof RemoteRequest\Connection\ISettings)) {
+            && ($this->query instanceof RemoteRequest\Connection\ITarget)) {
             $this->target->setRequest($this->query);
         }
 
         $this->answer->setResponse(
             $this->processor
-                ->setProtocolWrapper($this->target)
+                ->setProtocolSchema($this->target)
                 ->setData($this->query)
                 ->getResponse()
         );

@@ -1,4 +1,4 @@
-Remote Request 3.0
+Remote Request 4.0
 ==================
 
 Requests for local and remote servers in object way. Contains libraries for querying remote
@@ -19,9 +19,10 @@ familiar with composer)
 
 # Major changes
 
- - Versions 1 was initial
- - Since version 2 it has separated network layers 2 and 3 - transportation and content protocols
+ - Version 1 was initial
+ - Version 2 separated network layers 2 and 3 - transportation and content protocols
  - Version 3 is packaged for Composer
+ - Version 4 has internal structure change after adding "new" socket and protocol.
 
 # Usages
 
@@ -36,8 +37,8 @@ this check using Helper and setting context params (not advised).
 Basic usage (http query):
 
 ```php
-    $libWrapper = new RemoteRequest\Wrappers\Ssl();
-    $libWrapper->setTarget('10.0.0.1', 2048);
+    $libSchema = new RemoteRequest\Schemas\Ssl();
+    $libSchema->setTarget('10.0.0.1', 2048);
 
     $libQuery = new RemoteRequest\Protocols\Http\Query(); # http internals
     $libQuery
@@ -52,7 +53,7 @@ Basic usage (http query):
     ;
 
     $libProcessor = new RemoteRequest\Connection\Processor(); # tcp/ip http/ssl
-    $libProcessor->setProtocolWrapper($libWrapper);
+    $libProcessor->setProtocolSchema($libSchema);
     $libProcessor->setData($libQuery);
 
     $libHttpAnswer = new RemoteRequest\Protocols\Http\Answer();
@@ -75,16 +76,16 @@ Basic usage (http query):
 
 Variant for UDP
 ```php
-    $libWrapper = new RemoteRequest\Wrappers\Udp(); # parametry dotazu
-    $libWrapper->host = 'udp-listener.' . DOMAIN;
-    $libWrapper->port = 514;
+    $libSchema = new RemoteRequest\Schemas\Udp(); # parametry dotazu
+    $libSchema->host = 'udp-listener.' . DOMAIN;
+    $libSchema->port = 514;
 
     $message = new Protocols\Dummy\Query();
     $message->maxLength = 0; // expects no response
     $message->body = 'Post message to them!';
 
     $libProtocol = new Connection\Processor();
-    $libProtocol->setProtocolWrapper($libWrapper)->setData($message);
+    $libProtocol->setProtocolSchema($libSchema)->setData($message);
     $libProtocol->getResponse(); // just execute
 ```
 

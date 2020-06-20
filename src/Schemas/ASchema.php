@@ -1,15 +1,15 @@
 <?php
 
-namespace RemoteRequest\Wrappers;
+namespace RemoteRequest\Schemas;
 
 use RemoteRequest;
 
 /**
- * Wrappers for creating a connection
- * Define known wrapper with schema for access remote resource via php internal calls
+ * Schemas for creating a connection
+ * Define known schemas for access remote resource via php internal calls
  * @link https://www.php.net/manual/en/wrappers.php
  */
-abstract class AWrapper implements RemoteRequest\Connection\ISettings
+abstract class ASchema implements RemoteRequest\Connection\ITarget
 {
     const SCHEMA_FILE = 'file';
     const SCHEMA_PHP = 'php';
@@ -36,7 +36,7 @@ abstract class AWrapper implements RemoteRequest\Connection\ISettings
         return $this;
     }
 
-    public function setRequest(RemoteRequest\Connection\ISettings $request)
+    public function setRequest(RemoteRequest\Connection\ITarget $request)
     {
         $this->host = $request->getHost();
         $this->port = $request->getPort();
@@ -94,10 +94,10 @@ abstract class AWrapper implements RemoteRequest\Connection\ISettings
 
     /**
      * @param string $schema
-     * @return AWrapper
+     * @return ASchema
      * @throws RemoteRequest\RequestException
      */
-    public static function getWrapper(string $schema): AWrapper
+    public static function getSchema(string $schema): ASchema
     {
         switch ($schema) {
             case static::SCHEMA_FILE:

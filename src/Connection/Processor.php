@@ -2,7 +2,10 @@
 
 namespace RemoteRequest\Connection;
 
-use RemoteRequest;
+use RemoteRequest\Pointers;
+use RemoteRequest\RequestException;
+use RemoteRequest\Schemas\ASchema;
+use RemoteRequest\Sockets;
 
 /**
  * Query to the remote server - completing and simple processing
@@ -12,31 +15,31 @@ use RemoteRequest;
  */
 class Processor
 {
-    /** @var RemoteRequest\Pointers\ASocket */
-    protected $socketPointer = null;
-    /** @var RemoteRequest\Pointers\Processor */
-    protected $processor = null;
-    /** @var RemoteRequest\Wrappers\AWrapper */
-    protected $wrapper = null;
-    /** @var RemoteRequest\Connection\IQuery|null */
+    /** @var IQuery|null */
     protected $data = null;
+    /** @var Pointers\Processor */
+    protected $processor = null;
+    /** @var ASchema */
+    protected $schema = null;
+    /** @var Sockets\ASocket */
+    protected $socket = null;
 
-    public function __construct(RemoteRequest\Pointers\ASocket $method = null)
+    public function __construct(Sockets\ASocket $method = null)
     {
-        $this->socketPointer = (empty($method)) ? new RemoteRequest\Pointers\Fsocket() : $method ;
-        $this->processor = ($this->socketPointer instanceof RemoteRequest\Pointers\Socket)
-            ? new RemoteRequest\Pointers\SockProcessor()
-            : new RemoteRequest\Pointers\Processor()
+        $this->socket = (empty($method)) ? new Sockets\FSocket() : $method ;
+        $this->processor = ($this->socket instanceof Sockets\Socket)
+            ? new Pointers\SocketProcessor()
+            : new Pointers\Processor()
         ;
     }
 
-    public function setProtocolWrapper(RemoteRequest\Wrappers\AWrapper $wrapper)
+    public function setProtocolSchema(ASchema $wrapper)
     {
-        $this->wrapper = $wrapper;
+        $this->schema = $wrapper;
         return $this;
     }
 
-    public function setData(?RemoteRequest\Connection\IQuery $request)
+    public function setData(?IQuery $request)
     {
         $this->data = $request;
         return $this;
@@ -45,13 +48,13 @@ class Processor
     /**
      * Process query itself
      * @return string
-     * @throws RemoteRequest\RequestException
+     * @throws RequestException
      */
     public function getResponse(): string
     {
         return $this->processor
                 ->setQuery($this->data)
-                ->processPointer($this->socketPointer->getRemotePointer($this->wrapper), $this->wrapper)
+                ->processPointer($this->socket->getRemotePointer($this->schema), $this->schema)
                 ->getContent()
             ;
     }

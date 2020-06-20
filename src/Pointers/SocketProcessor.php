@@ -2,31 +2,32 @@
 
 namespace RemoteRequest\Pointers;
 
-use RemoteRequest;
+use RemoteRequest\RequestException;
+use RemoteRequest\Schemas\ASchema;
 
 /**
  * Query to the remote server - read into provided output
  */
-class SockProcessor extends Processor
+class SocketProcessor extends Processor
 {
     /** @var int how many bytes for load split */
     const PART_SPLIT = 2045;
 
     /**
      * @param resource $filePointer
-     * @param RemoteRequest\Wrappers\AWrapper $wrapper
+     * @param ASchema $wrapper
      * @return $this
-     * @throws RemoteRequest\RequestException
+     * @throws RequestException
      * @codeCoverageIgnore because accessing remote source via internal socket
      */
-    protected function writeRequest($filePointer, RemoteRequest\Wrappers\AWrapper $wrapper)
+    protected function writeRequest($filePointer, ASchema $wrapper)
     {
         $input = $this->remoteQuery->getData();
         $result = socket_sendto($filePointer, $input , strlen($input) , 0 , $wrapper->getHost() , $wrapper->getPort());
         if (!$result) {
             $errorCode = socket_last_error();
             $errorMesssage = socket_strerror($errorCode);
-            throw new RemoteRequest\RequestException('Send problem: ' . $errorMesssage, $errorCode);
+            throw new RequestException('Send problem: ' . $errorMesssage, $errorCode);
         }
         return $this;
     }
@@ -34,7 +35,7 @@ class SockProcessor extends Processor
     /**
      * @param resource $filePointer
      * @return $this
-     * @throws RemoteRequest\RequestException
+     * @throws RequestException
      * @codeCoverageIgnore because accessing remote source via internal socket
      */
     protected function readResponse($filePointer)
@@ -44,7 +45,7 @@ class SockProcessor extends Processor
         if (false === $result) { // because could return size 0 bytes
             $errorCode = socket_last_error();
             $errorMesssage = socket_strerror($errorCode);
-            throw new RemoteRequest\RequestException('Receive problem: ' . $errorMesssage, $errorCode);
+            throw new RequestException('Receive problem: ' . $errorMesssage, $errorCode);
         }
         $this->remoteResponse = $reply;
         return $this;

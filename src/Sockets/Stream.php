@@ -1,9 +1,9 @@
 <?php
 
-namespace RemoteRequest\Pointers;
+namespace RemoteRequest\Sockets;
 
 use RemoteRequest\RequestException;
-use RemoteRequest\Wrappers\AWrapper;
+use RemoteRequest\Schemas\ASchema;
 
 /**
  * Network pointer to the remote server - method Stream
@@ -21,12 +21,12 @@ class Stream extends ASocket
     }
 
     /**
-     * @param AWrapper $protocolWrapper
+     * @param ASchema $protocolWrapper
      * @return bool|resource
      * @throws RequestException
      * @codeCoverageIgnore because accessing remote source
      */
-    public function getRemotePointer(AWrapper $protocolWrapper)
+    public function getRemotePointer(ASchema $protocolWrapper)
     {
         // Make the request to the server
         // If possible, securely post using HTTPS, your PHP server will need to be SSL enabled

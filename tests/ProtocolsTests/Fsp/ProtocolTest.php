@@ -1,10 +1,12 @@
 <?php
 
+namespace ProtocolsTests\Fsp;
+
+use CommonTestClass;
 use RemoteRequest\Connection;
 use RemoteRequest\Protocols\Fsp;
-use RemoteRequest\Wrappers;
 
-class FspProtocolQueryMock
+class ProtocolQueryMock
 {
     /**
      * What we send into server
@@ -12,7 +14,7 @@ class FspProtocolQueryMock
      */
     public function getRequestSimple(): string
     {
-        return fspMakeDummyQuery([
+        return Common::makeDummyQuery([
             0x41, # CC_GET_DIR
             0x7f, # checksum
             0x01, 0x02, # key
@@ -25,7 +27,7 @@ class FspProtocolQueryMock
     }
 }
 
-class FspProcessorMock extends Connection\Processor
+class ProcessorMock extends Connection\Processor
 {
     /**
      * What server responds
@@ -33,7 +35,7 @@ class FspProcessorMock extends Connection\Processor
      */
     public function getResponseSimple(): string
     {
-        return fspMakeDummyQuery([
+        return Common::makeDummyQuery([
             0x42, # CC_GET_FILE
             0x8b, # checksum - 139
             0x01, 0x02, # key
@@ -50,7 +52,7 @@ class FspProcessorMock extends Connection\Processor
      */
     public function getResponseFailedChk(): string
     {
-        return fspMakeDummyQuery([
+        return Common::makeDummyQuery([
             0x42, # CC_GET_FILE
             0x9A, # checksum - fail!
             0x01, 0x02, # key
@@ -62,13 +64,13 @@ class FspProcessorMock extends Connection\Processor
     }
 }
 
-class FspProtocolTest extends CommonTestClass
+class ProtocolTest extends CommonTestClass
 {
     public function testQuerySimple()
     {
-        $mock = new FspProtocolQueryMock();
+        $mock = new ProtocolQueryMock();
         $lib = new Fsp\Query();
-        $lib->setCommand(RemoteRequest\Protocols\Fsp::CC_GET_DIR)
+        $lib->setCommand(Fsp::CC_GET_DIR)
             ->setKey(258)
             ->setSequence(772)
             ->setFilePosition(0)
@@ -83,10 +85,10 @@ class FspProtocolTest extends CommonTestClass
      */
     public function testAnswerSimple()
     {
-        $lib = new FspProcessorMock();
+        $lib = new ProcessorMock();
         $read = new Fsp\Answer();
         $read->setResponse($lib->getResponseSimple())->process();
-        $this->assertEquals(RemoteRequest\Protocols\Fsp::CC_GET_FILE, $read->getCommand());
+        $this->assertEquals(Fsp::CC_GET_FILE, $read->getCommand());
         $this->assertEquals(258, $read->getKey());
         $this->assertEquals(772, $read->getSequence());
         $this->assertEquals(32, $read->getFilePosition());
@@ -98,37 +100,8 @@ class FspProtocolTest extends CommonTestClass
      */
     public function testAnswerFailChecksumSimple()
     {
-        $lib = new FspProcessorMock();
+        $lib = new ProcessorMock();
         $read = new Fsp\Answer();
         $read->setResponse($lib->getResponseFailedChk())->process();
-    }
-
-    /**
-     * Direct call for testing from CLI; just comment that return
-     * ./phpunit --filter FspProtocolTest::testRemoteRound
-     * @throws \RemoteRequest\RequestException
-     */
-    public function testRemoteRound()
-    {
-        $this->assertTrue(true);
-        return;
-
-        $wrapper = Wrappers\AWrapper::getWrapper(Wrappers\AWrapper::SCHEMA_UDP);
-//        $wrapper->setTarget('ftp.vslib.cz', 21);
-//        $wrapper->setTarget('www.720k.net', 21, 60);
-//        $wrapper->setTarget('fsp.720k.net', 21, 60);
-        $wrapper->setTarget('10.0.0.30', 54321, 10);
-        $processor = new RemoteRequest\Connection\Processor(new RemoteRequest\Pointers\Socket());
-        $query = new Fsp\Query();
-        $answer = new Fsp\Answer();
-        $version = new Fsp\Query\Version($query);
-        $version->setKey(75)->setSequence(92)->compile();
-
-        $result = Fsp\Answer\AnswerFactory::getObject(
-            $answer->setResponse(
-                $processor->setProtocolWrapper($wrapper)->setData($query)->getResponse()
-            )->process()
-        );
-var_dump($result);
     }
 }

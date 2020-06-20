@@ -5,7 +5,7 @@ namespace RemoteRequest\Connection;
 /**
  * Settings of remote connection
  */
-interface ISettings
+interface ITarget
 {
     /**
      * Remote server (ip or domain)

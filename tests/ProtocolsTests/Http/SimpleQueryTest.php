@@ -1,10 +1,13 @@
 <?php
 
+namespace ProtocolsTests\Http;
+
+use CommonTestClass;
 use RemoteRequest\Connection;
 use RemoteRequest\Protocols\Dummy;
 use RemoteRequest\Protocols\Http;
 use RemoteRequest\RequestException;
-use RemoteRequest\Wrappers;
+use RemoteRequest\Schemas;
 
 class TestProcessor extends Connection\Processor
 {
@@ -22,7 +25,7 @@ class ContentTestProcessor extends TestProcessor
     }
 }
 
-class HttpQueryTest extends CommonTestClass
+class SimpleQueryTest extends CommonTestClass
 {
     /**
      * When the answer is empty
@@ -54,7 +57,7 @@ class HttpQueryTest extends CommonTestClass
     protected function queryOnMock(Connection\Processor $processor)
     {
         $processor->setData(new Dummy\Query());
-        $processor->setProtocolWrapper(new Wrappers\Tcp());
+        $processor->setProtocolSchema(new Schemas\Tcp());
         $answer = new Http\Answer();
         return $answer->setResponse($processor->getResponse());
     }

@@ -9,8 +9,8 @@ use RemoteRequest;
  */
 class Https extends Http
 {
-    protected function loadTarget(): RemoteRequest\Wrappers\AWrapper
+    protected function loadTarget(): RemoteRequest\Schemas\ASchema
     {
-        return new RemoteRequest\Wrappers\Ssl();
+        return new RemoteRequest\Schemas\Ssl();
     }
 }

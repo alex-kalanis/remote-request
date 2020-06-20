@@ -1,13 +1,16 @@
 <?php
 
+namespace ProtocolsTests\Fsp;
+
+use CommonTestClass;
 use RemoteRequest\Connection;
 use RemoteRequest\Protocols\Fsp;
 
-class FspAnswerMock extends Connection\Processor
+class AnswerMock extends Connection\Processor
 {
     public function getResponseVersion(): string
     {
-        return fspMakeDummyQuery([
+        return Common::makeDummyQuery([
             0x10, # CC_VERSION
             0x31, # checksum
             0x01, 0x02, # key
@@ -21,7 +24,7 @@ class FspAnswerMock extends Connection\Processor
 
     public function getResponseVersionPayload(): string
     {
-        return fspMakeDummyQuery([
+        return Common::makeDummyQuery([
             0x10, # CC_VERSION
             0x94, # checksum
             0x01, 0x02, # key
@@ -35,7 +38,7 @@ class FspAnswerMock extends Connection\Processor
 
     public function getResponseDir(): string
     {
-        return fspMakeDummyQuery([
+        return Common::makeDummyQuery([
             0x41, # CC_GET_DIR
             0x2E, # checksum
             0x01, 0x02, # key
@@ -52,7 +55,7 @@ class FspAnswerMock extends Connection\Processor
 
     public function getResponseError(): string
     {
-        return fspMakeDummyQuery([
+        return Common::makeDummyQuery([
             0x40, # CC_ERR
             0xD8, # checksum
             0x01, 0x02, # key
@@ -66,7 +69,7 @@ class FspAnswerMock extends Connection\Processor
 
     public function getResponseErrorDetails(): string
     {
-        return fspMakeDummyQuery([
+        return Common::makeDummyQuery([
             0x40, # CC_ERR
             0x19, # checksum
             0x01, 0x02, # key
@@ -80,7 +83,7 @@ class FspAnswerMock extends Connection\Processor
 
     public function getResponseTest(): string
     {
-        return fspMakeDummyQuery([
+        return Common::makeDummyQuery([
             0x81, # CC_TEST
             0x0B, # checksum
             0x01, 0x02, # key
@@ -94,7 +97,7 @@ class FspAnswerMock extends Connection\Processor
 
     public function getResponseNothing(): string
     {
-        return fspMakeDummyQuery([
+        return Common::makeDummyQuery([
             0x4A, # CC_BYE
             0x54, # checksum
             0x01, 0x02, # key
@@ -108,7 +111,7 @@ class FspAnswerMock extends Connection\Processor
 
     public function getResponseGetFile(): string
     {
-        return fspMakeDummyQuery([
+        return Common::makeDummyQuery([
             0x42, # CC_GET_FILE
             0x4D, # checksum
             0x01, 0x02, # key
@@ -122,7 +125,7 @@ class FspAnswerMock extends Connection\Processor
 
     public function getResponseUpload(): string
     {
-        return fspMakeDummyQuery([
+        return Common::makeDummyQuery([
             0x43, # CC_UP_LOAD
             0x4F, # checksum
             0x01, 0x02, # key
@@ -136,7 +139,7 @@ class FspAnswerMock extends Connection\Processor
 
     public function getResponseProtection(): string
     {
-        return fspMakeDummyQuery([
+        return Common::makeDummyQuery([
             0x47, # CC_GET_PRO
             0xEB, # checksum
             0x01, 0x02, # key
@@ -150,7 +153,7 @@ class FspAnswerMock extends Connection\Processor
 
     public function getResponseStats(): string
     {
-        return fspMakeDummyQuery([
+        return Common::makeDummyQuery([
             0x4D, # CC_STATS
             0x34, # checksum
             0x01, 0x02, # key
@@ -163,14 +166,14 @@ class FspAnswerMock extends Connection\Processor
     }
 }
 
-class FspAnswerTest extends CommonTestClass
+class AnswerTest extends CommonTestClass
 {
     /**
      * @throws \RemoteRequest\RequestException
      */
     public function testAnswerVersion()
     {
-        $mock = new FspAnswerMock();
+        $mock = new AnswerMock();
         $read = new Fsp\Answer();
 //        $read->canDump = true;
         $read->setResponse($mock->getResponseVersion())->process();
@@ -191,7 +194,7 @@ class FspAnswerTest extends CommonTestClass
      */
     public function testAnswerVersionPayload()
     {
-        $mock = new FspAnswerMock();
+        $mock = new AnswerMock();
         $read = new Fsp\Answer();
         $read->setResponse($mock->getResponseVersionPayload())->process();
         $process = Fsp\Answer\AnswerFactory::getObject($read)->process();
@@ -212,7 +215,7 @@ class FspAnswerTest extends CommonTestClass
      */
     public function testAnswerDir()
     {
-        $mock = new FspAnswerMock();
+        $mock = new AnswerMock();
         $read = new Fsp\Answer();
         $read->setResponse($mock->getResponseDir())->process();
         $process = Fsp\Answer\AnswerFactory::getObject($read)->process();
@@ -228,7 +231,7 @@ class FspAnswerTest extends CommonTestClass
      */
     public function testAnswerError()
     {
-        $mock = new FspAnswerMock();
+        $mock = new AnswerMock();
         $read = new Fsp\Answer();
 //        $read->canDump = true;
         $read->setResponse($mock->getResponseError())->process();
@@ -243,7 +246,7 @@ class FspAnswerTest extends CommonTestClass
      */
     public function testAnswerErrorDetails()
     {
-        $mock = new FspAnswerMock();
+        $mock = new AnswerMock();
         $read = new Fsp\Answer();
         $read->setResponse($mock->getResponseErrorDetails())->process();
         $process = Fsp\Answer\AnswerFactory::getObject($read)->process();
@@ -257,7 +260,7 @@ class FspAnswerTest extends CommonTestClass
      */
     public function testAnswerErrorRun()
     {
-        $mock = new FspAnswerMock();
+        $mock = new AnswerMock();
         $read = new Fsp\Answer();
         $read->setResponse($mock->getResponseError())->process();
         $process = Fsp\Answer\AnswerFactory::getObject($read)->process();
@@ -270,7 +273,7 @@ class FspAnswerTest extends CommonTestClass
      */
     public function testAnswerTest()
     {
-        $mock = new FspAnswerMock();
+        $mock = new AnswerMock();
         $read = new Fsp\Answer();
         $read->setResponse($mock->getResponseTest())->process();
         $process = Fsp\Answer\AnswerFactory::getObject($read)->process();
@@ -283,7 +286,7 @@ class FspAnswerTest extends CommonTestClass
      */
     public function testAnswerNothing()
     {
-        $mock = new FspAnswerMock();
+        $mock = new AnswerMock();
         $read = new Fsp\Answer();
         $read->setResponse($mock->getResponseNothing())->process();
         Fsp\Answer\AnswerFactory::getObject($read)->process();
@@ -295,7 +298,7 @@ class FspAnswerTest extends CommonTestClass
      */
     public function testAnswerGetFile()
     {
-        $mock = new FspAnswerMock();
+        $mock = new AnswerMock();
         $read = new Fsp\Answer();
         $read->setResponse($mock->getResponseGetFile())->process();
         $process = Fsp\Answer\AnswerFactory::getObject($read)->process();
@@ -309,7 +312,7 @@ class FspAnswerTest extends CommonTestClass
      */
     public function testAnswerUpload()
     {
-        $mock = new FspAnswerMock();
+        $mock = new AnswerMock();
         $read = new Fsp\Answer();
 //        $read->canDump = true;
         $read->setResponse($mock->getResponseUpload())->process();
@@ -323,7 +326,7 @@ class FspAnswerTest extends CommonTestClass
      */
     public function testAnswerProtection()
     {
-        $mock = new FspAnswerMock();
+        $mock = new AnswerMock();
         $read = new Fsp\Answer();
         $read->setResponse($mock->getResponseProtection())->process();
         $process = Fsp\Answer\AnswerFactory::getObject($read)->process();
@@ -344,7 +347,7 @@ class FspAnswerTest extends CommonTestClass
      */
     public function testAnswerStats()
     {
-        $mock = new FspAnswerMock();
+        $mock = new AnswerMock();
         $read = new Fsp\Answer();
         $read->setResponse($mock->getResponseStats())->process();
         $process = Fsp\Answer\AnswerFactory::getObject($read)->process();

@@ -1,13 +1,13 @@
 <?php
 
-namespace RemoteRequest\Wrappers;
+namespace RemoteRequest\Schemas;
 
 use RemoteRequest;
 
 /**
  * Properties for query to resource - wrapper for internal calls with available read and write props
  */
-class Php extends AWrapper
+class Php extends ASchema
 {
     const HOST_MEMORY = 'memory';
     const HOST_TEMP = 'temp';

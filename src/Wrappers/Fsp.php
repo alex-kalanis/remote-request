@@ -3,7 +3,8 @@
 namespace RemoteRequest\Wrappers;
 
 use RemoteRequest;
-use RemoteRequest\Protocols\Fsp;
+use RemoteRequest\Protocols\Fsp as Protocol;
+use RemoteRequest\Schemas;
 
 /**
  * Wrapper to plug FSP info into PHP
@@ -11,7 +12,7 @@ use RemoteRequest\Protocols\Fsp;
  * @link https://www.php.net/manual/en/class.streamwrapper.php
  * @link https://www.php.net/manual/en/stream.streamwrapper.example-1.php
  */
-class FspWrapper
+class Fsp
 {
     /* Properties */
     /** @var resource */
@@ -29,10 +30,10 @@ class FspWrapper
     /* Methods */
     public function __construct()
     {
-        $this->wrapper = AWrapper::getWrapper(AWrapper::SCHEMA_UDP);
-        $this->processor = new RemoteRequest\Connection\Processor(new RemoteRequest\Pointers\Socket());
-        $this->query = new Fsp\Query();
-        $this->answer = new Fsp\Answer();
+        $this->wrapper = Schemas\ASchema::getSchema(Schemas\ASchema::SCHEMA_UDP);
+        $this->processor = new RemoteRequest\Connection\Processor(new RemoteRequest\Sockets\Socket());
+        $this->query = new Protocol\Query();
+        $this->answer = new Protocol\Answer();
     }
 
     public function __destruct()
@@ -68,14 +69,14 @@ class FspWrapper
     public function mkdir(string $path, int $mode, int $options): bool
     {
         // create dir
-        $mkDir = new Fsp\Query\MakeDir($this->query);
+        $mkDir = new Protocol\Query\MakeDir($this->query);
         $mkDir->setKey($this->previousKey())->setSequence($this->generateSequence())->setDirPath($path)->compile();
-        /** @var Fsp\Answer\Protection|Fsp\Answer\Error $answer */
+        /** @var Protocol\Answer\Protection|Protocol\Answer\Error $answer */
         $answer = $this->sendQuery($this->query);
-        if ($answer instanceof Fsp\Answer\Error) {
+        if ($answer instanceof Protocol\Answer\Error) {
             throw $answer->getError();
         }
-        if (!$answer instanceof Fsp\Answer\Protection) {
+        if (!$answer instanceof Protocol\Answer\Protection) {
             throw new RemoteRequest\RequestException('Got something bad with mkdir. Class ' . get_class($answer));
         }
         $this->parseAnswer($answer);
@@ -91,14 +92,14 @@ class FspWrapper
      */
     public function rename(string $path_from, string $path_to): bool
     {
-        $rename = new Fsp\Query\Rename($this->query);
+        $rename = new Protocol\Query\Rename($this->query);
         $rename->setKey($this->previousKey())->setSequence($this->generateSequence())->setFilePath($path_from)->setNewPath($path_to)->compile();
-        /** @var Fsp\Answer\Nothing|Fsp\Answer\Error $answer */
+        /** @var Protocol\Answer\Nothing|Protocol\Answer\Error $answer */
         $answer = $this->sendQuery($this->query);
-        if ($answer instanceof Fsp\Answer\Error) {
+        if ($answer instanceof Protocol\Answer\Error) {
             throw $answer->getError();
         }
-        if (!$answer instanceof Fsp\Answer\Nothing) {
+        if (!$answer instanceof Protocol\Answer\Nothing) {
             throw new RemoteRequest\RequestException('Got something bad with rename. Class ' . get_class($answer));
         }
         $this->parseAnswer($answer);
@@ -113,14 +114,14 @@ class FspWrapper
      */
     public function rmdir(string $path, int $options): bool
     {
-        $delDir = new Fsp\Query\DelDir($this->query);
+        $delDir = new Protocol\Query\DelDir($this->query);
         $delDir->setKey($this->previousKey())->setSequence($this->generateSequence())->setDirPath($path)->compile();
-        /** @var Fsp\Answer\Nothing|Fsp\Answer\Error $answer */
+        /** @var Protocol\Answer\Nothing|Protocol\Answer\Error $answer */
         $answer = $this->sendQuery($this->query);
-        if ($answer instanceof Fsp\Answer\Error) {
+        if ($answer instanceof Protocol\Answer\Error) {
             throw $answer->getError();
         }
-        if (!$answer instanceof Fsp\Answer\Nothing) {
+        if (!$answer instanceof Protocol\Answer\Nothing) {
             throw new RemoteRequest\RequestException('Got something bad with rmdir. Class ' . get_class($answer));
         }
         $this->parseAnswer($answer);
@@ -249,14 +250,14 @@ class FspWrapper
      */
     public function unlink(string $path): bool
     {
-        $delFile = new Fsp\Query\DelFile($this->query);
+        $delFile = new Protocol\Query\DelFile($this->query);
         $delFile->setKey($this->previousKey())->setSequence($this->generateSequence())->setFilePath($path)->compile();
-        /** @var Fsp\Answer\Nothing|Fsp\Answer\Error $answer */
+        /** @var Protocol\Answer\Nothing|Protocol\Answer\Error $answer */
         $answer = $this->sendQuery($this->query);
-        if ($answer instanceof Fsp\Answer\Error) {
+        if ($answer instanceof Protocol\Answer\Error) {
             throw $answer->getError();
         }
-        if (!$answer instanceof Fsp\Answer\Nothing) {
+        if (!$answer instanceof Protocol\Answer\Nothing) {
             throw new RemoteRequest\RequestException('Got something bad with unlink. Class ' . get_class($answer));
         }
         $this->parseAnswer($answer);
@@ -272,14 +273,14 @@ class FspWrapper
      */
     protected function sendBye(): void
     {
-        $bye = new Fsp\Query\Bye($this->query);
+        $bye = new Protocol\Query\Bye($this->query);
         $bye->setKey($this->previousKey())->setSequence($this->generateSequence())->compile();
-        /** @var Fsp\Answer\Nothing|Fsp\Answer\Error $answer */
+        /** @var Protocol\Answer\Nothing|Protocol\Answer\Error $answer */
         $answer = $this->sendQuery($this->query);
-        if ($answer instanceof Fsp\Answer\Error) {
+        if ($answer instanceof Protocol\Answer\Error) {
             throw $answer->getError();
         }
-        if (!$answer instanceof Fsp\Answer\Nothing) {
+        if (!$answer instanceof Protocol\Answer\Nothing) {
             throw new RemoteRequest\RequestException('Got something bad with close. Class ' . get_class($answer));
         }
         $this->key = null;
@@ -287,15 +288,15 @@ class FspWrapper
     }
 
     /**
-     * @param Fsp\Query $query
-     * @return Fsp\Answer\AAnswer
+     * @param Protocol\Query $query
+     * @return Protocol\Answer\AAnswer
      * @throws RemoteRequest\RequestException
      */
-    protected function sendQuery(Fsp\Query $query): Fsp\Answer\AAnswer
+    protected function sendQuery(Protocol\Query $query): Protocol\Answer\AAnswer
     {
-        return Fsp\Answer\AnswerFactory::getObject(
+        return Protocol\Answer\AnswerFactory::getObject(
             $this->answer->setResponse(
-                $this->processor->setProtocolWrapper($this->wrapper)->setData($query)->getResponse()
+                $this->processor->setProtocolSchema($this->wrapper)->setData($query)->getResponse()
             )->process()
         );
     }
@@ -312,7 +313,7 @@ class FspWrapper
         return $seqKey;
     }
 
-    protected function parseAnswer(Fsp\Answer\AAnswer $answer): void
+    protected function parseAnswer(Protocol\Answer\AAnswer $answer): void
     {
         $raw = $answer->getDataClass();
         $this->key = $raw->getKey();
@@ -324,4 +325,4 @@ class FspWrapper
 if (in_array("fsp", stream_get_wrappers())) {
     stream_wrapper_unregister("fsp");
 }
-stream_wrapper_register("fsp", "\RemoteRequest\Wrappers\FspWrapper");
+stream_wrapper_register("fsp", "\RemoteRequest\Wrappers\Fsp");

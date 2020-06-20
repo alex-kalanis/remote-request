@@ -1,0 +1,86 @@
+<?php
+
+namespace BasicTests;
+
+use CommonTestClass;
+use RemoteRequest\Protocols;
+use RemoteRequest\RequestException;
+use RemoteRequest\Schemas;
+
+class SchemasTest extends CommonTestClass
+{
+    /**
+     * @throws RequestException
+     */
+    public function testInit()
+    {
+        $this->assertInstanceOf('\RemoteRequest\Schemas\File', Schemas\ASchema::getSchema(Schemas\ASchema::SCHEMA_FILE));
+        $this->assertInstanceOf('\RemoteRequest\Schemas\Php', Schemas\ASchema::getSchema(Schemas\ASchema::SCHEMA_PHP));
+        $this->assertInstanceOf('\RemoteRequest\Schemas\Tcp', Schemas\ASchema::getSchema(Schemas\ASchema::SCHEMA_TCP));
+        $this->assertInstanceOf('\RemoteRequest\Schemas\Udp', Schemas\ASchema::getSchema(Schemas\ASchema::SCHEMA_UDP));
+        $this->assertInstanceOf('\RemoteRequest\Schemas\Ssl', Schemas\ASchema::getSchema(Schemas\ASchema::SCHEMA_SSL));
+    }
+
+    public function testSimple()
+    {
+        $schema = new Schemas\Tcp();
+        $schema->setTarget('');
+        $this->assertEmpty($schema->getHost());
+        $this->assertEquals('tcp://', $schema->getHostname());
+        $this->assertEquals(SOL_TCP, $schema->getProtocol());
+        $schema->setTarget(Schemas\Php::HOST_TEMP);
+        $this->assertEquals('tcp://temp', $schema->getHostname());
+        $this->assertEquals('temp', $schema->getHost());
+        $this->assertEquals(1, $schema->getPort());
+        $this->assertEquals(30, $schema->getTimeout());
+    }
+
+    public function testHttp()
+    {
+        $schema = new Schemas\Tcp();
+        $lineSett = new Protocols\Http\Query();
+        $schema->setRequest($lineSett->setHost(Schemas\Php::HOST_MEMORY)->setPort(123456));
+        $this->assertEquals('memory', $schema->getHost());
+        $this->assertEquals(123456, $schema->getPort());
+    }
+
+    public function testUdp()
+    {
+        $schema = new Schemas\Udp();
+        $this->assertEquals('udp://', $schema->getHostname());
+        $this->assertEquals(SOL_UDP, $schema->getProtocol());
+    }
+
+    public function testSsl()
+    {
+        $schema = new Schemas\Ssl();
+        $this->assertEquals('ssl://', $schema->getHostname());
+        $this->assertEquals(SOL_TCP, $schema->getProtocol());
+    }
+
+    public function testPhp()
+    {
+        $schema = new Schemas\Php();
+        $this->assertEquals('php://', $schema->getHostname());
+        $this->assertEquals(0, $schema->getProtocol());
+        $this->assertNull($schema->getPort());
+        $this->assertNull($schema->getTimeout());
+    }
+
+    public function testFile()
+    {
+        $schema = new Schemas\File();
+        $this->assertEquals('file://', $schema->getHostname());
+        $this->assertEquals(0, $schema->getProtocol());
+        $this->assertNull($schema->getPort());
+        $this->assertNull($schema->getTimeout());
+    }
+
+    /**
+     * @expectedException \RemoteRequest\RequestException
+     */
+    public function testFail()
+    {
+        Schemas\ASchema::getSchema('unknown');
+    }
+}

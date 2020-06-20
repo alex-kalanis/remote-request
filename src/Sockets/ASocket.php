@@ -1,12 +1,12 @@
 <?php
 
-namespace RemoteRequest\Pointers;
+namespace RemoteRequest\Sockets;
 
 use RemoteRequest\RequestException;
-use RemoteRequest\Wrappers\AWrapper;
+use RemoteRequest\Schemas\ASchema;
 
 /**
- * Network pointer to the remote server - base abstract method
+ * Network sockets to the remote server - base abstract method
  */
 abstract class ASocket
 {
@@ -17,11 +17,11 @@ abstract class ASocket
     const SOCKET_SOCKET = 5;
 
     /**
-     * @param AWrapper $protocolWrapper
+     * @param ASchema $protocolWrapper
      * @return resource
      * @throws RequestException
      */
-    abstract public function getRemotePointer(AWrapper $protocolWrapper);
+    abstract public function getRemotePointer(ASchema $protocolWrapper);
 
     public static function getPointer(int $type = self::SOCKET_STREAM): ASocket
     {
@@ -31,12 +31,12 @@ abstract class ASocket
             case static::SOCKET_STREAM:
                 return new Stream();
             case static::SOCKET_PFSOCKET:
-                return new Pfsocket();
+                return new PfSocket();
             case static::SOCKET_SOCKET:
                 return new Socket();
             case static::SOCKET_FSOCKET:
             default:
-                return new Fsocket();
+                return new FSocket();
         }
     }
 }

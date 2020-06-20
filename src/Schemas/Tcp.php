@@ -1,17 +1,17 @@
 <?php
 
-namespace RemoteRequest\Wrappers;
+namespace RemoteRequest\Schemas;
 
 use RemoteRequest;
 
 /**
  * Properties for query to remote server - layer 2 protocol TCP
  */
-class Ssl extends AWrapper
+class Tcp extends ASchema
 {
     protected function getSchemaType(): string
     {
-        return static::SCHEMA_SSL;
+        return static::SCHEMA_TCP;
     }
 
     public function getProtocol(): int

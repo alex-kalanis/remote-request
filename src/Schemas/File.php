@@ -1,13 +1,13 @@
 <?php
 
-namespace RemoteRequest\Wrappers;
+namespace RemoteRequest\Schemas;
 
 use RemoteRequest;
 
 /**
  * Properties for query to resource - wrapper for file
  */
-class File extends AWrapper
+class File extends ASchema
 {
     protected function getSchemaType(): string
     {

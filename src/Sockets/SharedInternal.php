@@ -1,9 +1,9 @@
 <?php
 
-namespace RemoteRequest\Pointers;
+namespace RemoteRequest\Sockets;
 
 use RemoteRequest\RequestException;
-use RemoteRequest\Wrappers\AWrapper;
+use RemoteRequest\Schemas\ASchema;
 
 /**
  * Pointer to the local source (file, memory)
@@ -15,12 +15,12 @@ class SharedInternal extends ASocket
     protected $resourcePointer = null;
 
     /**
-     * @param AWrapper $protocolWrapper
+     * @param ASchema $protocolWrapper
      * @return bool|resource|null
      * @throws RequestException
      * @codeCoverageIgnore because accessing volume
      */
-    public function getRemotePointer(AWrapper $protocolWrapper)
+    public function getRemotePointer(ASchema $protocolWrapper)
     {
         if (is_null($this->resourcePointer)) {
             $this->resourcePointer = fopen($protocolWrapper->getHostname(), 'r+');

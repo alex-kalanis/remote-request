@@ -1,8 +1,11 @@
 <?php
 
+namespace ProtocolsTests;
+
+use CommonTestClass;
 use RemoteRequest\Protocols\Dummy;
 
-class DummyProtocolTest extends CommonTestClass
+class DummyTest extends CommonTestClass
 {
     public function testQuerySimple()
     {

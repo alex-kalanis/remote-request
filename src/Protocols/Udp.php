@@ -9,9 +9,9 @@ use RemoteRequest;
  */
 class Udp extends AProtocol
 {
-    protected function loadTarget(): RemoteRequest\Wrappers\AWrapper
+    protected function loadTarget(): RemoteRequest\Schemas\ASchema
     {
-        return new RemoteRequest\Wrappers\Udp();
+        return new RemoteRequest\Schemas\Udp();
     }
 
     protected function loadQuery(): RemoteRequest\Protocols\Dummy\Query

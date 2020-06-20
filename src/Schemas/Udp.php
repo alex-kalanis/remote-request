@@ -1,13 +1,13 @@
 <?php
 
-namespace RemoteRequest\Wrappers;
+namespace RemoteRequest\Schemas;
 
 use RemoteRequest;
 
 /**
  * Properties for query to remote server - layer 2 protocol UDP
  */
-class Udp extends AWrapper
+class Udp extends ASchema
 {
     protected function getSchemaType(): string
     {

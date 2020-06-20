@@ -1,8 +1,11 @@
 <?php
 
+namespace ProtocolsTests\Fsp;
+
+use CommonTestClass;
 use RemoteRequest\Protocols\Fsp;
 
-class FspQueryMock
+class QueryMock
 {
     public static function load(): self
     {
@@ -11,7 +14,7 @@ class FspQueryMock
 
     public function getRequestVersion(): string
     {
-        return fspMakeDummyQuery([
+        return Common::makeDummyQuery([
             0x10, # CC_VERSION
             0x26, # checksum
             0x01, 0x02, # key
@@ -25,7 +28,7 @@ class FspQueryMock
 
     public function getRequestGetDir(): string
     {
-        return fspMakeDummyQuery([
+        return Common::makeDummyQuery([
             0x41, # CC_GET_DIR
             0x6A, # checksum
             0x01, 0x02, # key
@@ -39,7 +42,7 @@ class FspQueryMock
 
     public function getRequestGetFile(): string
     {
-        return fspMakeDummyQuery([
+        return Common::makeDummyQuery([
             0x42, # CC_GET_FILE
             0x2F, # checksum
             0x01, 0x02, # key
@@ -53,7 +56,7 @@ class FspQueryMock
 
     public function getRequestUpload(): string
     {
-        return fspMakeDummyQuery([
+        return Common::makeDummyQuery([
             0x43, # CC_UP_LOAD
             0x01, # checksum
             0x01, 0x02, # key
@@ -67,7 +70,7 @@ class FspQueryMock
 
     public function getRequestInstall(): string
     {
-        return fspMakeDummyQuery([
+        return Common::makeDummyQuery([
             0x44, # CC_INSTALL
             0x0A, # checksum
             0x01, 0x02, # key
@@ -81,7 +84,7 @@ class FspQueryMock
 
     public function getRequestDelFile(): string
     {
-        return fspMakeDummyQuery([
+        return Common::makeDummyQuery([
             0x45, # CC_DEL_FILE
             0x4D, # checksum
             0x01, 0x02, # key
@@ -95,7 +98,7 @@ class FspQueryMock
 
     public function getRequestDelDir(): string
     {
-        return fspMakeDummyQuery([
+        return Common::makeDummyQuery([
             0x46, # CC_DEL_DIR
             0x4F, # checksum
             0x01, 0x02, # key
@@ -109,7 +112,7 @@ class FspQueryMock
 
     public function getRequestGetProtection(): string
     {
-        return fspMakeDummyQuery([
+        return Common::makeDummyQuery([
             0x47, # CC_GET_PRO
             0x51, # checksum
             0x01, 0x02, # key
@@ -123,7 +126,7 @@ class FspQueryMock
 
     public function getRequestSetProtection(): string
     {
-        return fspMakeDummyQuery([
+        return Common::makeDummyQuery([
             0x48, # CC_SET_PRO
             0x01, # checksum
             0x01, 0x02, # key
@@ -137,7 +140,7 @@ class FspQueryMock
 
     public function getRequestMakeDir(): string
     {
-        return fspMakeDummyQuery([
+        return Common::makeDummyQuery([
             0x49, # CC_MAKE_DIR
             0x55, # checksum
             0x01, 0x02, # key
@@ -151,7 +154,7 @@ class FspQueryMock
 
     public function getRequestBye(): string
     {
-        return fspMakeDummyQuery([
+        return Common::makeDummyQuery([
             0x4A, # CC_BYE
             0x60, # checksum
             0x01, 0x02, # key
@@ -165,7 +168,7 @@ class FspQueryMock
 
     public function getRequestGrabFile(): string
     {
-        return fspMakeDummyQuery([
+        return Common::makeDummyQuery([
             0x4B, # CC_GRAB_FILE
             0x69, # checksum
             0x01, 0x02, # key
@@ -179,7 +182,7 @@ class FspQueryMock
 
     public function getRequestGrabDone(): string
     {
-        return fspMakeDummyQuery([
+        return Common::makeDummyQuery([
             0x4C, # CC_GRAB_DONE
             0x42, # checksum
             0x01, 0x02, # key
@@ -193,7 +196,7 @@ class FspQueryMock
 
     public function getRequestStat(): string
     {
-        return fspMakeDummyQuery([
+        return Common::makeDummyQuery([
             0x4D, # CC_GET_FILE
             0x01, # checksum
             0x01, 0x02, # key
@@ -207,7 +210,7 @@ class FspQueryMock
 
     public function getRequestRename(): string
     {
-        return fspMakeDummyQuery([
+        return Common::makeDummyQuery([
             0x4E, # CC_RENAME
             0x01, # checksum
             0x01, 0x02, # key
@@ -220,13 +223,13 @@ class FspQueryMock
     }
 }
 
-class FspQueryTest extends CommonTestClass
+class QueryTest extends CommonTestClass
 {
     public function testQueryVersion()
     {
         $lib = new Fsp\Query\Version(new Fsp\Query());
         $lib->setKey(258)->setSequence(772);
-        $this->assertEquals(FspQueryMock::load()->getRequestVersion(), $lib->compile());
+        $this->assertEquals(QueryMock::load()->getRequestVersion(), $lib->compile());
     }
 
     public function testQueryGetDir()
@@ -234,7 +237,7 @@ class FspQueryTest extends CommonTestClass
         $lib = new Fsp\Query\GetDir(new Fsp\Query());
         $lib->setKey(258)->setSequence(772);
         $lib->setDirPath('foo/bar1')->setPosition(37);
-        $this->assertEquals(FspQueryMock::load()->getRequestGetDir(), $lib->compile());
+        $this->assertEquals(QueryMock::load()->getRequestGetDir(), $lib->compile());
     }
 
     public function testQueryGetFile()
@@ -242,7 +245,7 @@ class FspQueryTest extends CommonTestClass
         $lib = new Fsp\Query\GetFile(new Fsp\Query());
         $lib->setKey(258)->setSequence(772);
         $lib->setFilePath('foo/bar2')->setOffset(2780);
-        $this->assertEquals(FspQueryMock::load()->getRequestGetFile(), $lib->compile());
+        $this->assertEquals(QueryMock::load()->getRequestGetFile(), $lib->compile());
     }
 
     public function testQueryUpload()
@@ -250,7 +253,7 @@ class FspQueryTest extends CommonTestClass
         $lib = new Fsp\Query\Upload(new Fsp\Query());
         $lib->setKey(258)->setSequence(772);
         $lib->setFilePath('foo/bar3')->setData('ABCDEFGHIJKLMNOPQRSTUVWXYZ012456789abcdefghijklmnopqrstuvwxyz')->setOffset(2780);
-        $this->assertEquals(FspQueryMock::load()->getRequestUpload(), $lib->compile());
+        $this->assertEquals(QueryMock::load()->getRequestUpload(), $lib->compile());
     }
 
     public function testQueryInstall()
@@ -258,7 +261,7 @@ class FspQueryTest extends CommonTestClass
         $lib = new Fsp\Query\Install(new Fsp\Query());
         $lib->setKey(258)->setSequence(772);
         $lib->setFilePath('foo/bar4')->setTimestamp(1234567890);
-        $this->assertEquals(FspQueryMock::load()->getRequestInstall(), $lib->compile());
+        $this->assertEquals(QueryMock::load()->getRequestInstall(), $lib->compile());
     }
 
     public function testQueryDelFile()
@@ -266,7 +269,7 @@ class FspQueryTest extends CommonTestClass
         $lib = new Fsp\Query\DelFile(new Fsp\Query());
         $lib->setKey(258)->setSequence(772);
         $lib->setFilePath('foo/bar5');
-        $this->assertEquals(FspQueryMock::load()->getRequestDelFile(), $lib->compile());
+        $this->assertEquals(QueryMock::load()->getRequestDelFile(), $lib->compile());
     }
 
     public function testQueryDelDir()
@@ -274,7 +277,7 @@ class FspQueryTest extends CommonTestClass
         $lib = new Fsp\Query\DelDir(new Fsp\Query());
         $lib->setKey(258)->setSequence(772);
         $lib->setDirPath('foo/bar6');
-        $this->assertEquals(FspQueryMock::load()->getRequestDelDir(), $lib->compile());
+        $this->assertEquals(QueryMock::load()->getRequestDelDir(), $lib->compile());
     }
 
     public function testQueryGetProtection()
@@ -282,7 +285,7 @@ class FspQueryTest extends CommonTestClass
         $lib = new Fsp\Query\GetProtection(new Fsp\Query());
         $lib->setKey(258)->setSequence(772);
         $lib->setDirPath('foo/bar7');
-        $this->assertEquals(FspQueryMock::load()->getRequestGetProtection(), $lib->compile());
+        $this->assertEquals(QueryMock::load()->getRequestGetProtection(), $lib->compile());
     }
 
     public function testQuerySetProtection()
@@ -292,7 +295,7 @@ class FspQueryTest extends CommonTestClass
         $lib->setDirPath('foo/bar8')
             ->setOperation(Fsp\Query\SetProtection::CAN_PRESERVE_FILE)
             ->allowOperation(false);
-        $this->assertEquals(FspQueryMock::load()->getRequestSetProtection(), $lib->compile());
+        $this->assertEquals(QueryMock::load()->getRequestSetProtection(), $lib->compile());
     }
 
     public function testQueryMakeDir()
@@ -300,14 +303,14 @@ class FspQueryTest extends CommonTestClass
         $lib = new Fsp\Query\MakeDir(new Fsp\Query());
         $lib->setKey(258)->setSequence(772);
         $lib->setDirPath('foo/bar9');
-        $this->assertEquals(FspQueryMock::load()->getRequestMakeDir(), $lib->compile());
+        $this->assertEquals(QueryMock::load()->getRequestMakeDir(), $lib->compile());
     }
 
     public function testQueryBye()
     {
         $lib = new Fsp\Query\Bye(new Fsp\Query());
         $lib->setKey(258)->setSequence(772);
-        $this->assertEquals(FspQueryMock::load()->getRequestBye(), $lib->compile());
+        $this->assertEquals(QueryMock::load()->getRequestBye(), $lib->compile());
     }
 
     public function testQueryGrabFile()
@@ -315,7 +318,7 @@ class FspQueryTest extends CommonTestClass
         $lib = new Fsp\Query\GrabFile(new Fsp\Query());
         $lib->setKey(258)->setSequence(772);
         $lib->setFilePath('foo/bar10')->setOffset(2780);
-        $this->assertEquals(FspQueryMock::load()->getRequestGrabFile(), $lib->compile());
+        $this->assertEquals(QueryMock::load()->getRequestGrabFile(), $lib->compile());
     }
 
     public function testQueryGrabDone()
@@ -323,7 +326,7 @@ class FspQueryTest extends CommonTestClass
         $lib = new Fsp\Query\GrabDone(new Fsp\Query());
         $lib->setKey(258)->setSequence(772);
         $lib->setFilePath('foo/bar11')->setTimestamp(1234567890);
-        $this->assertEquals(FspQueryMock::load()->getRequestGrabDone(), $lib->compile());
+        $this->assertEquals(QueryMock::load()->getRequestGrabDone(), $lib->compile());
     }
 
     public function testQueryStat()
@@ -331,7 +334,7 @@ class FspQueryTest extends CommonTestClass
         $lib = new Fsp\Query\Stat(new Fsp\Query());
         $lib->setKey(258)->setSequence(772);
         $lib->setFilePath('foo/bar12');
-        $this->assertEquals(FspQueryMock::load()->getRequestStat(), $lib->compile());
+        $this->assertEquals(QueryMock::load()->getRequestStat(), $lib->compile());
     }
 
     public function testQueryRename()
@@ -339,6 +342,6 @@ class FspQueryTest extends CommonTestClass
         $lib = new Fsp\Query\Rename(new Fsp\Query());
         $lib->setKey(258)->setSequence(772);
         $lib->setFilePath('foo/bar13')->setNewPath('foo/bar14');
-        $this->assertEquals(FspQueryMock::load()->getRequestRename(), $lib->compile());
+        $this->assertEquals(QueryMock::load()->getRequestRename(), $lib->compile());
     }
 }
