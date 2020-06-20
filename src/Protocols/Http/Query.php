@@ -9,7 +9,7 @@ use RemoteRequest\Protocols\Http;
 /**
  * Message to the remote server compilation - protocol http
  */
-class Query extends Protocols\Dummy\Query implements Connection\ISettings
+class Query extends Protocols\Dummy\Query implements Connection\ITarget
 {
     /** @var string */
     protected $host = '';
@@ -88,7 +88,7 @@ class Query extends Protocols\Dummy\Query implements Connection\ISettings
         return $this->port;
     }
 
-    public function setRequestSettings(Connection\ISettings $request)
+    public function setRequestSettings(Connection\ITarget $request)
     {
         $this->host = $request->getHost();
         $this->port = $request->getPort();

@@ -19,6 +19,7 @@
         timeoutForSmallTests="1"
         timeoutForMediumTests="10"
         timeoutForLargeTests="60"
+        defaultTestSuite="ALL"
         verbose="true">
     <logging>
         <log type="coverage-text" target="php://stdout" showUncoveredFiles="false"/>
@@ -32,6 +33,28 @@
     <testsuites>
         <testsuite name="ALL">
             <directory>tests/BasicTests</directory>
+            <directory>tests/ProtocolsTests</directory>
+            <directory>tests/ProtocolsTests/Http</directory>
+            <directory>tests/ProtocolsTests/Restful</directory>
+            <directory>tests/ProtocolsTests/Fsp</directory>
+            <exclude>tests/ProtocolsTests/Fsp/RemoteTest.php</exclude>
+        </testsuite>
+        <testsuite name="Basic">
+            <directory>tests/BasicTests</directory>
+        </testsuite>
+        <testsuite name="Protocols">
+            <directory>tests/ProtocolsTests</directory>
+        </testsuite>
+        <testsuite name="Http">
+            <directory>tests/ProtocolsTests/Http</directory>
+            <directory>tests/ProtocolsTests/Restful</directory>
+        </testsuite>
+        <testsuite name="Fsp">
+            <directory>tests/ProtocolsTests/Fsp</directory>
+            <exclude>tests/ProtocolsTests/Fsp/RemoteTest.php</exclude>
+        </testsuite>
+        <testsuite name="FspRemote">
+            <file>tests/ProtocolsTests/Fsp/RemoteTest.php</file>
         </testsuite>
     </testsuites>
 </phpunit>

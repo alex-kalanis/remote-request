@@ -11,9 +11,9 @@ class Http extends AProtocol
 {
     const DELIMITER = "\r\n";
 
-    protected function loadTarget(): RemoteRequest\Wrappers\AWrapper
+    protected function loadTarget(): RemoteRequest\Schemas\ASchema
     {
-        return new RemoteRequest\Wrappers\Tcp();
+        return new RemoteRequest\Schemas\Tcp();
     }
 
     protected function loadQuery(): RemoteRequest\Protocols\Dummy\Query

@@ -2,7 +2,9 @@
 
 namespace RemoteRequest\Pointers;
 
-use RemoteRequest;
+use RemoteRequest\Connection\IQuery;
+use RemoteRequest\RequestException;
+use RemoteRequest\Schemas\ASchema;
 
 /**
  * Query to the remote server - read into provided output
@@ -12,37 +14,39 @@ class Processor
     /** @var int how many bytes for load split */
     const PART_SPLIT = 1024;
 
-    /** @var RemoteRequest\Connection\IQuery | null */
+    /** @var IQuery | null */
     protected $remoteQuery = null;
     /** @var string */
     protected $remoteResponse = '';
 
-    public function setQuery(RemoteRequest\Connection\IQuery $content)
+    public function setQuery(?IQuery $content)
     {
         $this->remoteQuery = $content;
         return $this;
     }
 
     /**
-     * @param $filePointer
+     * @param resource $filePointer
+     * @param ASchema $wrapper
      * @return $this
-     * @throws RemoteRequest\RequestException
-     * @codeCoverageIgnore because accessing remote resources
+     * @throws RequestException
+     * @codeCoverageIgnore because accessing remote resources, similar code is in overwrite
      */
-    public function processPointer($filePointer)
+    public function processPointer($filePointer, ASchema $wrapper)
     {
         $this->checkQuery();
         $this->checkPointer($filePointer);
-        $this->writeRequest($filePointer);
+        $this->writeRequest($filePointer, $wrapper);
         $this->readResponse($filePointer);
         return $this;
     }
 
     /**
      * @param resource $filePointer
+     * @param ASchema $wrapper
      * @return $this
      */
-    protected function writeRequest($filePointer)
+    protected function writeRequest($filePointer, ASchema $wrapper)
     {
         fwrite($filePointer, $this->remoteQuery->getData());
         return $this;
@@ -83,25 +87,25 @@ class Processor
     }
 
     /**
-     * @throws RemoteRequest\RequestException
+     * @throws RequestException
      */
     protected function checkQuery(): void
     {
         if (empty($this->remoteQuery)
-            || !($this->remoteQuery instanceof RemoteRequest\Connection\IQuery)) {
-            throw new RemoteRequest\RequestException('Unknown target data for request');
+            || !($this->remoteQuery instanceof IQuery)) {
+            throw new RequestException('Unknown target data for request');
         }
     }
 
     /**
      * @param resource|null $filePointer
-     * @throws RemoteRequest\RequestException
+     * @throws RequestException
      */
     protected function checkPointer($filePointer): void
     {
         if (empty($filePointer)
             || !is_resource($filePointer)) {
-            throw new RemoteRequest\RequestException('No stream pointer defined');
+            throw new RequestException('No stream pointer defined');
         }
     }
 

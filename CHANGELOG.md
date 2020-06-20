@@ -1,6 +1,19 @@
 Changelog
 =========
 
+#### 4.0.0 - 2010-06-20
+
+* Change of internal structure, so major version
+* Changes in naming conventions - Wrappers are now Schemas
+* Changes in naming conventions - ISettings are now ITarget
+* Changes in tests - they are in separated dirs and testsuites
+
+#### 3.1.0 - 2010-06-20
+
+* Pointers are now Sockets
+* Add older socket Socket
+* Add basics for FSP
+
 #### 3.0.0 - 2019-12-26
 
 * Changes for Composer and publication

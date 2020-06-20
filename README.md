@@ -1,4 +1,4 @@
-Remote Request 3.0
+Remote Request 4.0
 ==================
 
 Requests for local and remote servers in object way. Contains libraries for querying remote
@@ -6,7 +6,7 @@ machines - more universal way than Curl and more verbose than file_get_contents(
 
 # Installation
 
-```
+```json
 {
     "require": {
         "alex-kalanis/remote-request": "dev-master"
@@ -19,9 +19,10 @@ familiar with composer)
 
 # Major changes
 
- - Versions 1 was initial
- - Since version 2 it has separated network layers 2 and 3 - transportation and content protocols
+ - Version 1 was initial
+ - Version 2 separated network layers 2 and 3 - transportation and content protocols
  - Version 3 is packaged for Composer
+ - Version 4 has internal structure change after adding "new" socket and protocol.
 
 # Usages
 
@@ -36,8 +37,8 @@ this check using Helper and setting context params (not advised).
 Basic usage (http query):
 
 ```php
-    $libWrapper = new RemoteRequest\Wrappers\Ssl();
-    $libWrapper->setTarget('10.0.0.1', 2048);
+    $libSchema = new RemoteRequest\Schemas\Ssl();
+    $libSchema->setTarget('10.0.0.1', 2048);
 
     $libQuery = new RemoteRequest\Protocols\Http\Query(); # http internals
     $libQuery
@@ -52,7 +53,7 @@ Basic usage (http query):
     ;
 
     $libProcessor = new RemoteRequest\Connection\Processor(); # tcp/ip http/ssl
-    $libProcessor->setProtocolWrapper($libWrapper);
+    $libProcessor->setProtocolSchema($libSchema);
     $libProcessor->setData($libQuery);
 
     $libHttpAnswer = new RemoteRequest\Protocols\Http\Answer();
@@ -75,16 +76,16 @@ Basic usage (http query):
 
 Variant for UDP
 ```php
-    $libWrapper = new RemoteRequest\Wrappers\Udp(); # parametry dotazu
-    $libWrapper->host = 'udp-listener.' . DOMAIN;
-    $libWrapper->port = 514;
+    $libSchema = new RemoteRequest\Schemas\Udp(); # parametry dotazu
+    $libSchema->host = 'udp-listener.' . DOMAIN;
+    $libSchema->port = 514;
 
     $message = new Protocols\Dummy\Query();
     $message->maxLength = 0; // expects no response
     $message->body = 'Post message to them!';
 
     $libProtocol = new Connection\Processor();
-    $libProtocol->setProtocolWrapper($libWrapper)->setData($message);
+    $libProtocol->setProtocolSchema($libSchema)->setData($message);
     $libProtocol->getResponse(); // just execute
 ```
 
@@ -136,10 +137,15 @@ Pointers
 Nothing so fancy, but just only sources of pointers from stream processors. Both on remote
 machine and/or local storage.
 
+### Socket
+
+The most specific one. Usable mainly for connecting with UDP schema. It does not need to wait
+after receive data packet which happens with others.
+
 ### FSocket, PFsocket
 
-The most stupid ones. You cannot convice them with context about your truth like
-"That connection IS correctly secured".
+The most stupid ones and most known ones. You cannot convice them with context about your
+truth like "That connection IS correctly secured".
 
 ### Stream
 
@@ -164,11 +170,14 @@ Extended, edited HTTP, which in message body has a JSON data package instead of 
 of HTTP data. It can also pass files - uses base64 for transfer. But it cannot compile it back
 due unknown definition of data which came from the server.
 
+### FSP
+
+File Sharing Protocol a.k.a. FTP-over-UDP. Old, hackish, slow, but interesting protocol,
+which shows that there is no problem with making anything readable what is set into the
+files in layers. You could find more about it online. Here is simple wrapper for PHP which
+allows you use it transparently.
+
 Tests
 -----
 
-Uses PhpUnit tests. In directory ```tests/``` run:
-```
-phpunit --bootstrap _bootstrap.php --no-configuration --no-coverage HttpTest
-```
-Or just run phpunit form root.
+Uses PhpUnit tests. Download Phpunit.phar, save it to the root, make it executable and run.
