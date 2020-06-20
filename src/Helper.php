@@ -89,7 +89,7 @@ class Helper
         return new Connection\Processor($this->getLibPointers());
     }
 
-    protected function getLibPointers(): Pointers\APointer
+    protected function getLibPointers(): Pointers\ASocket
     {
         if (!empty($this->contextParams)) {
             $processing = new Pointers\Stream();

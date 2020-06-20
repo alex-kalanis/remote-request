@@ -9,7 +9,7 @@ use RemoteRequest\Wrappers\AWrapper;
  * Network pointer to the remote server - method Stream
  * Because that little shit cannot set context options to Fsocket; namely devel certs
  */
-class Stream extends APointer
+class Stream extends ASocket
 {
     /** @var string[][] */
     protected $contextOptions = [];

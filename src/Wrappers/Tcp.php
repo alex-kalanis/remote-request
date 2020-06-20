@@ -13,4 +13,9 @@ class Tcp extends AWrapper
     {
         return static::SCHEMA_TCP;
     }
+
+    public function getProtocol(): int
+    {
+        return SOL_TCP;
+    }
 }

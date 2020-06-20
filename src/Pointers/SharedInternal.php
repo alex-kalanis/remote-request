@@ -9,7 +9,7 @@ use RemoteRequest\Wrappers\AWrapper;
  * Pointer to the local source (file, memory)
  * Good one for testing (put inside the content you want to get)
  */
-class SharedInternal extends APointer
+class SharedInternal extends ASocket
 {
     /** @var resource|null */
     protected $resourcePointer = null;

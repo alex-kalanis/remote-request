@@ -8,7 +8,7 @@ use RemoteRequest\Wrappers;
 
 class ConnectProcessorMock extends Connection\Processor
 {
-    public function __construct(Pointers\APointer $method = null)
+    public function __construct(Pointers\ASocket $method = null)
     {
         parent::__construct($method);
         $this->processor = new PointerProcessorMock();
@@ -17,18 +17,18 @@ class ConnectProcessorMock extends Connection\Processor
 
 class PointerProcessorMock extends Pointers\Processor
 {
-    public function processPointer($filePointer)
+    public function processPointer($filePointer, RemoteRequest\Wrappers\AWrapper $wrapper)
     {
         $this->checkQuery();
         $this->checkPointer($filePointer);
-        $this->writeRequest($filePointer);
+        $this->writeRequest($filePointer, $wrapper);
         rewind($filePointer); // FOR REASON
         $this->readResponse($filePointer);
         return $this;
     }
 }
 
-class EmptyTestPointer extends Pointers\APointer
+class EmptyTestSocket extends Pointers\ASocket
 {
     public function getRemotePointer(Wrappers\AWrapper $protocolWrapper)
     {
@@ -36,7 +36,7 @@ class EmptyTestPointer extends Pointers\APointer
     }
 }
 
-class ExceptionTestPointer extends Pointers\APointer
+class ExceptionTestSocket extends Pointers\ASocket
 {
     public function getRemotePointer(Wrappers\AWrapper $protocolWrapper)
     {
@@ -64,6 +64,7 @@ class ConnectionTest extends CommonTestClass
         $wrapper->setTarget('');
         $this->assertEmpty($wrapper->getHost());
         $this->assertEquals('tcp://', $wrapper->getHostname());
+        $this->assertEquals(SOL_TCP, $wrapper->getProtocol());
         $wrapper->setTarget(Wrappers\Php::HOST_TEMP);
         $this->assertEquals('tcp://temp', $wrapper->getHostname());
         $this->assertEquals('temp', $wrapper->getHost());
@@ -77,17 +78,21 @@ class ConnectionTest extends CommonTestClass
 
         $wrapper = new Wrappers\Udp();
         $this->assertEquals('udp://', $wrapper->getHostname());
+        $this->assertEquals(SOL_UDP, $wrapper->getProtocol());
 
         $wrapper = new Wrappers\Ssl();
         $this->assertEquals('ssl://', $wrapper->getHostname());
+        $this->assertEquals(SOL_TCP, $wrapper->getProtocol());
 
         $wrapper = new Wrappers\Php();
         $this->assertEquals('php://', $wrapper->getHostname());
+        $this->assertEquals(0, $wrapper->getProtocol());
         $this->assertNull($wrapper->getPort());
         $this->assertNull($wrapper->getTimeout());
 
         $wrapper = new Wrappers\File();
         $this->assertEquals('file://', $wrapper->getHostname());
+        $this->assertEquals(0, $wrapper->getProtocol());
         $this->assertNull($wrapper->getPort());
         $this->assertNull($wrapper->getTimeout());
     }
@@ -137,6 +142,9 @@ class ConnectionTest extends CommonTestClass
         $query->maxLength = 2000;
         $wrapper = new Wrappers\Php();
         $wrapper->setTarget(Wrappers\Php::HOST_MEMORY);
+        $processor = new ConnectProcessorMock(new Pointers\Socket());
+        $processor->setProtocolWrapper($wrapper);
+        $processor->setData($query);
         $processor = new ConnectProcessorMock(new Pointers\SharedInternal());
         $processor->setProtocolWrapper($wrapper);
         $processor->setData($query);
@@ -145,10 +153,11 @@ class ConnectionTest extends CommonTestClass
 
     public function testPointersInit()
     {
-        $this->assertInstanceOf('\RemoteRequest\Pointers\SharedInternal', Pointers\APointer::getPointer(Pointers\APointer::POINTER_INTERNAL));
-        $this->assertInstanceOf('\RemoteRequest\Pointers\Stream', Pointers\APointer::getPointer(Pointers\APointer::POINTER_STREAM));
-        $this->assertInstanceOf('\RemoteRequest\Pointers\FSocket', Pointers\APointer::getPointer(Pointers\APointer::POINTER_FSOCKET));
-        $this->assertInstanceOf('\RemoteRequest\Pointers\Pfsocket', Pointers\APointer::getPointer(Pointers\APointer::POINTER_PFSOCKET));
+        $this->assertInstanceOf('\RemoteRequest\Pointers\SharedInternal', Pointers\ASocket::getPointer(Pointers\ASocket::SOCKET_INTERNAL));
+        $this->assertInstanceOf('\RemoteRequest\Pointers\Stream', Pointers\ASocket::getPointer(Pointers\ASocket::SOCKET_STREAM));
+        $this->assertInstanceOf('\RemoteRequest\Pointers\Socket', Pointers\ASocket::getPointer(Pointers\ASocket::SOCKET_SOCKET));
+        $this->assertInstanceOf('\RemoteRequest\Pointers\FSocket', Pointers\ASocket::getPointer(Pointers\ASocket::SOCKET_FSOCKET));
+        $this->assertInstanceOf('\RemoteRequest\Pointers\Pfsocket', Pointers\ASocket::getPointer(Pointers\ASocket::SOCKET_PFSOCKET));
     }
 
     public function testPointersSet()
@@ -170,7 +179,7 @@ class ConnectionTest extends CommonTestClass
      */
     public function testCallException()
     {
-        $processor = new Connection\Processor(new ExceptionTestPointer());
+        $processor = new Connection\Processor(new ExceptionTestSocket());
         $processor->setProtocolWrapper(new Wrappers\File());
         $processor->setData(new Protocols\Dummy\Query());
         $processor->getResponse(); // die
@@ -182,7 +191,7 @@ class ConnectionTest extends CommonTestClass
      */
     public function testCallNoPointer()
     {
-        $processor = new Connection\Processor(new EmptyTestPointer());
+        $processor = new Connection\Processor(new EmptyTestSocket());
         $processor->setProtocolWrapper(new Wrappers\File());
         $processor->setData(new Protocols\Dummy\Query());
         $processor->getResponse(); // die

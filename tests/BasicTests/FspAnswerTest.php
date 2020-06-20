@@ -176,6 +176,8 @@ class FspAnswerTest extends CommonTestClass
         $read->setResponse($mock->getResponseVersion())->process();
         $process = Fsp\Answer\AnswerFactory::getObject($read)->process();
         /** @var Fsp\Answer\Version $process */
+        $this->assertEquals(258, $process->getDataClass()->getKey());
+        $this->assertEquals(772, $process->getDataClass()->getSequence());
         $this->assertEquals('Test v0.1', $process->getVersion());
         $this->assertFalse($process->isServerLogging());
         $this->assertTrue($process->isReadOnly());

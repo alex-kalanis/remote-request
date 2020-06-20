@@ -68,6 +68,11 @@ abstract class AWrapper implements RemoteRequest\Connection\ISettings
         return intval($this->timeout);
     }
 
+    public function getProtocol(): int
+    {
+        return 0;
+    }
+
     /**
      * Get one of available IP network packet wrappers
      * default behavior falls into TCP by PHP

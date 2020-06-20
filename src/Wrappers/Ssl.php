@@ -13,4 +13,9 @@ class Ssl extends AWrapper
     {
         return static::SCHEMA_SSL;
     }
+
+    public function getProtocol(): int
+    {
+        return SOL_TCP;
+    }
 }
