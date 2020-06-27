@@ -21,7 +21,7 @@ class ConnectProcessorMock extends Connection\Processor
 
 class PointerProcessorMock extends Pointers\Processor
 {
-    public function processPointer($filePointer, Schemas\ASchema $wrapper)
+    public function processPointer($filePointer, Schemas\ASchema $wrapper): parent
     {
         $this->checkQuery();
         $this->checkPointer($filePointer);
@@ -39,7 +39,7 @@ class ConnectionTest extends CommonTestClass
      * The response is in query init
      * @throws RequestException
      */
-    public function testSetsSimple()
+    public function testSetsSimple(): void
     {
         $this->assertEquals('', $this->queryOnMock(''));
         $this->assertEquals('abcdefghijkl', $this->queryOnMock('abcdefghijkl'));
@@ -49,12 +49,12 @@ class ConnectionTest extends CommonTestClass
     /**
      * @expectedException \RemoteRequest\RequestException
      */
-    public function testSetsNoSocket()
+    public function testSetsNoSocket(): void
     {
         $this->queryOnMock(null);
     }
 
-    public function testSetsLongData()
+    public function testSetsLongData(): void
     {
         $content = str_repeat('ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz', 200);
         $this->assertEquals($content, $this->queryOnMock($content));
@@ -63,7 +63,7 @@ class ConnectionTest extends CommonTestClass
     /**
      * @throws RequestException
      */
-    public function testSetsLongDataCut()
+    public function testSetsLongDataCut(): void
     {
         $content = str_repeat('ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz', 100);
         $query = new Protocols\Dummy\Query();
@@ -85,7 +85,7 @@ class ConnectionTest extends CommonTestClass
      * @return string
      * @throws RequestException
      */
-    protected function queryOnMock(?string $message)
+    protected function queryOnMock(?string $message): string
     {
         $wrapper = new Schemas\Php();
         $wrapper->setTarget(Schemas\Php::HOST_MEMORY);

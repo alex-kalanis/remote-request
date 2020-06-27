@@ -225,14 +225,14 @@ class QueryMock
 
 class QueryTest extends CommonTestClass
 {
-    public function testQueryVersion()
+    public function testQueryVersion(): void
     {
         $lib = new Fsp\Query\Version(new Fsp\Query());
         $lib->setKey(258)->setSequence(772);
         $this->assertEquals(QueryMock::load()->getRequestVersion(), $lib->compile());
     }
 
-    public function testQueryGetDir()
+    public function testQueryGetDir(): void
     {
         $lib = new Fsp\Query\GetDir(new Fsp\Query());
         $lib->setKey(258)->setSequence(772);
@@ -240,7 +240,7 @@ class QueryTest extends CommonTestClass
         $this->assertEquals(QueryMock::load()->getRequestGetDir(), $lib->compile());
     }
 
-    public function testQueryGetFile()
+    public function testQueryGetFile(): void
     {
         $lib = new Fsp\Query\GetFile(new Fsp\Query());
         $lib->setKey(258)->setSequence(772);
@@ -248,7 +248,7 @@ class QueryTest extends CommonTestClass
         $this->assertEquals(QueryMock::load()->getRequestGetFile(), $lib->compile());
     }
 
-    public function testQueryUpload()
+    public function testQueryUpload(): void
     {
         $lib = new Fsp\Query\Upload(new Fsp\Query());
         $lib->setKey(258)->setSequence(772);
@@ -256,7 +256,7 @@ class QueryTest extends CommonTestClass
         $this->assertEquals(QueryMock::load()->getRequestUpload(), $lib->compile());
     }
 
-    public function testQueryInstall()
+    public function testQueryInstall(): void
     {
         $lib = new Fsp\Query\Install(new Fsp\Query());
         $lib->setKey(258)->setSequence(772);
@@ -264,7 +264,7 @@ class QueryTest extends CommonTestClass
         $this->assertEquals(QueryMock::load()->getRequestInstall(), $lib->compile());
     }
 
-    public function testQueryDelFile()
+    public function testQueryDelFile(): void
     {
         $lib = new Fsp\Query\DelFile(new Fsp\Query());
         $lib->setKey(258)->setSequence(772);
@@ -272,7 +272,7 @@ class QueryTest extends CommonTestClass
         $this->assertEquals(QueryMock::load()->getRequestDelFile(), $lib->compile());
     }
 
-    public function testQueryDelDir()
+    public function testQueryDelDir(): void
     {
         $lib = new Fsp\Query\DelDir(new Fsp\Query());
         $lib->setKey(258)->setSequence(772);
@@ -280,7 +280,7 @@ class QueryTest extends CommonTestClass
         $this->assertEquals(QueryMock::load()->getRequestDelDir(), $lib->compile());
     }
 
-    public function testQueryGetProtection()
+    public function testQueryGetProtection(): void
     {
         $lib = new Fsp\Query\GetProtection(new Fsp\Query());
         $lib->setKey(258)->setSequence(772);
@@ -288,7 +288,7 @@ class QueryTest extends CommonTestClass
         $this->assertEquals(QueryMock::load()->getRequestGetProtection(), $lib->compile());
     }
 
-    public function testQuerySetProtection()
+    public function testQuerySetProtection(): void
     {
         $lib = new Fsp\Query\SetProtection(new Fsp\Query());
         $lib->setKey(258)->setSequence(772);
@@ -298,7 +298,7 @@ class QueryTest extends CommonTestClass
         $this->assertEquals(QueryMock::load()->getRequestSetProtection(), $lib->compile());
     }
 
-    public function testQueryMakeDir()
+    public function testQueryMakeDir(): void
     {
         $lib = new Fsp\Query\MakeDir(new Fsp\Query());
         $lib->setKey(258)->setSequence(772);
@@ -306,14 +306,14 @@ class QueryTest extends CommonTestClass
         $this->assertEquals(QueryMock::load()->getRequestMakeDir(), $lib->compile());
     }
 
-    public function testQueryBye()
+    public function testQueryBye(): void
     {
         $lib = new Fsp\Query\Bye(new Fsp\Query());
         $lib->setKey(258)->setSequence(772);
         $this->assertEquals(QueryMock::load()->getRequestBye(), $lib->compile());
     }
 
-    public function testQueryGrabFile()
+    public function testQueryGrabFile(): void
     {
         $lib = new Fsp\Query\GrabFile(new Fsp\Query());
         $lib->setKey(258)->setSequence(772);
@@ -321,7 +321,7 @@ class QueryTest extends CommonTestClass
         $this->assertEquals(QueryMock::load()->getRequestGrabFile(), $lib->compile());
     }
 
-    public function testQueryGrabDone()
+    public function testQueryGrabDone(): void
     {
         $lib = new Fsp\Query\GrabDone(new Fsp\Query());
         $lib->setKey(258)->setSequence(772);
@@ -329,7 +329,7 @@ class QueryTest extends CommonTestClass
         $this->assertEquals(QueryMock::load()->getRequestGrabDone(), $lib->compile());
     }
 
-    public function testQueryStat()
+    public function testQueryStat(): void
     {
         $lib = new Fsp\Query\Stat(new Fsp\Query());
         $lib->setKey(258)->setSequence(772);
@@ -337,7 +337,7 @@ class QueryTest extends CommonTestClass
         $this->assertEquals(QueryMock::load()->getRequestStat(), $lib->compile());
     }
 
-    public function testQueryRename()
+    public function testQueryRename(): void
     {
         $lib = new Fsp\Query\Rename(new Fsp\Query());
         $lib->setKey(258)->setSequence(772);

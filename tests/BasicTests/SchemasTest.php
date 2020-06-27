@@ -12,7 +12,7 @@ class SchemasTest extends CommonTestClass
     /**
      * @throws RequestException
      */
-    public function testInit()
+    public function testInit(): void
     {
         $this->assertInstanceOf('\RemoteRequest\Schemas\File', Schemas\ASchema::getSchema(Schemas\ASchema::SCHEMA_FILE));
         $this->assertInstanceOf('\RemoteRequest\Schemas\Php', Schemas\ASchema::getSchema(Schemas\ASchema::SCHEMA_PHP));
@@ -21,7 +21,7 @@ class SchemasTest extends CommonTestClass
         $this->assertInstanceOf('\RemoteRequest\Schemas\Ssl', Schemas\ASchema::getSchema(Schemas\ASchema::SCHEMA_SSL));
     }
 
-    public function testSimple()
+    public function testSimple(): void
     {
         $schema = new Schemas\Tcp();
         $schema->setTarget('');
@@ -35,7 +35,7 @@ class SchemasTest extends CommonTestClass
         $this->assertEquals(30, $schema->getTimeout());
     }
 
-    public function testHttp()
+    public function testHttp(): void
     {
         $schema = new Schemas\Tcp();
         $lineSett = new Protocols\Http\Query();
@@ -44,21 +44,21 @@ class SchemasTest extends CommonTestClass
         $this->assertEquals(123456, $schema->getPort());
     }
 
-    public function testUdp()
+    public function testUdp(): void
     {
         $schema = new Schemas\Udp();
         $this->assertEquals('udp://', $schema->getHostname());
         $this->assertEquals(SOL_UDP, $schema->getProtocol());
     }
 
-    public function testSsl()
+    public function testSsl(): void
     {
         $schema = new Schemas\Ssl();
         $this->assertEquals('ssl://', $schema->getHostname());
         $this->assertEquals(SOL_TCP, $schema->getProtocol());
     }
 
-    public function testPhp()
+    public function testPhp(): void
     {
         $schema = new Schemas\Php();
         $this->assertEquals('php://', $schema->getHostname());
@@ -67,7 +67,7 @@ class SchemasTest extends CommonTestClass
         $this->assertNull($schema->getTimeout());
     }
 
-    public function testFile()
+    public function testFile(): void
     {
         $schema = new Schemas\File();
         $this->assertEquals('file://', $schema->getHostname());
@@ -79,7 +79,7 @@ class SchemasTest extends CommonTestClass
     /**
      * @expectedException \RemoteRequest\RequestException
      */
-    public function testFail()
+    public function testFail(): void
     {
         Schemas\ASchema::getSchema('unknown');
     }

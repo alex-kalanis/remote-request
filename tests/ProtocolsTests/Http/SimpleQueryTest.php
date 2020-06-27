@@ -31,7 +31,7 @@ class SimpleQueryTest extends CommonTestClass
      * When the answer is empty
      * @throws RequestException
      */
-    public function testSetsSimple()
+    public function testSetsSimple(): void
     {
         $result = $this->queryOnMock(new TestProcessor());
         $this->assertEquals(900, $result->getCode());
@@ -42,7 +42,7 @@ class SimpleQueryTest extends CommonTestClass
      * When the answer contains something
      * @throws RequestException
      */
-    public function testSetsBody()
+    public function testSetsBody(): void
     {
         $result = $this->queryOnMock(new ContentTestProcessor());
         $this->assertEquals(901, $result->getCode());
@@ -54,7 +54,7 @@ class SimpleQueryTest extends CommonTestClass
      * @return Http\Answer
      * @throws RequestException
      */
-    protected function queryOnMock(Connection\Processor $processor)
+    protected function queryOnMock(Connection\Processor $processor): Http\Answer
     {
         $processor->setData(new Dummy\Query());
         $processor->setProtocolSchema(new Schemas\Tcp());

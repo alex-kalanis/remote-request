@@ -13,7 +13,7 @@ class QueryMock extends Restful\Query
 
 class QueryTest extends CommonTestClass
 {
-    public function testSimple()
+    public function testSimple(): void
     {
         $lib = $this->prepareQuerySimple();
         $lib->setHost('somewhere.example');
@@ -30,7 +30,7 @@ class QueryTest extends CommonTestClass
             . '{"foo":"bar","abc":"def"}', $lib->getData());
     }
 
-    public function testFiles()
+    public function testFiles(): void
     {
         $lib = $this->prepareQuerySimple();
         $lib->setRequestSettings($this->prepareProtocolSchema('somewhere.example', 512))
@@ -44,7 +44,7 @@ class QueryTest extends CommonTestClass
             . '{"foo":"bar","up":{"type":"file","filename":"dummy.txt","mimetype":"text\/plain","content64":"bW5idmN4"}}', $lib->getData());
     }
 
-    protected function prepareQuerySimple()
+    protected function prepareQuerySimple(): Restful\Query
     {
         $lib = new QueryMock();
         $lib->setMethod('get');
@@ -56,7 +56,7 @@ class QueryTest extends CommonTestClass
         return $lib;
     }
 
-    protected function prepareTestFile($content)
+    protected function prepareTestFile($content): Http\Query\File
     {
         $libValue = new Http\Query\File($content);
         $libValue->filename = 'dummy.txt';
@@ -64,7 +64,7 @@ class QueryTest extends CommonTestClass
         return $libValue;
     }
 
-    protected function prepareProtocolSchema(string $host = 'unable.example', int $port = 80)
+    protected function prepareProtocolSchema(string $host = 'unable.example', int $port = 80): Schemas\Tcp
     {
         $request = new Schemas\Tcp();
         return $request->setTarget($host, $port);

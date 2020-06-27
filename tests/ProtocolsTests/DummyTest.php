@@ -7,7 +7,7 @@ use RemoteRequest\Protocols\Dummy;
 
 class DummyTest extends CommonTestClass
 {
-    public function testQuerySimple()
+    public function testQuerySimple(): void
     {
         $libValue = new Dummy\Query();
         $this->assertNull($libValue->maxLength);
@@ -19,7 +19,7 @@ class DummyTest extends CommonTestClass
         $this->assertNull($libValue->getMaxAnswerLength());
     }
 
-    public function testAnswerSimple()
+    public function testAnswerSimple(): void
     {
         $libValue = new Dummy\Answer();
         $this->assertEmpty($libValue->getContent());

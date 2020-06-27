@@ -7,7 +7,7 @@ use RemoteRequest\Protocols\Http;
 
 class ProtocolTest extends CommonTestClass
 {
-    public function testValueSimple()
+    public function testValueSimple(): void
     {
         $libValue1 = new Http\Query\Value();
         $this->assertEquals('', $libValue1->getContent());
@@ -17,7 +17,7 @@ class ProtocolTest extends CommonTestClass
         $this->assertEquals('lkjhg', $libValue2->getContent());
     }
 
-    public function testValueFile()
+    public function testValueFile(): void
     {
         $libValue1 = new Http\Query\File();
         $this->assertEquals('', $libValue1->getContent());
@@ -29,12 +29,12 @@ class ProtocolTest extends CommonTestClass
         $this->assertEquals('text/plain', $libValue2->getMimeType());
     }
 
-    protected function prepareTestValue($content)
+    protected function prepareTestValue($content): Http\Query\Value
     {
         return new Http\Query\Value($content);
     }
 
-    protected function prepareTestFile($content)
+    protected function prepareTestFile($content): Http\Query\File
     {
         $libValue = new Http\Query\File($content);
         $libValue->filename = 'dummy.txt';

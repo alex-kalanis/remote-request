@@ -66,7 +66,7 @@ class ProcessorMock extends Connection\Processor
 
 class ProtocolTest extends CommonTestClass
 {
-    public function testQuerySimple()
+    public function testQuerySimple(): void
     {
         $mock = new ProtocolQueryMock();
         $lib = new Fsp\Query();
@@ -83,7 +83,7 @@ class ProtocolTest extends CommonTestClass
     /**
      * @throws \RemoteRequest\RequestException
      */
-    public function testAnswerSimple()
+    public function testAnswerSimple(): void
     {
         $lib = new ProcessorMock();
         $read = new Fsp\Answer();
@@ -98,7 +98,7 @@ class ProtocolTest extends CommonTestClass
     /**
      * @expectedException \RemoteRequest\RequestException
      */
-    public function testAnswerFailChecksumSimple()
+    public function testAnswerFailChecksumSimple(): void
     {
         $lib = new ProcessorMock();
         $read = new Fsp\Answer();

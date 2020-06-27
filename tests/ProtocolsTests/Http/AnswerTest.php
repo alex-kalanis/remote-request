@@ -56,7 +56,7 @@ class AnswerMock extends Connection\Processor
 
 class AnswerTest extends CommonTestClass
 {
-    public function testSimple()
+    public function testSimple(): void
     {
         $method = new AnswerMock();
         $lib = $this->prepareSimple($method->getResponseSimple());
@@ -64,7 +64,7 @@ class AnswerTest extends CommonTestClass
         $this->assertEquals('abcdefghijkl', $lib->getContent());
     }
 
-    public function testEmpty()
+    public function testEmpty(): void
     {
         $method = new AnswerMock();
         $lib = $this->prepareSimple($method->getResponseEmpty());
@@ -72,7 +72,7 @@ class AnswerTest extends CommonTestClass
         $this->assertEquals('', $lib->getContent());
     }
 
-    public function testHeaders()
+    public function testHeaders(): void
     {
         $method = new AnswerMock();
         $lib = $this->prepareSimple($method->getResponseHeaders());
@@ -89,7 +89,7 @@ class AnswerTest extends CommonTestClass
         $this->assertFalse($lib->isSuccessful());
     }
 
-    public function testChunked()
+    public function testChunked(): void
     {
         $method = new AnswerMock();
         $lib = $this->prepareSimple($method->getResponseChunked());
@@ -99,7 +99,7 @@ class AnswerTest extends CommonTestClass
         $this->assertEquals('chunked', $lib->getHeader('Transfer-Encoding'));
     }
 
-    public function testDeflated()
+    public function testDeflated(): void
     {
         $method = new AnswerMock();
         $lib = $this->prepareSimple($method->getResponseDeflated());
@@ -109,7 +109,7 @@ class AnswerTest extends CommonTestClass
         $this->assertEquals('deflate', $lib->getHeader('Content-Encoding'));
     }
 
-    protected function prepareSimple(string $content)
+    protected function prepareSimple(string $content): Http\Answer
     {
         return (new Http\Answer())->setResponse($content);
     }

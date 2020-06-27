@@ -171,7 +171,7 @@ class AnswerTest extends CommonTestClass
     /**
      * @throws \RemoteRequest\RequestException
      */
-    public function testAnswerVersion()
+    public function testAnswerVersion(): void
     {
         $mock = new AnswerMock();
         $read = new Fsp\Answer();
@@ -192,7 +192,7 @@ class AnswerTest extends CommonTestClass
     /**
      * @throws \RemoteRequest\RequestException
      */
-    public function testAnswerVersionPayload()
+    public function testAnswerVersionPayload(): void
     {
         $mock = new AnswerMock();
         $read = new Fsp\Answer();
@@ -213,7 +213,7 @@ class AnswerTest extends CommonTestClass
     /**
      * @throws \RemoteRequest\RequestException
      */
-    public function testAnswerDir()
+    public function testAnswerDir(): void
     {
         $mock = new AnswerMock();
         $read = new Fsp\Answer();
@@ -229,7 +229,7 @@ class AnswerTest extends CommonTestClass
     /**
      * @throws \RemoteRequest\RequestException
      */
-    public function testAnswerError()
+    public function testAnswerError(): void
     {
         $mock = new AnswerMock();
         $read = new Fsp\Answer();
@@ -244,7 +244,7 @@ class AnswerTest extends CommonTestClass
     /**
      * @throws \RemoteRequest\RequestException
      */
-    public function testAnswerErrorDetails()
+    public function testAnswerErrorDetails(): void
     {
         $mock = new AnswerMock();
         $read = new Fsp\Answer();
@@ -258,7 +258,7 @@ class AnswerTest extends CommonTestClass
     /**
      * @expectedException \RemoteRequest\RequestException
      */
-    public function testAnswerErrorRun()
+    public function testAnswerErrorRun(): void
     {
         $mock = new AnswerMock();
         $read = new Fsp\Answer();
@@ -271,7 +271,7 @@ class AnswerTest extends CommonTestClass
     /**
      * @throws \RemoteRequest\RequestException
      */
-    public function testAnswerTest()
+    public function testAnswerTest(): void
     {
         $mock = new AnswerMock();
         $read = new Fsp\Answer();
@@ -284,7 +284,7 @@ class AnswerTest extends CommonTestClass
     /**
      * @throws \RemoteRequest\RequestException
      */
-    public function testAnswerNothing()
+    public function testAnswerNothing(): void
     {
         $mock = new AnswerMock();
         $read = new Fsp\Answer();
@@ -296,7 +296,7 @@ class AnswerTest extends CommonTestClass
     /**
      * @throws \RemoteRequest\RequestException
      */
-    public function testAnswerGetFile()
+    public function testAnswerGetFile(): void
     {
         $mock = new AnswerMock();
         $read = new Fsp\Answer();
@@ -310,7 +310,7 @@ class AnswerTest extends CommonTestClass
     /**
      * @throws \RemoteRequest\RequestException
      */
-    public function testAnswerUpload()
+    public function testAnswerUpload(): void
     {
         $mock = new AnswerMock();
         $read = new Fsp\Answer();
@@ -324,7 +324,7 @@ class AnswerTest extends CommonTestClass
     /**
      * @throws \RemoteRequest\RequestException
      */
-    public function testAnswerProtection()
+    public function testAnswerProtection(): void
     {
         $mock = new AnswerMock();
         $read = new Fsp\Answer();
@@ -345,7 +345,7 @@ class AnswerTest extends CommonTestClass
     /**
      * @throws \RemoteRequest\RequestException
      */
-    public function testAnswerStats()
+    public function testAnswerStats(): void
     {
         $mock = new AnswerMock();
         $read = new Fsp\Answer();

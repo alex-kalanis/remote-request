@@ -34,7 +34,7 @@ class AnswerMock extends Connection\Processor
 
 class AnswerTest extends CommonTestClass
 {
-    public function testSimple()
+    public function testSimple(): void
     {
         $method = new AnswerMock();
         $lib = $this->prepareAnswerSimple($method->getResponseSimple());
@@ -46,7 +46,7 @@ class AnswerTest extends CommonTestClass
         $this->assertEquals('Closed', $lib->getHeader('Connection'));
     }
 
-    public function testFiles()
+    public function testFiles(): void
     {
         $method = new AnswerMock();
         $lib = $this->prepareAnswerSimple($method->getResponseFile());
@@ -62,7 +62,7 @@ class AnswerTest extends CommonTestClass
         $this->assertEquals('Closed', $lib->getHeader('Connection'));
     }
 
-    protected function prepareAnswerSimple(string $content)
+    protected function prepareAnswerSimple(string $content): Restful\Answer
     {
         return (new Restful\Answer())->setResponse($content);
     }

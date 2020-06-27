@@ -2,11 +2,14 @@
 
 function autoload($className)
 {
-    if (!defined('PROJECT')) {
-        define('PROJECT', '.');
+    if (!defined('PROJECT_NAME')) {
+        define('PROJECT_NAME', '.');
+    }
+    if (!defined('PROJECT_DIR')) {
+        define('PROJECT_DIR', 'src');
     }
 
-    $className = preg_replace('/^' . PROJECT . '/', '', $className);
+    $className = preg_replace('/^' . PROJECT_NAME . '/', '', $className);
     $className = str_replace('\\', '/', $className);
     $className = str_replace('_', '/', $className);
 

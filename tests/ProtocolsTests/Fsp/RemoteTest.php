@@ -16,7 +16,7 @@ class RemoteTest extends CommonTestClass
      * @throws \RemoteRequest\RequestException
      * @medium
      */
-    public function testRound()
+    public function testRound(): void
     {
         $this->assertTrue(true);
         return;

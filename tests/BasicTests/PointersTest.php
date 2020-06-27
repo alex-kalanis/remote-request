@@ -31,7 +31,7 @@ class PointersTest extends CommonTestClass
      * When it blows
      * @expectedException \RemoteRequest\RequestException
      */
-    public function testCallException()
+    public function testCallException(): void
     {
         $processor = new Connection\Processor(new ExceptionTestSocket());
         $processor->setProtocolSchema(new Schemas\File());
@@ -43,7 +43,7 @@ class PointersTest extends CommonTestClass
      * When it blows
      * @expectedException \RemoteRequest\RequestException
      */
-    public function testCallNoPointer()
+    public function testCallNoPointer(): void
     {
         $processor = new Connection\Processor(new EmptyTestSocket());
         $processor->setProtocolSchema(new Schemas\File());

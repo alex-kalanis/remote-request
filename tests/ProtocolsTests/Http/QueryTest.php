@@ -20,7 +20,7 @@ class QueryMock extends Http\Query
 
 class QueryTest extends CommonTestClass
 {
-    public function testQuerySimple()
+    public function testQuerySimple(): void
     {
         $lib = $this->prepareSimple();
         $lib->setHost('somewhere.example');
@@ -51,7 +51,7 @@ class QueryTest extends CommonTestClass
         $this->assertEquals(2121, $lib->getPort());
     }
 
-    public function testQueryWithInline()
+    public function testQueryWithInline(): void
     {
         $lib = $this->prepareSimple();
         $lib->setHost('somewhere.example');
@@ -62,7 +62,7 @@ class QueryTest extends CommonTestClass
         $this->assertEquals("GET /example?baz=abc&foo=bar HTTP/1.1\r\nHost: somewhere.example\r\n\r\n", $lib->getData());
     }
 
-    public function testQueryWithContent()
+    public function testQueryWithContent(): void
     {
         $lib = $this->prepareSimple();
         $lib->setMultipart(false);
@@ -82,7 +82,7 @@ class QueryTest extends CommonTestClass
             . "Content-Length: 23\r\n\r\nfoo=bar&bar=def&bay=ghi", $lib->getData());
     }
 
-    public function testQueryWithContentPost()
+    public function testQueryWithContentPost(): void
     {
         $lib = $this->prepareSimple();
         $lib->setMethod('post');
@@ -110,7 +110,7 @@ class QueryTest extends CommonTestClass
             . "foo=bar", $lib->getData());
     }
 
-    public function testQueryWithContentFiles()
+    public function testQueryWithContentFiles(): void
     {
         $lib = $this->prepareSimple();
         $lib->setRequestSettings($this->prepareProtocolSchema('somewhere.example', 512))
@@ -122,7 +122,7 @@ class QueryTest extends CommonTestClass
             . "----PHPFSock----\r\n", $lib->getData());
     }
 
-    protected function prepareSimple()
+    protected function prepareSimple(): Http\Query
     {
         $lib = new QueryMock();
         $lib->setMethod('get');
@@ -134,7 +134,7 @@ class QueryTest extends CommonTestClass
         return $lib;
     }
 
-    protected function prepareTestFile($content)
+    protected function prepareTestFile($content): Http\Query\File
     {
         $libValue = new Http\Query\File($content);
         $libValue->filename = 'dummy.txt';
@@ -142,7 +142,7 @@ class QueryTest extends CommonTestClass
         return $libValue;
     }
 
-    protected function prepareProtocolSchema(string $host = 'unable.example', int $port = 80)
+    protected function prepareProtocolSchema(string $host = 'unable.example', int $port = 80): Schemas\Tcp
     {
         $request = new Schemas\Tcp();
         return $request->setTarget($host, $port);
