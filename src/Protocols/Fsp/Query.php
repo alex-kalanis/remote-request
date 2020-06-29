@@ -12,10 +12,12 @@ class Query extends Protocols\Dummy\Query
     use Traits\THeader;
     use Traits\TChecksum;
 
+    public $maxLength = Protocols\Fsp::MAX_PACKET_SIZE;
     protected $headCommand = 0;
     protected $headServerKey = 0;
     protected $headSequence = 0;
     protected $headFilePosition = 0;
+    protected $contentData = '';
     protected $contentExtraData = '';
 
     public function setKey(int $key = 0)
@@ -42,9 +44,9 @@ class Query extends Protocols\Dummy\Query
         return $this;
     }
 
-    public function setData(string $data): self
+    public function setContent(string $data): self
     {
-        $this->body = $data;
+        $this->contentData = $data;
         return $this;
     }
 
@@ -54,15 +56,14 @@ class Query extends Protocols\Dummy\Query
         return $this;
     }
 
-    public function getData(): string
+    public function getPacket(): string
     {
         return sprintf("%s%s%s", $this->renderRequestHeader($this->computeCheckSum()), $this->getContent(), $this->getExtraData());
     }
 
-    public function sumChunk(int $sum, string $data): int
+    public function getInitialSumChunk(string $data): int
     {
-        # FIXME: this checksum computation is likely slow...
-        return array_reduce(str_split($data), [$this, 'sumBytes'], $sum + strlen($data));
+        return strlen($data);
     }
 
     protected function getCommand(): int
@@ -80,6 +81,11 @@ class Query extends Protocols\Dummy\Query
         return (int)$this->headSequence;
     }
 
+    protected function getDataLength(): int
+    {
+        return strlen($this->getContent());
+    }
+
     protected function getFilePosition(): int
     {
         return (int)$this->headFilePosition;
@@ -87,7 +93,7 @@ class Query extends Protocols\Dummy\Query
 
     protected function getContent(): string
     {
-        return (string)$this->body;
+        return (string)$this->contentData;
     }
 
     protected function getExtraData(): string

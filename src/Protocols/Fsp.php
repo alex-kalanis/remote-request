@@ -12,8 +12,10 @@ use RemoteRequest;
  */
 class Fsp extends Udp
 {
-    # how large is header
+    # how large is whole load
     const HEADER_SIZE = 12;
+    const SPACE_SIZE = 1024;
+    const MAX_PACKET_SIZE = 1036; // 1024 + 12
 
     # Command Codes
     const CC_VERSION   = 0x10;
@@ -40,6 +42,7 @@ class Fsp extends Udp
     const RDTYPE_END    = 0x00;
     const RDTYPE_FILE   = 0x01;
     const RDTYPE_DIR    = 0x02;
+    const RDTYPE_LINK   = 0x03;
     const RDTYPE_SKIP   = 0x2a;
 
     protected function loadQuery(): RemoteRequest\Protocols\Dummy\Query

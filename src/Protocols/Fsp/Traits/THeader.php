@@ -16,7 +16,7 @@ trait THeader
             $this->headerFill($checksum, 1),
             $this->headerFill($this->getKey(), 2),
             $this->headerFill($this->getSequence(), 2),
-            $this->headerFill(strlen($this->getContent()), 2),
+            $this->headerFill($this->getDataLength(), 2),
             $this->headerFill($this->getFilePosition(), 4)
         );
     }
@@ -40,6 +40,8 @@ trait THeader
     abstract protected function getKey(): int;
 
     abstract protected function getSequence(): int;
+
+    abstract protected function getDataLength(): int;
 
     abstract protected function getFilePosition(): int;
 

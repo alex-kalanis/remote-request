@@ -4,7 +4,7 @@ namespace ProtocolsTests\Fsp;
 
 use CommonTestClass;
 use RemoteRequest\Connection;
-use RemoteRequest\Pointers;
+use RemoteRequest\Sockets;
 use RemoteRequest\Protocols\Fsp;
 use RemoteRequest\Schemas;
 
@@ -26,17 +26,26 @@ class RemoteTest extends CommonTestClass
 //        $wrapper->setTarget('www.720k.net', 21, 60);
 //        $wrapper->setTarget('fsp.720k.net', 21, 60);
         $wrapper->setTarget('10.0.0.30', 54321, 10);
-        $processor = new Connection\Processor(new Pointers\Socket());
+        $processor = new Connection\Processor(new Sockets\Socket());
         $query = new Fsp\Query();
         $answer = new Fsp\Answer();
+        $answer->canDump = true;
         $version = new Fsp\Query\Version($query);
-        $version->setKey(75)->setSequence(92)->compile();
+        $version->setKey(32)->setSequence(16)->compile();
 
+//var_dump(array_map('dechex', array_map('ord', str_split($query->body))));
+//return;
+        $response = $processor->setProtocolSchema($wrapper)->setData($query)->getResponse();
         $result = Fsp\Answer\AnswerFactory::getObject(
             $answer->setResponse(
-                $processor->setProtocolSchema($wrapper)->setData($query)->getResponse()
+                $response
             )->process()
-        );
-var_dump($result);
+        )->process();
+
+var_dump(array_map('dechex', array_map('ord', str_split($response))));
+//var_dump($result);
+        /** @var Fsp\Answer\Version $result */
+        $this->assertEquals('fspd 2.8.1b29', $result->getVersion());
+        $this->assertFalse($result->isReadOnly());
     }
 }

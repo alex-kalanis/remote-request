@@ -31,11 +31,26 @@ class Answer extends Protocols\Dummy\Answer
      */
     public function process(): Answer
     {
+        $this->checkSize();
         $this->getHeader();
         $this->processHeader();
         $this->processContent();
         $this->checkResponse();
         return $this;
+    }
+
+    /**
+     * @throws RequestException
+     */
+    protected function checkSize(): void
+    {
+        $loadSize = strlen($this->body);
+        if (Protocols\Fsp::HEADER_SIZE > $loadSize) {
+            throw new RequestException('Response too short');
+        }
+        if (Protocols\Fsp::MAX_PACKET_SIZE < $loadSize) {
+            throw new RequestException('Response too large');
+        }
     }
 
     protected function getHeader(): void
@@ -66,25 +81,24 @@ class Answer extends Protocols\Dummy\Answer
      */
     protected function checkResponse(): void
     {
+        $checksum = $this->computeCheckSum();
         // @codeCoverageIgnoreStart
-        // necessary dumper - who can math checksums from their head?
+        // necessary dumper - who can calculate checksums from their head?
         if ($this->canDump) {
-            $chk = $this->computeCheckSum();
             var_dump(['chksums',
-                'calc_raw' => $chk, 'calc_hex' => dechex($chk),
-                'got_raw' => $this->headChecksum, 'got_hex' => dechex($this->headChecksum)
+                'calc_raw' => $checksum, 'calc_hex' => dechex($checksum), 'calc_bin' => decbin($checksum),
+                'got_raw' => $this->headChecksum, 'got_hex' => dechex($this->headChecksum), 'got_bin' => decbin($this->headChecksum)
             ]);
         }
         // @codeCoverageIgnoreEnd
-        if ($this->computeCheckSum() != $this->headChecksum ) {
+        if ($checksum != $this->headChecksum ) {
             throw new RequestException('Invalid checksum');
         }
     }
 
-    public function sumChunk(int $sum, string $data): int
+    public function getInitialSumChunk(string $data): int
     {
-        # FIXME: this checksum computation is likely slow...
-        return array_reduce(str_split($data), [$this, 'sumBytes'], $sum);
+        return 0;
     }
 
     public function getCommand(): string

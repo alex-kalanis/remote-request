@@ -32,14 +32,14 @@ abstract class AQuery
 
     public function compile(): string
     {
-        return $this->query
+        return $this->query->body = $this->query
             ->setCommand($this->getCommand())
             ->setKey($this->serverKey)
             ->setSequence($this->localSequence)
             ->setFilePosition($this->getFilePosition())
-            ->setData($this->getData())
+            ->setContent($this->getData())
             ->setExtraData($this->getExtraData())
-            ->getData()
+            ->getPacket()
         ;
     }
 

@@ -170,7 +170,7 @@ class Helper
                     ->setSequence((int)$this->connectionParams['sequence'])
                     ->setKey((int)$this->connectionParams['secret'])
                     ->setFilePosition((int)$this->connectionParams['seek'])
-                    ->setData($this->postContent)
+                    ->setContent($this->postContent)
                 ;
             case 'http':
             case 'https':
