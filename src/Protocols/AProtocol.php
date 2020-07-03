@@ -48,6 +48,7 @@ abstract class AProtocol
     /**
      * @return Dummy\Answer
      * @throws RemoteRequest\RequestException
+     * @codeCoverageIgnore because it's about querying remote machine
      */
     public function getAnswer(): Dummy\Answer
     {
@@ -63,5 +64,28 @@ abstract class AProtocol
                 ->getResponse()
         );
         return $this->answer;
+    }
+
+    /**
+     * @param string $schema
+     * @return AProtocol
+     * @throws RemoteRequest\RequestException
+     */
+    public static function getProtocol(string $schema): AProtocol
+    {
+        switch ($schema) {
+            case 'tcp':
+            case 'file':
+                return new Tcp();
+            case 'udp':
+                return new Udp();
+            case 'fsp':
+                return new Fsp();
+            case 'http':
+            case 'https':
+                return new Http();
+            default:
+                throw new RemoteRequest\RequestException('Unknown response available for protocol schema ' . $schema);
+        }
     }
 }
