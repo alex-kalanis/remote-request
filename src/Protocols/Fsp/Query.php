@@ -58,12 +58,17 @@ class Query extends Protocols\Dummy\Query
 
     public function getPacket(): string
     {
-        return sprintf("%s%s%s", $this->renderRequestHeader($this->computeCheckSum()), $this->getContent(), $this->getExtraData());
+        return $this->renderRequestHeader($this->computeCheckSum()) . $this->getContent() . $this->getExtraData();
     }
 
-    public function getInitialSumChunk(string $data): int
+    public function getChecksumPacket(): string
     {
-        return strlen($data);
+        return $this->renderRequestHeader(0) . $this->getContent() . $this->getExtraData();
+    }
+
+    public function getInitialSumChunk(): int
+    {
+        return strlen($this->getChecksumPacket());
     }
 
     protected function getCommand(): int

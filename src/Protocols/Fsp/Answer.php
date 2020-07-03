@@ -73,6 +73,7 @@ class Answer extends Protocols\Dummy\Answer
         $content = substr($this->body, Protocols\Fsp::HEADER_SIZE);
         $this->content = substr($content, 0, $this->getDataLength());
         $this->extra = substr($content, $this->getDataLength());
+        $this->extra = (false !== $this->extra) ? $this->extra : '';
     }
 
     /**
@@ -96,9 +97,16 @@ class Answer extends Protocols\Dummy\Answer
         }
     }
 
-    public function getInitialSumChunk(string $data): int
+    public function getInitialSumChunk(): int
     {
         return 0;
+    }
+
+    public function getChecksumPacket(): string
+    {
+        $content = $this->body;
+        $content[1] = chr(0); // null checksum
+        return $content;
     }
 
     public function getCommand(): string

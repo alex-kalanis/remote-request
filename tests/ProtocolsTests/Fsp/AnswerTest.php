@@ -85,7 +85,7 @@ class AnswerMock extends Connection\Processor
     {
         return Common::makeDummyQuery([
             0x81, # CC_TEST
-            0x0B, # checksum
+            0x8B, # checksum
             0x01, 0x02, # key
             0x03, 0x04, # sequence
             0x00, 0x00, # data_length

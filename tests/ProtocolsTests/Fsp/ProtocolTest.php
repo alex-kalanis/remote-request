@@ -160,6 +160,7 @@ class ProtocolTest extends CommonTestClass
     {
         $lib = new ProcessorMock();
         $read = new Fsp\Answer();
+//        $read->canDump = true;
         $read->setResponse($lib->getResponseSimple())->process();
         $this->assertEquals(Fsp::CC_GET_FILE, $read->getCommand());
         $this->assertEquals(258, $read->getKey());
@@ -202,18 +203,20 @@ class ProtocolTest extends CommonTestClass
         Fsp\Answer\AnswerFactory::getObject($read)->process();
     }
 
-//    /**
-//     * @throws \RemoteRequest\RequestException
-//     */
-//    public function testAnswerReal(): void
-//    {
-//        $lib = new ProcessorMock();
-//        $read = new Fsp\Answer();
-//        $read->setResponse($lib->getResponseReal())->process();
-//        $this->assertEquals(Fsp::CC_VERSION, $read->getCommand());
-//        $this->assertEquals(62860, $read->getKey());
-//        $this->assertEquals(16, $read->getSequence());
-//        $this->assertEquals(3, $read->getFilePosition()); // 3 at extra
-//        $this->assertEquals('fspd 2.8.1b29', $read->getContent());
-//    }
+    /**
+     * @throws \RemoteRequest\RequestException
+     * havaruje na skutecnem hashi - potreba spocitat rucne!
+     */
+    public function testAnswerReal(): void
+    {
+        $lib = new ProcessorMock();
+        $read = new Fsp\Answer();
+//        $read->canDump = true;
+        $read->setResponse($lib->getResponseReal())->process();
+        $this->assertEquals(Fsp::CC_VERSION, $read->getCommand());
+        $this->assertEquals(62860, $read->getKey());
+        $this->assertEquals(16, $read->getSequence());
+        $this->assertEquals(3, $read->getFilePosition()); // 3 at extra
+        $this->assertEquals('fspd 2.8.1b29' . chr(0), $read->getContent());
+    }
 }

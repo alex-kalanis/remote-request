@@ -33,8 +33,6 @@ class RemoteTest extends CommonTestClass
         $version = new Fsp\Query\Version($query);
         $version->setKey(32)->setSequence(16)->compile();
 
-//var_dump(array_map('dechex', array_map('ord', str_split($query->body))));
-//return;
         $response = $processor->setProtocolSchema($wrapper)->setData($query)->getResponse();
         $result = Fsp\Answer\AnswerFactory::getObject(
             $answer->setResponse(
@@ -42,8 +40,6 @@ class RemoteTest extends CommonTestClass
             )->process()
         )->process();
 
-var_dump(array_map('dechex', array_map('ord', str_split($response))));
-//var_dump($result);
         /** @var Fsp\Answer\Version $result */
         $this->assertEquals('fspd 2.8.1b29', $result->getVersion());
         $this->assertFalse($result->isReadOnly());
