@@ -2,47 +2,67 @@
 
 namespace RemoteRequest\Protocols\Fsp\Answer;
 
-use RemoteRequest\Protocols\Fsp;
-
 /**
  * Process Get Directory
+// struct RDIRENT {
+//     struct HEADER {
+//         long  time;
+//         long  size;
+//         byte  type;
+//     }
+//     ASCIIZ name;
+// }
+// padding - round struct to 4 bytes block
  */
 class GetDir extends AAnswer
 {
+    /** @var GetDir\FileInfo|null */
+    protected $singleFile = null;
+    /** @var int */
     protected $position = 0;
-    protected $name = '';
-    protected $time = 0;
-    protected $size = 0;
-    protected $type = null;
+    /** @var GetDir\FileInfo[] */
+    protected $files = [];
+
+    protected function customInit(): void
+    {
+        parent::customInit();
+        $this->singleFile = new GetDir\FileInfo('');
+    }
 
     public function process(): parent
     {
         $this->position = $this->answer->getFilePosition();
         $data = $this->answer->getContent();
-        $this->time = Fsp\Strings::mb_ord(substr($data, 0, 4));
-        $this->size = Fsp\Strings::mb_ord(substr($data, 4, 4));
-        $this->type = Fsp\Strings::mb_ord($data[8]);
-        $this->name = substr($data, 9, -1);
+        $dataLen = $this->answer->getDataLength();
+        // on begining up to 12 chars and check by last one against 0x00 (NULL byte), then add by 4; read ends with overflowing the body size
+        $startSeq = 0;
+        $endSeq = 0;
+        $newPacket = true;
+        do {
+            if ($newPacket) {
+                $endSeq =+ 12;
+                $newPacket = false;
+            }
+            $record = substr($data, $startSeq, $endSeq);
+            if (chr(0) == substr($record, -1, 1)) {
+                $file = clone $this->singleFile;
+                $this->files[] = $file->setData($record);
+
+                $startSeq += $endSeq;
+                $endSeq = 0;
+                $newPacket = true;
+            } else {
+                $endSeq += 4;
+            }
+        } while ($startSeq < $dataLen);
         return $this;
     }
 
-    public function getFileName(): string
+    /**
+     * @return GetDir\FileInfo[]
+     */
+    public function getFiles(): array
     {
-        return $this->name;
-    }
-
-    public function getTime(): int
-    {
-        return $this->time;
-    }
-
-    public function getSize(): int
-    {
-        return $this->size;
-    }
-
-    public function getType(): ?int
-    {
-        return $this->type;
+        return $this->files;
     }
 }

@@ -33,7 +33,7 @@ class Sequence
      */
     protected function getRandInitial(): int
     {
-        return rand(0, 255);
+        return rand(0, 65535);
     }
 
     public function getKey(): string

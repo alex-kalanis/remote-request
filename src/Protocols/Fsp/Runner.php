@@ -82,9 +82,10 @@ class Runner
             ->setSequence($this->session->getSequence())
             ->compile()
         ;
+        $response = $this->processor->setProtocolSchema($this->schema)->setData($this->query)->getResponse();
         $answer = Answer\AnswerFactory::getObject(
             $this->answer->setResponse(
-                $this->processor->setProtocolSchema($this->schema)->setData($this->query)->getResponse()
+                $response
             )->process()
         );
         if ($answer instanceof Answer\Error) {
@@ -92,7 +93,7 @@ class Runner
         }
         $this->session
             ->setKey($answer->getDataClass()->getKey())
-            ->setSequence($answer->getDataClass()->getSequence())
+            ->updateSequence($answer->getDataClass()->getSequence())
         ;
         return $answer;
     }

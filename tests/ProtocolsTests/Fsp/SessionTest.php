@@ -112,7 +112,7 @@ class SessionTest extends CommonTestClass
         $mock->clear();
         $mock->setHost('asdf');
         $this->assertEquals(75, $mock->getSequence());
-        $mock->setSequence(75);
+        $mock->updateSequence(75);
         $mock->clear();
 
     }
@@ -125,7 +125,7 @@ class SessionTest extends CommonTestClass
         $mock = new SessionMock();
         $mock->clear();
         $mock->setHost('asdf');
-        $mock->setSequence(94);
+        $mock->updateSequence(94);
     }
 
     /**

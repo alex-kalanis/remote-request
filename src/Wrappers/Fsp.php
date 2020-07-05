@@ -4,13 +4,18 @@ namespace RemoteRequest\Wrappers;
 
 use RemoteRequest;
 use RemoteRequest\Protocols\Fsp as Protocol;
-use RemoteRequest\Schemas;
 
 /**
  * Wrapper to plug FSP info into PHP
  * - for direct call fsp via php - the connection itself is in libraries outside
  * @link https://www.php.net/manual/en/class.streamwrapper.php
  * @link https://www.php.net/manual/en/stream.streamwrapper.example-1.php
+ *
+ * Usage:
+ * - In initialization:
+RemoteRequest\Wrappers\Fsp::register();
+ * - somewhere in code:
+file_get_contents('fsp://user:pass@server:12345/dir/file');
  */
 class Fsp
 {
@@ -19,44 +24,74 @@ class Fsp
     protected $context;
     protected $position;
     protected $varname;
+    protected $runner = null;
+    protected $dir = null;
+    protected $file = null;
 
-    protected $key = null;
-    protected $sequence = [];
-    protected $wrapper = null;
-    protected $processor = null;
-    protected $query = null;
-    protected $answer = null;
+    protected $path = '';
+
+    public static function register()
+    {
+        if (in_array("fsp", stream_get_wrappers())) {
+            stream_wrapper_unregister("fsp");
+        }
+        stream_wrapper_register("fsp", "\RemoteRequest\Wrappers\Fsp");
+    }
 
     /* Methods */
     public function __construct()
     {
-        $this->wrapper = Schemas\ASchema::getSchema(Schemas\ASchema::SCHEMA_UDP);
-        $this->processor = new RemoteRequest\Connection\Processor(new RemoteRequest\Sockets\Socket());
-        $this->query = new Protocol\Query();
-        $this->answer = new Protocol\Answer();
+        $this->runner = new Protocol\Runner();
+        $this->dir = new Fsp\Dir($this->runner);
+        $this->file = new Fsp\File($this->runner);
     }
 
     public function __destruct()
     {
-        if (isset($this->key)) {
-            $this->sendBye();
-        }
+        $this->runner->__destruct();
     }
 
     public function dir_closedir(): bool
     {
+        try {
+            return $this->dir->close();
+        } catch (RemoteRequest\RequestException $ex) {
+            trigger_error($ex->getMessage(), E_USER_ERROR);
+            return false;
+        }
     }
 
     public function dir_opendir(string $path, int $options): bool
     {
+        try {
+            return $this->dir->open($path, $options);
+        } catch (RemoteRequest\RequestException $ex) {
+            trigger_error($ex->getMessage(), E_USER_ERROR);
+            return false;
+        }
     }
 
-    public function dir_readdir(): string
+    /**
+     * @return string|false
+     */
+    public function dir_readdir()
     {
+        try {
+            return $this->dir->read();
+        } catch (RemoteRequest\RequestException $ex) {
+            trigger_error($ex->getMessage(), E_USER_ERROR);
+            return false;
+        }
     }
 
     public function dir_rewinddir(): bool
     {
+        try {
+            return $this->dir->rewind();
+        } catch (RemoteRequest\RequestException $ex) {
+            trigger_error($ex->getMessage(), E_USER_ERROR);
+            return false;
+        }
     }
 
     /**
@@ -64,68 +99,45 @@ class Fsp
      * @param int $mode
      * @param int $options
      * @return bool
-     * @throws RemoteRequest\RequestException
      */
     public function mkdir(string $path, int $mode, int $options): bool
     {
-        // create dir
-        $mkDir = new Protocol\Query\MakeDir($this->query);
-        $mkDir->setKey($this->previousKey())->setSequence($this->generateSequence())->setDirPath($path)->compile();
-        /** @var Protocol\Answer\Protection|Protocol\Answer\Error $answer */
-        $answer = $this->sendQuery($this->query);
-        if ($answer instanceof Protocol\Answer\Error) {
-            throw $answer->getError();
+        try {
+            return $this->dir->make($path, $mode, $options);
+        } catch (RemoteRequest\RequestException $ex) {
+            trigger_error($ex->getMessage(), E_USER_ERROR);
+            return false;
         }
-        if (!$answer instanceof Protocol\Answer\Protection) {
-            throw new RemoteRequest\RequestException('Got something bad with mkdir. Class ' . get_class($answer));
-        }
-        $this->parseAnswer($answer);
-        // TODO: send protection data - set from $mode
-        return true;
     }
 
     /**
      * @param string $path_from
      * @param string $path_to
      * @return bool
-     * @throws RemoteRequest\RequestException
      */
     public function rename(string $path_from, string $path_to): bool
     {
-        $rename = new Protocol\Query\Rename($this->query);
-        $rename->setKey($this->previousKey())->setSequence($this->generateSequence())->setFilePath($path_from)->setNewPath($path_to)->compile();
-        /** @var Protocol\Answer\Nothing|Protocol\Answer\Error $answer */
-        $answer = $this->sendQuery($this->query);
-        if ($answer instanceof Protocol\Answer\Error) {
-            throw $answer->getError();
+        try {
+            return $this->dir->rename($path_from, $path_to);
+        } catch (RemoteRequest\RequestException $ex) {
+            trigger_error($ex->getMessage(), E_USER_ERROR);
+            return false;
         }
-        if (!$answer instanceof Protocol\Answer\Nothing) {
-            throw new RemoteRequest\RequestException('Got something bad with rename. Class ' . get_class($answer));
-        }
-        $this->parseAnswer($answer);
-        return true;
     }
 
     /**
      * @param string $path
      * @param int $options
      * @return bool
-     * @throws RemoteRequest\RequestException
      */
     public function rmdir(string $path, int $options): bool
     {
-        $delDir = new Protocol\Query\DelDir($this->query);
-        $delDir->setKey($this->previousKey())->setSequence($this->generateSequence())->setDirPath($path)->compile();
-        /** @var Protocol\Answer\Nothing|Protocol\Answer\Error $answer */
-        $answer = $this->sendQuery($this->query);
-        if ($answer instanceof Protocol\Answer\Error) {
-            throw $answer->getError();
+        try {
+            return $this->dir->remove($path, $options);
+        } catch (RemoteRequest\RequestException $ex) {
+            trigger_error($ex->getMessage(), E_USER_ERROR);
+            return false;
         }
-        if (!$answer instanceof Protocol\Answer\Nothing) {
-            throw new RemoteRequest\RequestException('Got something bad with rmdir. Class ' . get_class($answer));
-        }
-        $this->parseAnswer($answer);
-        return true;
     }
 
     /**
@@ -232,6 +244,7 @@ class Fsp
 
     public function stream_truncate(int $new_size): bool
     {
+        return false;
     }
 
     public function stream_write(string $data): int
@@ -246,83 +259,40 @@ class Fsp
     /**
      * @param string $path
      * @return bool
-     * @throws RemoteRequest\RequestException
      */
     public function unlink(string $path): bool
     {
-        $delFile = new Protocol\Query\DelFile($this->query);
-        $delFile->setKey($this->previousKey())->setSequence($this->generateSequence())->setFilePath($path)->compile();
-        /** @var Protocol\Answer\Nothing|Protocol\Answer\Error $answer */
-        $answer = $this->sendQuery($this->query);
-        if ($answer instanceof Protocol\Answer\Error) {
-            throw $answer->getError();
+        try {
+            return $this->file->unlink($path);
+        } catch (RemoteRequest\RequestException $ex) {
+            trigger_error($ex->getMessage(), E_USER_ERROR);
+            return false;
         }
-        if (!$answer instanceof Protocol\Answer\Nothing) {
-            throw new RemoteRequest\RequestException('Got something bad with unlink. Class ' . get_class($answer));
-        }
-        $this->parseAnswer($answer);
-        return true;
     }
 
     public function url_stat(string $path, int $flags): array
     {
-    }
-
-    /**
-     * @throws RemoteRequest\RequestException
-     */
-    protected function sendBye(): void
-    {
-        $bye = new Protocol\Query\Bye($this->query);
-        $bye->setKey($this->previousKey())->setSequence($this->generateSequence())->compile();
-        /** @var Protocol\Answer\Nothing|Protocol\Answer\Error $answer */
-        $answer = $this->sendQuery($this->query);
-        if ($answer instanceof Protocol\Answer\Error) {
-            throw $answer->getError();
+        try {
+            return $this->dir->stats($path, $flags);
+        } catch (RemoteRequest\RequestException $ex) {
+            if ($flags & ~STREAM_URL_STAT_QUIET) {
+                trigger_error($ex->getMessage(), E_USER_ERROR);
+            }
+            return [
+                0 => 0,
+                1 => 0,
+                2 => 0,
+                3 => 0,
+                4 => 0,
+                5 => 0,
+                6 => 0,
+                7 => 0,
+                8 => 0,
+                9 => 0,
+                10 => 0,
+                11 => -1,
+                12 => -1,
+            ];
         }
-        if (!$answer instanceof Protocol\Answer\Nothing) {
-            throw new RemoteRequest\RequestException('Got something bad with close. Class ' . get_class($answer));
-        }
-        $this->key = null;
-        $this->sequence = [];
-    }
-
-    /**
-     * @param Protocol\Query $query
-     * @return Protocol\Answer\AAnswer
-     * @throws RemoteRequest\RequestException
-     */
-    protected function sendQuery(Protocol\Query $query): Protocol\Answer\AAnswer
-    {
-        return Protocol\Answer\AnswerFactory::getObject(
-            $this->answer->setResponse(
-                $this->processor->setProtocolSchema($this->wrapper)->setData($query)->getResponse()
-            )->process()
-        );
-    }
-
-    protected function previousKey(): int
-    {
-        return isset($this->key) ? $this->key : rand(0, 255);
-    }
-
-    protected function generateSequence(): int
-    {
-        $seqKey = rand(0, 255);
-        $this->sequence[$seqKey] = microtime();
-        return $seqKey;
-    }
-
-    protected function parseAnswer(Protocol\Answer\AAnswer $answer): void
-    {
-        $raw = $answer->getDataClass();
-        $this->key = $raw->getKey();
-        $this->sequence[$raw->getSequence()] = microtime() - $this->sequence[$raw->getSequence()];
     }
 }
-
-
-if (in_array("fsp", stream_get_wrappers())) {
-    stream_wrapper_unregister("fsp");
-}
-stream_wrapper_register("fsp", "\RemoteRequest\Wrappers\Fsp");

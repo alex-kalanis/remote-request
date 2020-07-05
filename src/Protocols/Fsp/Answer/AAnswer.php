@@ -14,6 +14,11 @@ abstract class AAnswer
     public function __construct(Fsp\Answer $answer)
     {
         $this->answer = $answer;
+        $this->customInit();
+    }
+
+    protected function customInit(): void
+    {
     }
 
     public function getDataClass(): Fsp\Answer

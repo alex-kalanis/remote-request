@@ -10,6 +10,8 @@ use RemoteRequest\Protocols\Fsp as Protocol;
  */
 class Dir extends AOperations
 {
+    /** @var Protocol\Answer\GetDir\FileInfo[] */
+    protected $files = [];
     protected $path = '';
     protected $seek = 0;
 
@@ -26,14 +28,16 @@ class Dir extends AOperations
     }
 
     /**
-     * @return string
+     * @return string|bool
      * @throws RemoteRequest\RequestException
      */
-    public function read(): string
+    public function read()
     {
-        $answer = $this->readDir();
-        $this->seek++;
-        return $answer->getFileName();
+        $part = $this->readFiles($this->path);
+        if (empty($part)) {
+            return false;
+        }
+        return $part->getFilename();
     }
 
     public function rewind(): bool
@@ -109,59 +113,74 @@ class Dir extends AOperations
     {
         // tohle bude jako readdir(), ale s tim rozdilem, ze se potrebuji vytahnout ta data, ne jmeno
         $parsedPath = $this->parsePath($path);
-        $slashPos = strrpos('/', $parsedPath);
+        $slashPos = strrpos($path, '/');
         if (false === $slashPos) {
             throw new RemoteRequest\RequestException('Bad parsed path: ' . $parsedPath);
         }
-        $fileName = substr($parsedPath, $slashPos);
-        $this->path = substr($parsedPath, 0, $parsedPath - 1);
+        $fileName = substr($path, $slashPos + 1);
+        $dirPath = substr($path, 0, $slashPos);
 
         $infoAnswer = null;
-//            $dirInfo = new Protocol\Query\GetProtection($this->runner->getQuery());
-//            $dirInfo->setDirPath($this->path);
-//            $infoAnswer = $this->runner->setActionQuery($dirInfo)->process();
-//            if (!$infoAnswer instanceof Protocol\Answer\Protection) {
-//                throw new RemoteRequest\RequestException('Got something bad with stat protection. Class ' . get_class($infoAnswer));
-//            }
+//        $dirInfo = new Protocol\Query\GetProtection($this->runner->getQuery());
+//        $dirInfo->setDirPath($dirPath);
+//        $infoAnswer = $this->runner->setActionQuery($dirInfo)->process();
+//        if (!$infoAnswer instanceof Protocol\Answer\Protection) {
+//            throw new RemoteRequest\RequestException('Got something bad with stat protection. Class ' . get_class($infoAnswer));
+//        }
 
-        $this->seek = 0;
-        do {
+        while ($fileInfo = $this->readFiles($dirPath)) {
             // doseekovali jsme na jmeno...
-            $answer = $this->readDir();
-            if ($answer->getFileName() == $fileName) {
+            if ($fileInfo->getFileName() == $fileName) {
                 return [
                     0 => 0,
                     1 => 0,
-                    2 => $this->parseMode($infoAnswer, $answer->getType()),
+                    2 => $this->parseMode($infoAnswer, $fileInfo->getOrigType()),
                     3 => 0,
                     4 => 0,
                     5 => 0,
                     6 => 0,
-                    7 => $answer->getSize(),
-                    8 => $answer->getTime(),
-                    9 => $answer->getTime(),
-                    10 => $answer->getTime(),
+                    7 => $fileInfo->getSize(),
+                    8 => $fileInfo->getATime(),
+                    9 => $fileInfo->getMTime(),
+                    10 => $fileInfo->getCTime(),
                     11 => -1,
                     12 => -1,
                 ];
             }
-            $this->seek++;
-        } while ($this->seek < 65536);
+        }
         throw new RemoteRequest\RequestException('FSP path not found: ' . $path);
     }
 
     /**
+     * @param string $path
+     * @return Protocol\Answer\GetDir\FileInfo|null
+     * @throws RemoteRequest\RequestException
+     */
+    public function readFiles(string $path): ?Protocol\Answer\GetDir\FileInfo
+    {
+        if (false === next($this->files)) {
+            $this->files = $this->readDir($path)->getFiles();
+            reset($this->files);
+            $this->seek++;
+        }
+        $file = current($this->files);
+        return $file;
+    }
+
+    /**
+     * @param string $path
      * @return Protocol\Answer\GetDir
      * @throws RemoteRequest\RequestException
      */
-    protected function readDir(): Protocol\Answer\GetDir
+    protected function readDir(string $path): Protocol\Answer\GetDir
     {
         $rdDir = new Protocol\Query\GetDir($this->runner->getQuery());
-        $rdDir->setDirPath($this->parsePath($this->path))->setPosition($this->seek);
+        $rdDir->setDirPath($this->parsePath($path))->setPosition($this->seek);
         $answer = $this->runner->setActionQuery($rdDir)->process();
         if (!$answer instanceof Protocol\Answer\GetDir) {
             throw new RemoteRequest\RequestException('Got something bad with mkdir. Class ' . get_class($answer));
         }
+        $answer->process();
         return $answer;
     }
 

@@ -86,7 +86,7 @@ class Session
      * @return $this
      * @throws RequestException
      */
-    public function setSequence(int $sequence): self
+    public function updateSequence(int $sequence): self
     {
         $this->getLastSequence()->checkSequence($sequence)->updateSequence();
         return $this;

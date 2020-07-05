@@ -25,18 +25,20 @@ class AOperations
      */
     protected function parsePath(string $path, bool $setTarget = true): string
     {
-        $requestUrl = parse_url($path);
-        if (false === $requestUrl) {
+        $host = parse_url($path, PHP_URL_HOST);
+        $port = parse_url($path, PHP_URL_PORT);
+        $into = parse_url($path, PHP_URL_PATH);
+        if (empty($host)) {
             throw new RemoteRequest\RequestException('Malformed path: ' . $path);
         }
         if ($setTarget) {
             $this->runner->getSchema()->setTarget(
-                $requestUrl['host'],
-                !empty($requestUrl['port']) ? (int)$requestUrl['port'] : 21,
-                $this->runner->getTimeout($requestUrl['host'])
+                $host,
+                !empty($port) ? (int)$port : 21,
+                $this->runner->getTimeout($host)
             );
         }
-        $pre = (in_array($requestUrl['path'][0], ['.', '\\'])) ? substr($requestUrl['path'], 1) : $requestUrl['path'] ;
+        $pre = (in_array($into[0], ['.', '\\'])) ? substr($into, 1) : $into ;
         return $pre;
     }
 }

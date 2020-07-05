@@ -126,12 +126,12 @@ class Answer extends Protocols\Dummy\Answer
 
     public function getDataLength(): int
     {
-        return (string)$this->headDataLength;
+        return (int)$this->headDataLength;
     }
 
     public function getFilePosition(): int
     {
-        return (string)$this->headFilePosition;
+        return (int)$this->headFilePosition;
     }
 
     public function getContent(): string

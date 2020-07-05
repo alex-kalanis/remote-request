@@ -4,9 +4,10 @@ namespace ProtocolsTests\Fsp;
 
 use CommonTestClass;
 use RemoteRequest\Connection;
-use RemoteRequest\Sockets;
 use RemoteRequest\Protocols\Fsp;
 use RemoteRequest\Schemas;
+use RemoteRequest\Sockets;
+use RemoteRequest\Wrappers;
 
 class RemoteTest extends CommonTestClass
 {
@@ -44,4 +45,12 @@ class RemoteTest extends CommonTestClass
         $this->assertEquals('fspd 2.8.1b29', $result->getVersion());
         $this->assertFalse($result->isReadOnly());
     }
+
+    public function testDirList(): void
+    {
+        $runner = new Fsp\Runner();
+        $lib = new Wrappers\Fsp\Dir($runner);
+        print_r($lib->stats('fsp://10.0.0.30:54321/deb/asyncio.pdf', 0));
+        $lib->close();
+   }
 }
