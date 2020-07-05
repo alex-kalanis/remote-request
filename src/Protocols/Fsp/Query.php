@@ -20,6 +20,8 @@ class Query extends Protocols\Dummy\Query
     protected $contentData = '';
     protected $contentExtraData = '';
 
+    private $preparedPacket = '';
+
     public function setKey(int $key = 0)
     {
         $this->headServerKey = $key;
@@ -58,17 +60,19 @@ class Query extends Protocols\Dummy\Query
 
     public function getPacket(): string
     {
-        return $this->renderRequestHeader($this->computeCheckSum()) . $this->getContent() . $this->getExtraData();
+        $this->preparedPacket = $this->renderRequestHeader() . $this->getContent() . $this->getExtraData();
+        $this->preparedPacket[1] = chr($this->computeCheckSum());
+        return $this->preparedPacket;
     }
 
     public function getChecksumPacket(): string
     {
-        return $this->renderRequestHeader(0) . $this->getContent() . $this->getExtraData();
+        return $this->preparedPacket;
     }
 
     public function getInitialSumChunk(): int
     {
-        return strlen($this->getChecksumPacket());
+        return strlen($this->preparedPacket);
     }
 
     protected function getCommand(): int

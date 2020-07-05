@@ -9,11 +9,11 @@ use RemoteRequest\Protocols\Fsp;
  */
 trait THeader
 {
-    protected function renderRequestHeader(int $checksum): string
+    protected function renderRequestHeader(): string
     {
         return sprintf('%s%s%s%s%s%s',
             $this->headerFill($this->getCommand(), 1),
-            $this->headerFill($checksum, 1),
+            $this->headerFill(0, 1),
             $this->headerFill($this->getKey(), 2),
             $this->headerFill($this->getSequence(), 2),
             $this->headerFill($this->getDataLength(), 2),

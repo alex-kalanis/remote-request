@@ -58,7 +58,7 @@ class QueryMock
     {
         return Common::makeDummyQuery([
             0x43, # CC_UP_LOAD
-            0x01, # checksum
+            0x8F, # checksum
             0x01, 0x02, # key
             0x03, 0x04, # sequence
             0x00, 0x3D, # data_length
@@ -128,7 +128,7 @@ class QueryMock
     {
         return Common::makeDummyQuery([
             0x48, # CC_SET_PRO
-            0x01, # checksum
+            0xE9, # checksum
             0x01, 0x02, # key
             0x03, 0x04, # sequence
             0x00, 0x09, # data_length
@@ -198,7 +198,7 @@ class QueryMock
     {
         return Common::makeDummyQuery([
             0x4D, # CC_GET_FILE
-            0x01, # checksum
+            0x85, # checksum
             0x01, 0x02, # key
             0x03, 0x04, # sequence
             0x00, 0x0A, # data_length
@@ -212,7 +212,7 @@ class QueryMock
     {
         return Common::makeDummyQuery([
             0x4E, # CC_RENAME
-            0x01, # checksum
+            0xAB, # checksum
             0x01, 0x02, # key
             0x03, 0x04, # sequence
             0x00, 0x0A, # data_length
