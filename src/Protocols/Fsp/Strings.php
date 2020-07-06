@@ -25,4 +25,18 @@ class Strings
             + ( (isset($char) ) ? ord($char) : 0 )
             ;
     }
+
+    public static function filler(int $input, int $length): string
+    {
+        return str_pad(
+            substr(static::mb_chr($input), 0, $length),
+            $length,
+            chr(0),
+            STR_PAD_LEFT);
+    }
+
+    public static function cutter(string $data, int $start, int $length): int
+    {
+        return static::mb_ord(substr($data, $start, $length));
+    }
 }

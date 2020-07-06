@@ -2,8 +2,7 @@
 
 namespace RemoteRequest\Wrappers;
 
-use RemoteRequest;
-use RemoteRequest\Protocols\Fsp as Protocol;
+use RemoteRequest\RequestException;
 
 /**
  * Wrapper to plug FSP info into PHP
@@ -19,16 +18,13 @@ file_get_contents('fsp://user:pass@server:12345/dir/file');
  */
 class Fsp
 {
-    /* Properties */
     /** @var resource */
-    protected $context;
-    protected $position;
-    protected $varname;
+    public $context;
+
     protected $runner = null;
     protected $dir = null;
     protected $file = null;
-
-    protected $path = '';
+    protected $showErrors = true;
 
     public static function register()
     {
@@ -38,24 +34,27 @@ class Fsp
         stream_wrapper_register("fsp", "\RemoteRequest\Wrappers\Fsp");
     }
 
-    /* Methods */
     public function __construct()
     {
-        $this->runner = new Protocol\Runner();
+        $this->runner = new Fsp\Runner();
         $this->dir = new Fsp\Dir($this->runner);
         $this->file = new Fsp\File($this->runner);
     }
 
     public function __destruct()
     {
-        $this->runner->__destruct();
+        try {
+            $this->runner->__destruct();
+        } catch (RequestException $ex) {
+            trigger_error($ex->getMessage(), E_USER_ERROR);
+        }
     }
 
     public function dir_closedir(): bool
     {
         try {
             return $this->dir->close();
-        } catch (RemoteRequest\RequestException $ex) {
+        } catch (RequestException $ex) {
             trigger_error($ex->getMessage(), E_USER_ERROR);
             return false;
         }
@@ -65,7 +64,7 @@ class Fsp
     {
         try {
             return $this->dir->open($path, $options);
-        } catch (RemoteRequest\RequestException $ex) {
+        } catch (RequestException $ex) {
             trigger_error($ex->getMessage(), E_USER_ERROR);
             return false;
         }
@@ -78,7 +77,7 @@ class Fsp
     {
         try {
             return $this->dir->read();
-        } catch (RemoteRequest\RequestException $ex) {
+        } catch (RequestException $ex) {
             trigger_error($ex->getMessage(), E_USER_ERROR);
             return false;
         }
@@ -88,7 +87,7 @@ class Fsp
     {
         try {
             return $this->dir->rewind();
-        } catch (RemoteRequest\RequestException $ex) {
+        } catch (RequestException $ex) {
             trigger_error($ex->getMessage(), E_USER_ERROR);
             return false;
         }
@@ -104,7 +103,7 @@ class Fsp
     {
         try {
             return $this->dir->make($path, $mode, $options);
-        } catch (RemoteRequest\RequestException $ex) {
+        } catch (RequestException $ex) {
             trigger_error($ex->getMessage(), E_USER_ERROR);
             return false;
         }
@@ -119,7 +118,7 @@ class Fsp
     {
         try {
             return $this->dir->rename($path_from, $path_to);
-        } catch (RemoteRequest\RequestException $ex) {
+        } catch (RequestException $ex) {
             trigger_error($ex->getMessage(), E_USER_ERROR);
             return false;
         }
@@ -134,7 +133,7 @@ class Fsp
     {
         try {
             return $this->dir->remove($path, $options);
-        } catch (RemoteRequest\RequestException $ex) {
+        } catch (RequestException $ex) {
             trigger_error($ex->getMessage(), E_USER_ERROR);
             return false;
         }
@@ -142,118 +141,146 @@ class Fsp
 
     /**
      * @param int $cast_as
-     * @return resource
+     * @return resource|bool
      */
     public function stream_cast(int $cast_as)
     {
+        try {
+            return $this->file->stream_cast($cast_as);
+        } catch (RequestException $ex) {
+            $this->errorReport($ex);
+            return false;
+        }
     }
 
     public function stream_close(): void
     {
+        try {
+            $this->file->stream_close();
+        } catch (RequestException $ex) {
+            $this->errorReport($ex);
+        }
     }
 
     public function stream_eof(): bool
     {
-        return $this->position >= strlen($GLOBALS[$this->varname]);
+        try {
+            return $this->file->stream_eof();
+        } catch (RequestException $ex) {
+            $this->errorReport($ex);
+            return true;
+        }
     }
 
     public function stream_flush(): bool
     {
+        try {
+            return $this->file->stream_flush();
+        } catch (RequestException $ex) {
+            $this->errorReport($ex);
+            return false;
+        }
     }
 
     public function stream_lock(int $operation): bool
     {
+        try {
+            return $this->file->stream_lock($operation);
+        } catch (RequestException $ex) {
+            $this->errorReport($ex);
+            return false;
+        }
     }
 
     public function stream_metadata(string $path, int $option, $var): bool
     {
-        if($option == STREAM_META_TOUCH) {
-            $url = parse_url($path);
-            $varname = $url["host"];
-            if(!isset($GLOBALS[$varname])) {
-                $GLOBALS[$varname] = '';
-            }
-            return true;
+        try {
+            return $this->file->stream_metadata($path, $option, $var);
+        } catch (RequestException $ex) {
+            $this->errorReport($ex);
+            return false;
         }
-        return false;
     }
 
-    function stream_open(string $path, string $mode, int $options, string &$opened_path): bool
+    public function stream_open(string $path, string $mode, int $options, string &$opened_path): bool
     {
-        $url = parse_url($path);
-        $this->varname = $url["host"];
-        $this->position = 0;
-
-        return true;
+        try {
+            $this->canReport($options);
+            return $this->file->stream_open($this->dir, $path, $mode);
+        } catch (RequestException $ex) {
+            $this->errorReport($ex);
+            return false;
+        }
     }
 
     public function stream_read(int $count): string
     {
-        $ret = substr($GLOBALS[$this->varname], $this->position, $count);
-        $this->position += strlen($ret);
-        return $ret;
+        try {
+            return $this->file->stream_read($count);
+        } catch (RequestException $ex) {
+            $this->errorReport($ex);
+            return false;
+        }
     }
 
     public function stream_seek(int $offset, int $whence = SEEK_SET): bool
     {
-        switch ($whence) {
-            case SEEK_SET:
-                if ($offset < strlen($GLOBALS[$this->varname]) && $offset >= 0) {
-                    $this->position = $offset;
-                    return true;
-                } else {
-                    return false;
-                }
-                break;
-
-            case SEEK_CUR:
-                if ($offset >= 0) {
-                    $this->position += $offset;
-                    return true;
-                } else {
-                    return false;
-                }
-                break;
-
-            case SEEK_END:
-                if (strlen($GLOBALS[$this->varname]) + $offset >= 0) {
-                    $this->position = strlen($GLOBALS[$this->varname]) + $offset;
-                    return true;
-                } else {
-                    return false;
-                }
-                break;
-
-            default:
-                return false;
+        try {
+            return $this->file->stream_seek($offset, $whence);
+        } catch (RequestException $ex) {
+            $this->errorReport($ex);
+            return false;
         }
     }
 
     public function stream_set_option(int $option, int $arg1, int $arg2): bool
     {
+        try {
+            return $this->file->stream_set_option($option, $arg1, $arg2);
+        } catch (RequestException $ex) {
+            $this->errorReport($ex);
+            return false;
+        }
     }
 
     public function stream_stat(): array
     {
+        try {
+            return $this->file->stream_stat($this->dir);
+        } catch (RequestException $ex) {
+            $this->errorReport($ex);
+            return [];
+        }
     }
 
     public function stream_tell(): int
     {
-        return $this->position;
+        try {
+            return $this->file->stream_tell();
+        } catch (RequestException $ex) {
+            $this->errorReport($ex);
+            return -1;
+        }
     }
 
     public function stream_truncate(int $new_size): bool
     {
-        return false;
+        try {
+            return $this->file->stream_truncate($new_size);
+        } catch (RequestException $ex) {
+            $this->errorReport($ex);
+            return false;
+        }
     }
 
     public function stream_write(string $data): int
     {
-        $left = substr($GLOBALS[$this->varname], 0, $this->position);
-        $right = substr($GLOBALS[$this->varname], $this->position + strlen($data));
-        $GLOBALS[$this->varname] = $left . $data . $right;
-        $this->position += strlen($data);
-        return strlen($data);
+        try {
+            return $this->file->stream_write($data);
+        } catch (RequestException $ex) {
+            $this->errorReport($ex);
+            return 0;
+        }
     }
 
     /**
@@ -264,9 +291,24 @@ class Fsp
     {
         try {
             return $this->file->unlink($path);
-        } catch (RemoteRequest\RequestException $ex) {
+        } catch (RequestException $ex) {
             trigger_error($ex->getMessage(), E_USER_ERROR);
             return false;
+        }
+    }
+
+    protected function canReport($opts): void
+    {
+        $this->showErrors = ($opts & STREAM_REPORT_ERRORS);
+    }
+
+    /**
+     * @param RequestException $ex
+     */
+    protected function errorReport(RequestException $ex): void
+    {
+        if ($this->showErrors) {
+            trigger_error($ex->getMessage(), E_USER_ERROR);
         }
     }
 
@@ -274,7 +316,7 @@ class Fsp
     {
         try {
             return $this->dir->stats($path, $flags);
-        } catch (RemoteRequest\RequestException $ex) {
+        } catch (RequestException $ex) {
             if ($flags & ~STREAM_URL_STAT_QUIET) {
                 trigger_error($ex->getMessage(), E_USER_ERROR);
             }

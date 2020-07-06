@@ -11,6 +11,7 @@ class GetFile extends AQuery
 {
     protected $filePath = '';
     protected $offset = 0;
+    protected $limit = 0;
 
     protected function getCommand(): int
     {
@@ -23,9 +24,15 @@ class GetFile extends AQuery
         return $this;
     }
 
-    public function setOffset(string $offset): self
+    public function setOffset(int $offset): self
     {
         $this->offset = $offset;
+        return $this;
+    }
+
+    public function setLimit(int $limit): self
+    {
+        $this->limit = $limit;
         return $this;
     }
 
@@ -37,5 +44,10 @@ class GetFile extends AQuery
     protected function getData(): string
     {
         return $this->filePath . chr(0);
+    }
+
+    protected function getExtraData(): string
+    {
+        return ($this->limit) ? Fsp\Strings::filler($this->limit, 2) : '' ;
     }
 }

@@ -180,3 +180,6 @@ Tests
 -----
 
 Uses PhpUnit tests. Download Phpunit.phar, save it to the root, make it executable and run.
+There is excluded directory - Wrappers. They're here to access remote sources and simplify
+your life, so it isn't good idea to run tests on them. Also Helper isn't covered for same
+reason.

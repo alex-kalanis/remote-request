@@ -26,7 +26,12 @@
     </logging>
     <filter>
         <whitelist>
-            <directory suffix=".php">src/</directory>
+            <directory suffix=".php">src/Connection</directory>
+            <directory suffix=".php">src/Pointers</directory>
+            <directory suffix=".php">src/Protocols</directory>
+            <directory suffix=".php">src/Schemas</directory>
+            <directory suffix=".php">src/Sockets</directory>
+            <file>src/RequestException.php</file>
         </whitelist>
     </filter>
 

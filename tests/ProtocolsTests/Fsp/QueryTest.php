@@ -44,13 +44,13 @@ class QueryMock
     {
         return Common::makeDummyQuery([
             0x42, # CC_GET_FILE
-            0x2F, # checksum
+            0x0D, # checksum
             0x01, 0x02, # key
             0x03, 0x04, # sequence
             0x00, 0x09, # data_length
             0x00, 0x00, 0x0B, 0xDC, # position
-            'foo/bar2', 0x00 # content
-            # no extra data
+            'foo/bar2', 0x00, # content
+            0x03, 0xd8, # extra data
         ]);
     }
 
@@ -244,7 +244,7 @@ class QueryTest extends CommonTestClass
     {
         $lib = new Fsp\Query\GetFile(new Fsp\Query());
         $lib->setKey(258)->setSequence(772);
-        $lib->setFilePath('foo/bar2')->setOffset(2780);
+        $lib->setFilePath('foo/bar2')->setOffset(2780)->setLimit(728);
         $this->assertEquals(QueryMock::load()->getRequestGetFile(), $lib->compile());
     }
 

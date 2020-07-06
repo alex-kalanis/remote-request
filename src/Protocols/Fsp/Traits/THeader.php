@@ -12,27 +12,13 @@ trait THeader
     protected function renderRequestHeader(): string
     {
         return sprintf('%s%s%s%s%s%s',
-            $this->headerFill($this->getCommand(), 1),
-            $this->headerFill(0, 1),
-            $this->headerFill($this->getKey(), 2),
-            $this->headerFill($this->getSequence(), 2),
-            $this->headerFill($this->getDataLength(), 2),
-            $this->headerFill($this->getFilePosition(), 4)
+            Fsp\Strings::filler($this->getCommand(), 1),
+            Fsp\Strings::filler(0, 1),
+            Fsp\Strings::filler($this->getKey(), 2),
+            Fsp\Strings::filler($this->getSequence(), 2),
+            Fsp\Strings::filler($this->getDataLength(), 2),
+            Fsp\Strings::filler($this->getFilePosition(), 4)
         );
-    }
-
-    protected function headerFill(int $input, int $length): string
-    {
-        return str_pad(
-            substr(Fsp\Strings::mb_chr($input), 0, $length),
-            $length,
-            chr(0),
-            STR_PAD_LEFT);
-    }
-
-    protected function headerParse(string $header, int $start, int $length): int
-    {
-        return Fsp\Strings::mb_ord(substr($header, $start, $length));
     }
 
     abstract protected function getCommand(): int;

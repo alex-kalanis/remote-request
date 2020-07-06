@@ -13,6 +13,12 @@ namespace RemoteRequest\Protocols\Fsp\Answer;
 //     ASCIIZ name;
 // }
 // padding - round struct to 4 bytes block
+ *
+ * Idea for v3: Liquid headers - at first used bytes and then actual content; because it's necessary to encode long
+ * strings (like multibyte unicode) or long numbers (like 64bit date); this remove necessity for rounding
+ * Also need to send file rights and do not determine them extra - type-r-w-x
+ * And maybe sending files one-by-one. Because long name in chinese fill the string name really fast. And it's better
+ * for seeking on client side.
  */
 class GetDir extends AAnswer
 {

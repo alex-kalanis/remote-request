@@ -43,6 +43,6 @@ class Install extends AQuery
 
     protected function getExtraData(): string
     {
-        return Fsp\Strings::mb_chr($this->timestamp);
+        return ($this->timestamp) ? Fsp\Strings::filler($this->timestamp, 4) : '' ;
     }
 }

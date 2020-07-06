@@ -2,8 +2,7 @@
 
 namespace RemoteRequest\Wrappers\Fsp;
 
-use RemoteRequest;
-use RemoteRequest\Protocols\Fsp as Protocol;
+use RemoteRequest\RequestException;
 
 /**
  * Wrapper to plug FSP info into PHP - directory part
@@ -12,7 +11,7 @@ class AOperations
 {
     protected $runner = null;
 
-    public function __construct(Protocol\Runner $runner)
+    public function __construct(Runner $runner)
     {
         $this->runner = $runner;
     }
@@ -21,7 +20,7 @@ class AOperations
      * @param string $path
      * @param bool $setTarget
      * @return string
-     * @throws RemoteRequest\RequestException
+     * @throws RequestException
      */
     protected function parsePath(string $path, bool $setTarget = true): string
     {
@@ -29,7 +28,7 @@ class AOperations
         $port = parse_url($path, PHP_URL_PORT);
         $into = parse_url($path, PHP_URL_PATH);
         if (empty($host)) {
-            throw new RemoteRequest\RequestException('Malformed path: ' . $path);
+            throw new RequestException('Malformed path: ' . $path);
         }
         if ($setTarget) {
             $this->runner->getSchema()->setTarget(

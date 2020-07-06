@@ -63,6 +63,30 @@ class Dir extends AOperations
             throw new RemoteRequest\RequestException('Got something bad with mkdir. Class ' . get_class($answer));
         }
         // TODO: send protection data - set from $mode
+//        $this->rights($path, $mode[0], true);
+        return true;
+    }
+
+    /**
+     * @param string $path
+     * @param string $right
+     * @param bool $allow
+     * @return bool
+     * @throws RemoteRequest\RequestException
+     */
+    public function rights(string $path, string $right, bool $allow): bool
+    {
+        $protect = new Protocol\Query\SetProtection($this->runner->getQuery());
+        $protect
+            ->setDirPath($this->parsePath($path))
+            ->setOperation($right)
+            ->allowOperation($allow)
+        ;
+        /** @var Protocol\Answer\Protection $answer */
+        $answer = $this->runner->setActionQuery($protect)->process();
+        if (!$answer instanceof Protocol\Answer\Protection) {
+            throw new RemoteRequest\RequestException('Got something bad with setting protections. Class ' . get_class($answer));
+        }
         return true;
     }
 

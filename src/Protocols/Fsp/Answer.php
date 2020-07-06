@@ -60,12 +60,12 @@ class Answer extends Protocols\Dummy\Answer
 
     protected function processHeader(): void
     {
-        $this->headCommand = $this->headerParse($this->header, 0, 1);
-        $this->headChecksum = $this->headerParse($this->header, 1, 1);
-        $this->headServerKey = $this->headerParse($this->header, 2, 2);
-        $this->headSequence = $this->headerParse($this->header, 4, 2);
-        $this->headDataLength = $this->headerParse($this->header, 6, 2);
-        $this->headFilePosition = $this->headerParse($this->header, 8, 4);
+        $this->headCommand = Strings::cutter($this->header, 0, 1);
+        $this->headChecksum = Strings::cutter($this->header, 1, 1);
+        $this->headServerKey = Strings::cutter($this->header, 2, 2);
+        $this->headSequence = Strings::cutter($this->header, 4, 2);
+        $this->headDataLength = Strings::cutter($this->header, 6, 2);
+        $this->headFilePosition = Strings::cutter($this->header, 8, 4);
     }
 
     protected function processContent(): void

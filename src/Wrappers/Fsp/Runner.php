@@ -1,9 +1,12 @@
 <?php
 
-namespace RemoteRequest\Protocols\Fsp;
+namespace RemoteRequest\Wrappers\Fsp;
 
-use RemoteRequest;
+use RemoteRequest\Connection;
+use RemoteRequest\Protocols\Fsp as Protocol;
+use RemoteRequest\RequestException;
 use RemoteRequest\Schemas;
+use RemoteRequest\Sockets;
 
 /**
  * Runner for FSP under RemoteRequest
@@ -12,31 +15,31 @@ class Runner
 {
     /** @var Schemas\ASchema */
     protected $schema = null;
-    /** @var RemoteRequest\Connection\Processor */
+    /** @var Connection\Processor */
     protected $processor = null;
-    /** @var Query */
+    /** @var Protocol\Query */
     protected $query = null;
-    /** @var Answer */
+    /** @var Protocol\Answer */
     protected $answer = null;
-    /** @var Session */
+    /** @var Protocol\Session */
     protected $session = null;
-    /** @var Query\AQuery|null */
+    /** @var Protocol\Query\AQuery|null */
     protected $actionQuery = null;
 
     /**
-     * @throws RemoteRequest\RequestException
+     * @throws RequestException
      */
     public function __construct()
     {
         $this->schema = Schemas\ASchema::getSchema(Schemas\ASchema::SCHEMA_UDP);
-        $this->processor = new RemoteRequest\Connection\Processor(new RemoteRequest\Sockets\Socket());
-        $this->query = new Query();
-        $this->answer = new Answer();
-        $this->session = new Session();
+        $this->processor = new Connection\Processor(new Sockets\Socket());
+        $this->query = new Protocol\Query();
+        $this->answer = new Protocol\Answer();
+        $this->session = new Protocol\Session();
     }
 
     /**
-     * @throws RemoteRequest\RequestException
+     * @throws RequestException
      */
     public function __destruct()
     {
@@ -45,13 +48,13 @@ class Runner
         }
     }
 
-    public function setActionQuery(Query\AQuery $query): self
+    public function setActionQuery(Protocol\Query\AQuery $query): self
     {
         $this->actionQuery = $query;
         return $this;
     }
 
-    public function getQuery(): Query
+    public function getQuery(): Protocol\Query
     {
         return $this->query;
     }
@@ -68,13 +71,13 @@ class Runner
     }
 
     /**
-     * @return Answer\AAnswer
-     * @throws RemoteRequest\RequestException
+     * @return Protocol\Answer\AAnswer
+     * @throws RequestException
      */
-    public function process(): Answer\AAnswer
+    public function process(): Protocol\Answer\AAnswer
     {
         if (empty($this->actionQuery)) {
-            throw new RemoteRequest\RequestException('No action set.');
+            throw new RequestException('No action set.');
         }
         $this->session->setHost($this->schema->getHost());
         $this->actionQuery
@@ -83,12 +86,12 @@ class Runner
             ->compile()
         ;
         $response = $this->processor->setProtocolSchema($this->schema)->setData($this->query)->getResponse();
-        $answer = Answer\AnswerFactory::getObject(
+        $answer = Protocol\Answer\AnswerFactory::getObject(
             $this->answer->setResponse(
                 $response
             )->process()
         );
-        if ($answer instanceof Answer\Error) {
+        if ($answer instanceof Protocol\Answer\Error) {
             throw $answer->getError();
         }
         $this->session
@@ -99,16 +102,16 @@ class Runner
     }
 
     /**
-     * @throws RemoteRequest\RequestException
+     * @throws RequestException
      */
     protected function sendBye(): void
     {
-        $answer = $this->setActionQuery(new Query\Bye($this->getQuery()))
+        $answer = $this->setActionQuery(new Protocol\Query\Bye($this->getQuery()))
             ->process()
         ;
-        /** @var Answer\Nothing $answer */
-        if (!$answer instanceof Answer\Nothing) {
-            throw new RemoteRequest\RequestException('Got something bad with close. Class ' . get_class($answer));
+        /** @var Protocol\Answer\Nothing $answer */
+        if (!$answer instanceof Protocol\Answer\Nothing) {
+            throw new RequestException('Got something bad with close. Class ' . get_class($answer));
         }
         $this->session->clear();
     }

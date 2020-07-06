@@ -48,9 +48,7 @@ class RemoteTest extends CommonTestClass
 
     public function testDirList(): void
     {
-        $runner = new Fsp\Runner();
-        $lib = new Wrappers\Fsp\Dir($runner);
-        print_r($lib->stats('fsp://10.0.0.30:54321/deb/asyncio.pdf', 0));
-        $lib->close();
-   }
+        Wrappers\Fsp::register();
+        print_r(['stats', stat('fsp://10.0.0.30:54321/deb/asyncio.pdf')]);
+    }
 }
