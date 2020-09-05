@@ -45,25 +45,25 @@ class Helper
         return $lib->getResponse()->getContent();
     }
 
-    public function setLink(string $link)
+    public function setLink(string $link): self
     {
         $this->link = $link;
         return $this;
     }
 
-    public function setPostContent($postContent = '')
+    public function setPostContent($postContent = ''): self
     {
         $this->postContent = $postContent;
         return $this;
     }
 
-    public function setConnectionParams(array $params = [])
+    public function setConnectionParams(array $params = []): self
     {
         $this->connectionParams = array_merge($this->connectionParams, $params);
         return $this;
     }
 
-    public function setContextParams(array $params = [])
+    public function setContextParams(array $params = []): self
     {
         $this->contextParams = $params;
         return $this;

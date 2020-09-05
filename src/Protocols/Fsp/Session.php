@@ -16,7 +16,7 @@ class Session
     /** @var Session\Sequence[] */
     protected static $sequence = [];
 
-    public function setHost(?string $host): self
+    public function setHost(string $host): self
     {
         $this->host = $host;
         static::$sequence[$this->host] = [];

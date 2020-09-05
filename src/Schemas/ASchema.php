@@ -36,7 +36,7 @@ abstract class ASchema implements RemoteRequest\Connection\ITarget
         return $this;
     }
 
-    public function setRequest(RemoteRequest\Connection\ITarget $request)
+    public function setRequest(RemoteRequest\Connection\ITarget $request): self
     {
         $this->host = $request->getHost();
         $this->port = $request->getPort();

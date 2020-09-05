@@ -16,12 +16,37 @@ abstract class ASocket
     const SOCKET_PFSOCKET = 4;
     const SOCKET_SOCKET = 5;
 
+    protected $pointer = null;
+
+    public function __destruct()
+    {
+        if (!empty($this->pointer)) {
+            fclose($this->pointer);
+            $this->pointer = null;
+        }
+    }
+
     /**
      * @param ASchema $protocolWrapper
-     * @return resource
+     * @return resource|null
      * @throws RequestException
      */
-    abstract public function getRemotePointer(ASchema $protocolWrapper);
+    abstract protected function remotePointer(ASchema $protocolWrapper);
+
+    /**
+     * @param ASchema $protocolWrapper
+     * @return resource|null
+     * @throws RequestException
+     */
+    public function getResourcePointer(ASchema $protocolWrapper)
+    {
+        if (empty($this->pointer)) {
+            $this->pointer = $this->remotePointer($protocolWrapper);
+        } else {
+            rewind($this->pointer);
+        }
+        return $this->pointer;
+    }
 
     public static function getPointer(int $type = self::SOCKET_STREAM): ASocket
     {

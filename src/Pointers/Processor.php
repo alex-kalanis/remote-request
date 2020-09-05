@@ -19,7 +19,7 @@ class Processor
     /** @var string */
     protected $remoteResponse = '';
 
-    public function setQuery(?IQuery $content)
+    public function setQuery(?IQuery $content): self
     {
         $this->remoteQuery = $content;
         return $this;
@@ -32,7 +32,7 @@ class Processor
      * @throws RequestException
      * @codeCoverageIgnore because accessing remote resources, similar code is in overwrite
      */
-    public function processPointer($filePointer, ASchema $wrapper)
+    public function processPointer($filePointer, ASchema $wrapper): self
     {
         $this->checkQuery();
         $this->checkPointer($filePointer);
@@ -46,7 +46,7 @@ class Processor
      * @param ASchema $wrapper
      * @return $this
      */
-    protected function writeRequest($filePointer, ASchema $wrapper)
+    protected function writeRequest($filePointer, ASchema $wrapper): self
     {
         fwrite($filePointer, $this->remoteQuery->getData());
         return $this;
@@ -56,7 +56,7 @@ class Processor
      * @param resource $filePointer
      * @return $this
      */
-    protected function readResponse($filePointer)
+    protected function readResponse($filePointer): self
     {
         $this->remoteResponse = '';
 
@@ -81,7 +81,6 @@ class Processor
             }
         }
 
-        fclose($filePointer);
         $this->remoteResponse = $response;
         return $this;
     }

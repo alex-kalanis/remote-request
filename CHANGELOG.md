@@ -1,14 +1,22 @@
 Changelog
 =========
 
-#### 4.0.0 - 2010-06-20
+#### 4.1.0 - 2020-08-11
+
+* Sockets stays open in the whole time of script run
+
+#### 4.0.1 - 2020-08-11
+
+* Authentication lib for HTTP
+
+#### 4.0.0 - 2020-06-20
 
 * Change of internal structure, so major version
 * Changes in naming conventions - Wrappers are now Schemas
 * Changes in naming conventions - ISettings are now ITarget
 * Changes in tests - they are in separated dirs and testsuites
 
-#### 3.1.0 - 2010-06-20
+#### 3.1.0 - 2020-06-20
 
 * Pointers are now Sockets
 * Add older socket Socket

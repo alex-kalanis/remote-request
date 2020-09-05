@@ -81,6 +81,28 @@ class ConnectionTest extends CommonTestClass
     }
 
     /**
+     * @throws RequestException
+     */
+    public function testRepeatConnectionUse(): void
+    {
+        $content1 = str_repeat('ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz', 10);
+        $content2 = str_repeat('ZYXWVUTSRQPONMLKJIHGFEDCBA9876543210zyxwvutsrqponmlkjihgfedcba', 10);
+        $wrapper = new Schemas\Php();
+        $wrapper->setTarget(Schemas\Php::HOST_MEMORY);
+        $processor = new ConnectProcessorMock(new Sockets\SharedInternal());
+        $processor->setProtocolSchema($wrapper);
+        $query1 = new Protocols\Dummy\Query();
+        $query1->body = $content1;
+        $processor->setData($query1);
+        $this->assertEquals($content1, $processor->getResponse());
+
+        $query2 = new Protocols\Dummy\Query();
+        $query2->body = $content2;
+        $processor->setData($query2);
+        $this->assertEquals($content2, $processor->getResponse());
+    }
+
+    /**
      * @param string|null $message what to send to remote machine
      * @return string
      * @throws RequestException

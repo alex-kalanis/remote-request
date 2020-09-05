@@ -8,6 +8,8 @@ use RemoteRequest\Protocols\Fsp;
  * Install file
  * Start file upload - this one will be saved
  * To stop just send Install with zero length
+ *
+ * Correct name for v3 should be Publish - it publish uploaded file (move it from temp to target)
  */
 class Install extends AQuery
 {
