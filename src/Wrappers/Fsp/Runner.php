@@ -71,6 +71,7 @@ class Runner
     }
 
     /**
+     * Process queries to remote machine
      * @return Protocol\Answer\AAnswer
      * @throws RequestException
      */
@@ -78,6 +79,9 @@ class Runner
     {
         if (empty($this->actionQuery)) {
             throw new RequestException('No action set.');
+        }
+        if (empty($this->schema->getHost())) {
+            throw new RequestException('No target.');
         }
         $this->session->setHost($this->schema->getHost());
         $this->actionQuery

@@ -1,8 +1,11 @@
-Remote Request 4.0
-==================
+Remote Request 4
+================
 
 Requests for local and remote servers in object way. Contains libraries for querying remote
-machines - more universal way than Curl and more verbose than file_get_contents(). 
+machines - more universal way than Curl and more verbose than file_get_contents().
+
+The basic philosophy of this package is keep it simple and work with bulks of data, not streams,
+although stream variables has been used for passing the options. So no things like EventLoop.
 
 # Installation
 
@@ -10,7 +13,13 @@ machines - more universal way than Curl and more verbose than file_get_contents(
 {
     "require": {
         "alex-kalanis/remote-request": "dev-master"
-    }
+    },
+    "repositories": [
+        {
+            "type": "http",
+            "url":  "https://github.com/alex-kalanis/remote-request.git"
+        }
+    ]
 }
 ```
 
@@ -76,7 +85,7 @@ Basic usage (http query):
 
 Variant for UDP
 ```php
-    $libSchema = new RemoteRequest\Schemas\Udp(); # parametry dotazu
+    $libSchema = new RemoteRequest\Schemas\Udp(); # query params on layer 3
     $libSchema->setTarget('udp-listener.' . DOMAIN, 514);
 
     $message = new RemoteRequest\Protocols\Dummy\Query();

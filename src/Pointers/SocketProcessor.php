@@ -20,7 +20,7 @@ class SocketProcessor extends Processor
      * @throws RequestException
      * @codeCoverageIgnore because accessing remote source via internal socket
      */
-    protected function writeRequest($filePointer, ASchema $wrapper)
+    protected function writeRequest($filePointer, ASchema $wrapper): parent
     {
         $input = $this->remoteQuery->getData();
         $result = socket_sendto($filePointer, $input , strlen($input) , 0 , $wrapper->getHost() , $wrapper->getPort());
@@ -38,7 +38,7 @@ class SocketProcessor extends Processor
      * @throws RequestException
      * @codeCoverageIgnore because accessing remote source via internal socket
      */
-    protected function readResponse($filePointer)
+    protected function readResponse($filePointer): parent
     {
         $reply = '';
         $result = socket_recv ( $filePointer, $reply , static::PART_SPLIT , MSG_WAITALL );

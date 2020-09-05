@@ -33,13 +33,13 @@ class Processor
         ;
     }
 
-    public function setProtocolSchema(ASchema $wrapper)
+    public function setProtocolSchema(ASchema $wrapper): self
     {
         $this->schema = $wrapper;
         return $this;
     }
 
-    public function setData(?IQuery $request)
+    public function setData(?IQuery $request): self
     {
         $this->data = $request;
         return $this;
@@ -54,7 +54,7 @@ class Processor
     {
         return $this->processor
                 ->setQuery($this->data)
-                ->processPointer($this->socket->getRemotePointer($this->schema), $this->schema)
+                ->processPointer($this->socket->getResourcePointer($this->schema), $this->schema)
                 ->getContent()
             ;
     }

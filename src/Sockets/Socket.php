@@ -17,7 +17,7 @@ class Socket extends ASocket
      * @throws RequestException
      * @codeCoverageIgnore because accessing remote source via internal socket
      */
-    public function getRemotePointer(ASchema $protocolWrapper)
+    protected function remotePointer(ASchema $protocolWrapper)
     {
         // Make the request to the server
         // If possible, securely post using HTTPS, your PHP server will need to be SSL enabled

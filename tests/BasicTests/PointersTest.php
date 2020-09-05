@@ -11,7 +11,7 @@ use RemoteRequest\Sockets;
 
 class EmptyTestSocket extends Sockets\ASocket
 {
-    public function getRemotePointer(Schemas\ASchema $protocolWrapper)
+    protected function remotePointer(Schemas\ASchema $protocolWrapper)
     {
         return null;
     }
@@ -19,7 +19,7 @@ class EmptyTestSocket extends Sockets\ASocket
 
 class ExceptionTestSocket extends Sockets\ASocket
 {
-    public function getRemotePointer(Schemas\ASchema $protocolWrapper)
+    protected function remotePointer(Schemas\ASchema $protocolWrapper)
     {
         throw new RequestException('Cannot establish connection');
     }

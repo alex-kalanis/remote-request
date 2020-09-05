@@ -135,7 +135,6 @@ class Dir extends AOperations
      */
     public function stats(string $path, int $flags): array
     {
-        // tohle bude jako readdir(), ale s tim rozdilem, ze se potrebuji vytahnout ta data, ne jmeno
         $parsedPath = $this->parsePath($path);
         $slashPos = strrpos($path, '/');
         if (false === $slashPos) {
@@ -153,7 +152,7 @@ class Dir extends AOperations
 //        }
 
         while ($fileInfo = $this->readFiles($dirPath)) {
-            // doseekovali jsme na jmeno...
+            // seek into the name...
             if ($fileInfo->getFileName() == $fileName) {
                 return [
                     0 => 0,
