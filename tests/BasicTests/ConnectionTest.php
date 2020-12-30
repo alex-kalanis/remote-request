@@ -2,6 +2,7 @@
 
 namespace BasicTests;
 
+
 use CommonTestClass;
 use RemoteRequest\Connection;
 use RemoteRequest\Pointers;
@@ -9,6 +10,7 @@ use RemoteRequest\Protocols;
 use RemoteRequest\RequestException;
 use RemoteRequest\Schemas;
 use RemoteRequest\Sockets;
+
 
 class ConnectProcessorMock extends Connection\Processor
 {
@@ -18,6 +20,7 @@ class ConnectProcessorMock extends Connection\Processor
         $this->processor = new PointerProcessorMock();
     }
 }
+
 
 class PointerProcessorMock extends Pointers\Processor
 {
@@ -31,6 +34,7 @@ class PointerProcessorMock extends Pointers\Processor
         return $this;
     }
 }
+
 
 class ConnectionTest extends CommonTestClass
 {
@@ -47,10 +51,11 @@ class ConnectionTest extends CommonTestClass
     }
 
     /**
-     * @expectedException \RemoteRequest\RequestException
+     * @throws RequestException
      */
     public function testSetsNoSocket(): void
     {
+        $this->expectException(RequestException::class);
         $this->queryOnMock(null);
     }
 

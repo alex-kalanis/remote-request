@@ -1,9 +1,21 @@
 {
   "name": "alex-kalanis/remote-request",
   "description": "PHP libraries for make queries onto remote servers",
-  "keywords": [],
-  "license": "BSD 3-Clause",
-  "type": "project",
+  "keywords": [
+    "restapi",
+    "rest",
+    "http",
+    "fsp",
+    "tcp",
+    "udp",
+    "curl",
+    "server",
+    "socket",
+    "fsocket",
+    "request"
+  ],
+  "license": "BSD-3-Clause",
+  "type": "library",
   "require": {
     "php": ">=7.2.0",
     "ext-json": "*",
@@ -11,7 +23,7 @@
     "ext-sockets": "*"
   },
   "require-dev": {
-    "phpunit/phpunit": "~6.0"
+    "phpunit/phpunit": ">6.0"
   },
   "autoload": {
     "psr-4": {

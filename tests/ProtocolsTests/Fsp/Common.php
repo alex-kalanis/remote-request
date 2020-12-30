@@ -2,6 +2,7 @@
 
 namespace ProtocolsTests\Fsp;
 
+
 class Common
 {
     public static function makeDummyQuery(array $values): string

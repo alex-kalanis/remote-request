@@ -2,9 +2,12 @@
 
 namespace ProtocolsTests\Fsp;
 
+
 use CommonTestClass;
 use RemoteRequest\Connection;
 use RemoteRequest\Protocols\Fsp;
+use RemoteRequest\RequestException;
+
 
 class ProtocolQueryMock
 {
@@ -123,6 +126,7 @@ class ProcessorMock extends Connection\Processor
     }
 }
 
+
 class ProtocolTest extends CommonTestClass
 {
     public function testQuerySimple(): void
@@ -154,7 +158,7 @@ class ProtocolTest extends CommonTestClass
     }
 
     /**
-     * @throws \RemoteRequest\RequestException
+     * @throws RequestException
      */
     public function testAnswerSimple(): void
     {
@@ -170,42 +174,45 @@ class ProtocolTest extends CommonTestClass
     }
 
     /**
-     * @expectedException \RemoteRequest\RequestException
+     * @throws RequestException
      */
     public function testAnswerFailChecksumSimple(): void
     {
         $lib = new ProcessorMock();
         $read = new Fsp\Answer();
+        $this->expectException(RequestException::class);
         $read->setResponse($lib->getResponseFailedChk())->process();
     }
 
     /**
-     * @expectedException \RemoteRequest\RequestException
-     * @expectedExceptionMessage Response too short
+     * @throws RequestException
      */
     public function testAnswerShort(): void
     {
         $mock = new ProcessorMock();
         $read = new Fsp\Answer();
+        $this->expectException(RequestException::class);
         $read->setResponse($mock->getResponseShort())->process();
         Fsp\Answer\AnswerFactory::getObject($read)->process();
+        $this->expectExceptionMessageMatches('Response too short');
     }
 
     /**
-     * @expectedException \RemoteRequest\RequestException
-     * @expectedExceptionMessage Response too large
+     * @throws RequestException
      */
     public function testAnswerLong(): void
     {
         $mock = new ProcessorMock();
         $read = new Fsp\Answer();
+        $this->expectException(RequestException::class);
         $read->setResponse($mock->getResponseLong())->process();
         Fsp\Answer\AnswerFactory::getObject($read)->process();
+        $this->expectExceptionMessageMatches('Response too large');
     }
 
     /**
-     * @throws \RemoteRequest\RequestException
-     * havaruje na skutecnem hashi - potreba spocitat rucne!
+     * @throws RequestException
+     * fails on real hash - need to calculate it "by hand"!
      */
     public function testAnswerReal(): void
     {

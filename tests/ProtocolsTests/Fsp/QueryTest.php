@@ -2,8 +2,10 @@
 
 namespace ProtocolsTests\Fsp;
 
+
 use CommonTestClass;
 use RemoteRequest\Protocols\Fsp;
+
 
 class QueryMock
 {
@@ -222,6 +224,7 @@ class QueryMock
         ]);
     }
 }
+
 
 class QueryTest extends CommonTestClass
 {

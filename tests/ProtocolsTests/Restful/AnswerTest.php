@@ -2,10 +2,12 @@
 
 namespace ProtocolsTests\Restful;
 
+
 use CommonTestClass;
 use RemoteRequest\Connection;
 use RemoteRequest\Protocols\Http;
 use RemoteRequest\Protocols\Restful;
+
 
 class AnswerMock extends Connection\Processor
 {
@@ -31,6 +33,7 @@ class AnswerMock extends Connection\Processor
             . '{"foou":"barr","up":{"type":"file","filename":"unknown.txt","mimetype":"text\/plain","content64":"bW5idmN4"}}';
     }
 }
+
 
 class AnswerTest extends CommonTestClass
 {

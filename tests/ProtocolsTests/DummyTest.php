@@ -2,8 +2,10 @@
 
 namespace ProtocolsTests;
 
+
 use CommonTestClass;
 use RemoteRequest\Protocols\Dummy;
+
 
 class DummyTest extends CommonTestClass
 {

@@ -2,14 +2,17 @@
 
 namespace ProtocolsTests\Restful;
 
+
 use CommonTestClass;
 use RemoteRequest\Protocols\Http;
 use RemoteRequest\Protocols\Restful;
 use RemoteRequest\Schemas;
 
+
 class QueryMock extends Restful\Query
 {
 }
+
 
 class QueryTest extends CommonTestClass
 {

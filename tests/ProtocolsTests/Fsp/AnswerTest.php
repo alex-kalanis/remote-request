@@ -2,9 +2,12 @@
 
 namespace ProtocolsTests\Fsp;
 
+
 use CommonTestClass;
 use RemoteRequest\Connection;
 use RemoteRequest\Protocols\Fsp;
+use RemoteRequest\RequestException;
+
 
 class AnswerMock extends Connection\Processor
 {
@@ -251,7 +254,7 @@ class AnswerMock extends Connection\Processor
 class AnswerTest extends CommonTestClass
 {
     /**
-     * @throws \RemoteRequest\RequestException
+     * @throws RequestException
      */
     public function testAnswerVersion(): void
     {
@@ -272,7 +275,7 @@ class AnswerTest extends CommonTestClass
     }
 
     /**
-     * @throws \RemoteRequest\RequestException
+     * @throws RequestException
      */
     public function testAnswerVersionPayload(): void
     {
@@ -293,7 +296,7 @@ class AnswerTest extends CommonTestClass
     }
 
     /**
-     * @throws \RemoteRequest\RequestException
+     * @throws RequestException
      */
     public function testAnswerDir(): void
     {
@@ -335,7 +338,7 @@ class AnswerTest extends CommonTestClass
     }
 
     /**
-     * @throws \RemoteRequest\RequestException
+     * @throws RequestException
      */
     public function testAnswerDirReal(): void
     {
@@ -371,7 +374,7 @@ class AnswerTest extends CommonTestClass
     }
 
     /**
-     * @throws \RemoteRequest\RequestException
+     * @throws RequestException
      */
     public function testAnswerError(): void
     {
@@ -386,7 +389,7 @@ class AnswerTest extends CommonTestClass
     }
 
     /**
-     * @throws \RemoteRequest\RequestException
+     * @throws RequestException
      */
     public function testAnswerErrorDetails(): void
     {
@@ -400,7 +403,7 @@ class AnswerTest extends CommonTestClass
     }
 
     /**
-     * @expectedException \RemoteRequest\RequestException
+     * @throws RequestException
      */
     public function testAnswerErrorRun(): void
     {
@@ -409,11 +412,12 @@ class AnswerTest extends CommonTestClass
         $read->setResponse($mock->getResponseError())->process();
         $process = Fsp\Answer\AnswerFactory::getObject($read)->process();
         /** @var Fsp\Answer\Error $process */
+        $this->expectException(RequestException::class);
         $process->setHardWay(true)->getError();
     }
 
     /**
-     * @throws \RemoteRequest\RequestException
+     * @throws RequestException
      */
     public function testAnswerTest(): void
     {
@@ -426,7 +430,7 @@ class AnswerTest extends CommonTestClass
     }
 
     /**
-     * @throws \RemoteRequest\RequestException
+     * @throws RequestException
      */
     public function testAnswerNothing(): void
     {
@@ -438,7 +442,7 @@ class AnswerTest extends CommonTestClass
     }
 
     /**
-     * @throws \RemoteRequest\RequestException
+     * @throws RequestException
      */
     public function testAnswerGetFile(): void
     {
@@ -452,7 +456,7 @@ class AnswerTest extends CommonTestClass
     }
 
     /**
-     * @throws \RemoteRequest\RequestException
+     * @throws RequestException
      */
     public function testAnswerUpload(): void
     {
@@ -466,7 +470,7 @@ class AnswerTest extends CommonTestClass
     }
 
     /**
-     * @throws \RemoteRequest\RequestException
+     * @throws RequestException
      */
     public function testAnswerProtection(): void
     {
@@ -487,7 +491,7 @@ class AnswerTest extends CommonTestClass
     }
 
     /**
-     * @throws \RemoteRequest\RequestException
+     * @throws RequestException
      */
     public function testAnswerStats(): void
     {

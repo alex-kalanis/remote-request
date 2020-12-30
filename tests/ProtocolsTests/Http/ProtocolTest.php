@@ -2,8 +2,10 @@
 
 namespace ProtocolsTests\Http;
 
+
 use CommonTestClass;
 use RemoteRequest\Protocols\Http;
+
 
 class ProtocolTest extends CommonTestClass
 {

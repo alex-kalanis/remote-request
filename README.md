@@ -13,13 +13,7 @@ although stream variables has been used for passing the options. So no things li
 {
     "require": {
         "alex-kalanis/remote-request": "dev-master"
-    },
-    "repositories": [
-        {
-            "type": "http",
-            "url":  "https://github.com/alex-kalanis/remote-request.git"
-        }
-    ]
+    }
 }
 ```
 

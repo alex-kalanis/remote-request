@@ -2,9 +2,11 @@
 
 namespace ProtocolsTests\Http;
 
+
 use CommonTestClass;
 use RemoteRequest\Connection;
 use RemoteRequest\Protocols\Http;
+
 
 class AnswerMock extends Connection\Processor
 {
@@ -53,6 +55,7 @@ class AnswerMock extends Connection\Processor
             . base64_decode("S0xKTklNS8/IzMrOyc3LLygsKi4pLSuvqKwyMDQyMTUzt7AEAA==");
     }
 }
+
 
 class AnswerTest extends CommonTestClass
 {

@@ -174,7 +174,12 @@ class Helper
                 ;
             case 'http':
             case 'https':
-                $query = new Protocols\Http\Query();
+                $query = isset($parsed["user"])
+                    ? (new Protocols\Http\Query\AuthBasic())->setCredentials(
+                        $parsed["user"],
+                        isset($parsed["pass"]) ? $parsed["pass"] : ''
+                    )
+                    : new Protocols\Http\Query();
                 $query->maxLength = $this->connectionParams['maxLength'];
                 return $query
                     ->setRequestSettings($settings)

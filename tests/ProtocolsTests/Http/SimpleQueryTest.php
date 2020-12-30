@@ -2,12 +2,14 @@
 
 namespace ProtocolsTests\Http;
 
+
 use CommonTestClass;
 use RemoteRequest\Connection;
 use RemoteRequest\Protocols\Dummy;
 use RemoteRequest\Protocols\Http;
 use RemoteRequest\RequestException;
 use RemoteRequest\Schemas;
+
 
 class TestProcessor extends Connection\Processor
 {
@@ -17,6 +19,7 @@ class TestProcessor extends Connection\Processor
     }
 }
 
+
 class ContentTestProcessor extends TestProcessor
 {
     public function getResponse(): string
@@ -24,6 +27,7 @@ class ContentTestProcessor extends TestProcessor
         return 'HTTP/0.1 901 KO' . Http::DELIMITER . Http::DELIMITER . 'abcdefghijkl';
     }
 }
+
 
 class SimpleQueryTest extends CommonTestClass
 {

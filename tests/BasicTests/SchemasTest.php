@@ -2,10 +2,12 @@
 
 namespace BasicTests;
 
+
 use CommonTestClass;
 use RemoteRequest\Protocols;
 use RemoteRequest\RequestException;
 use RemoteRequest\Schemas;
+
 
 class SchemasTest extends CommonTestClass
 {
@@ -77,10 +79,11 @@ class SchemasTest extends CommonTestClass
     }
 
     /**
-     * @expectedException \RemoteRequest\RequestException
+     * @throws RequestException
      */
     public function testFail(): void
     {
+        $this->expectException(RequestException::class);
         Schemas\ASchema::getSchema('unknown');
     }
 }

@@ -2,9 +2,11 @@
 
 namespace ProtocolsTests\Http;
 
+
 use CommonTestClass;
 use RemoteRequest\Protocols\Http;
 use RemoteRequest\Schemas;
+
 
 class QueryMock extends Http\Query
 {
@@ -17,6 +19,20 @@ class QueryMock extends Http\Query
         return '--PHPFSock--';
     }
 }
+
+
+class QueryAuthMock extends Http\Query\AuthBasic
+{
+    /**
+     * Overwrite because random string in testing does not work
+     * @return string
+     */
+    protected function generateBoundary(): string
+    {
+        return '--PHPFSock--';
+    }
+}
+
 
 class QueryTest extends CommonTestClass
 {
@@ -122,12 +138,36 @@ class QueryTest extends CommonTestClass
             . "----PHPFSock----\r\n", $lib->getData());
     }
 
+    public function testQueryWithAuth(): void
+    {
+        $lib = $this->prepareAuth();
+        $lib->setRequestSettings($this->prepareProtocolSchema('somewhere.example', 126))
+            ->addValues(['foo' => 'bar']);
+        $this->assertEquals(
+            "GET /example?foo=bar HTTP/1.1\r\nHost: somewhere.example:126\r\n"
+            . "Authorization: Basic Zm9vZGlkOmJ1dWdnZWU=\r\n\r\n"
+            , $lib->getData());
+    }
+
     protected function prepareSimple(): Http\Query
     {
         $lib = new QueryMock();
         $lib->setMethod('get');
         $lib->setPath('/example');
         $lib->setMultipart(null);
+        $lib->removeHeader('Accept');
+        $lib->removeHeader('User-Agent');
+        $lib->removeHeader('Connection');
+        return $lib;
+    }
+
+    protected function prepareAuth(): Http\Query
+    {
+        $lib = new QueryAuthMock();
+        $lib->setMethod('get');
+        $lib->setPath('/example');
+        $lib->setMultipart(null);
+        $lib->setCredentials('foodid', 'buuggee');
         $lib->removeHeader('Accept');
         $lib->removeHeader('User-Agent');
         $lib->removeHeader('Connection');

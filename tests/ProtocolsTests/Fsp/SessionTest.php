@@ -2,8 +2,11 @@
 
 namespace ProtocolsTests\Fsp;
 
+
 use CommonTestClass;
 use RemoteRequest\Protocols\Fsp;
+use RemoteRequest\RequestException;
+
 
 class SequenceMock extends Fsp\Session\Sequence
 {
@@ -12,6 +15,7 @@ class SequenceMock extends Fsp\Session\Sequence
         return 75;
     }
 }
+
 
 class SessionMock extends Fsp\Session
 {
@@ -30,10 +34,11 @@ class SessionMock extends Fsp\Session
     }
 }
 
+
 class SessionTest extends CommonTestClass
 {
     /**
-     * @throws \RemoteRequest\RequestException
+     * @throws RequestException
      */
     public function testSeqPass(): void
     {
@@ -44,16 +49,17 @@ class SessionTest extends CommonTestClass
     }
 
     /**
-     * @expectedException \RemoteRequest\RequestException
+     * @throws RequestException
      */
     public function testSeqFail(): void
     {
         $mock = new SequenceMock();
+        $this->expectException(RequestException::class);
         $mock->checkSequence(75);
     }
 
     /**
-     * @throws \RemoteRequest\RequestException
+     * @throws RequestException
      */
     public function testKeyNone(): void
     {
@@ -62,25 +68,27 @@ class SessionTest extends CommonTestClass
     }
 
     /**
-     * @expectedException \RemoteRequest\RequestException
+     * @throws RequestException
      */
     public function testKeyFail(): void
     {
         $mock = new SessionMock();
+        $this->expectException(RequestException::class);
         $mock->getKey();
     }
 
     /**
-     * @expectedException \RemoteRequest\RequestException
+     * @throws RequestException
      */
     public function testSequenceFail(): void
     {
         $mock = new SessionMock();
+        $this->expectException(RequestException::class);
         $mock->getSequence();
     }
 
     /**
-     * @throws \RemoteRequest\RequestException
+     * @throws RequestException
      */
     public function testKeyNotFound(): void
     {
@@ -90,7 +98,7 @@ class SessionTest extends CommonTestClass
     }
 
     /**
-     * @throws \RemoteRequest\RequestException
+     * @throws RequestException
      */
     public function testKeyFound(): void
     {
@@ -104,7 +112,7 @@ class SessionTest extends CommonTestClass
     }
 
     /**
-     * @throws \RemoteRequest\RequestException
+     * @throws RequestException
      */
     public function testSequenceFound(): void
     {
@@ -118,18 +126,19 @@ class SessionTest extends CommonTestClass
     }
 
     /**
-     * @expectedException \RemoteRequest\RequestException
+     * @throws RequestException
      */
     public function testSequenceNotSet(): void
     {
         $mock = new SessionMock();
         $mock->clear();
         $mock->setHost('asdf');
+        $this->expectException(RequestException::class);
         $mock->updateSequence(94);
     }
 
     /**
-     * @throws \RemoteRequest\RequestException
+     * @throws RequestException
      */
     public function testSequences(): void
     {

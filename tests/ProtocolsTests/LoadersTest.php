@@ -2,10 +2,12 @@
 
 namespace ProtocolsTests;
 
+
 use CommonTestClass;
 use RemoteRequest\Protocols;
 use RemoteRequest\RequestException;
 use RemoteRequest\Schemas;
+
 
 class LoadersTest extends CommonTestClass
 {
@@ -23,10 +25,11 @@ class LoadersTest extends CommonTestClass
     }
 
     /**
-     * @expectedException \RemoteRequest\RequestException
+     * @throws RequestException
      */
     public function testFail(): void
     {
+        $this->expectException(RequestException::class);
         Protocols\AProtocol::getProtocol('unknown');
     }
 

@@ -1,6 +1,10 @@
 Changelog
 =========
 
+#### 4.2.0 - 2020-12-30
+
+* Changes in tests for using with Travis service
+
 #### 4.1.0 - 2020-08-11
 
 * Sockets stays open in the whole time of script run
