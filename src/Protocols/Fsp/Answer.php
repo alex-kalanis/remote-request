@@ -109,9 +109,9 @@ class Answer extends Protocols\Dummy\Answer
         return $content;
     }
 
-    public function getCommand(): string
+    public function getCommand(): int
     {
-        return (string)$this->headCommand;
+        return (int)$this->headCommand;
     }
 
     public function getKey(): int

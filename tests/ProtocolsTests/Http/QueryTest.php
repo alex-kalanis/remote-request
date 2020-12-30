@@ -57,9 +57,9 @@ class QueryTest extends CommonTestClass
         $this->assertFalse($lib->setMultipart(false)->isMultipart());
 
         $lib->addHeader('some', 'value');
-        $this->assertContains('some: value', $lib->getData());
+        $this->assertNotEquals(false, strpos($lib->getData(), 'some: value'));
         $lib->removeHeader('some');
-        $this->assertNotContains('some: value', $lib->getData());
+        $this->assertFalse(strpos($lib->getData(), 'some: value')); // not found
         $sett = new Schemas\Ssl();
         $sett->setTarget('elsewhere.example', 2121);
         $lib->setRequestSettings($sett);
