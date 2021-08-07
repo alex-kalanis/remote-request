@@ -2,10 +2,14 @@
 
 namespace RemoteRequest\Sockets;
 
+
 use RemoteRequest\RequestException;
 use RemoteRequest\Schemas\ASchema;
 
+
 /**
+ * Class FSocket
+ * @package RemoteRequest\Sockets
  * Network pointer to the remote server - method Fsocket
  */
 class FSocket extends ASocket
@@ -20,7 +24,7 @@ class FSocket extends ASocket
     {
         // Make the request to the server
         // If possible, securely post using HTTPS, your PHP server will need to be SSL enabled
-        $filePointer = fsockopen($protocolWrapper->getHostname(), $protocolWrapper->getPort(), $errno, $errstr, $protocolWrapper->getTimeout());
+        $filePointer = fsockopen($protocolWrapper->getHostname(), $protocolWrapper->getPort(), $errno, $errStr, $protocolWrapper->getTimeout());
 
         if (!$filePointer) {
             throw new RequestException('Cannot establish connection');

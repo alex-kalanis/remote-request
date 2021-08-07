@@ -2,9 +2,13 @@
 
 namespace RemoteRequest\Protocols\Fsp\Query;
 
+
 use RemoteRequest\Protocols\Fsp;
 
+
 /**
+ * Class Stat
+ * @package RemoteRequest\Protocols\Fsp\Query
  * Stats about file
  */
 class Stat extends AQuery

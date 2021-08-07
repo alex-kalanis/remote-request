@@ -2,10 +2,14 @@
 
 namespace RemoteRequest\Sockets;
 
+
 use RemoteRequest\RequestException;
 use RemoteRequest\Schemas\ASchema;
 
+
 /**
+ * Class Stream
+ * @package RemoteRequest\Sockets
  * Network pointer to the remote server - method Stream
  * Because that little shit cannot set context options to Fsocket; namely devel certs
  */
@@ -44,7 +48,7 @@ class Stream extends ASocket
 
         $context = stream_context_create($this->contextOptions);
         $link = $protocolWrapper->getHostname() . (!empty($protocolWrapper->getPort()) ? ':' . $protocolWrapper->getPort() : '' );
-        $filePointer = stream_socket_client($link, $errno, $errstr, $protocolWrapper->getTimeout(), STREAM_CLIENT_CONNECT, $context);
+        $filePointer = stream_socket_client($link, $errno, $errStr, $protocolWrapper->getTimeout(), STREAM_CLIENT_CONNECT, $context);
 
         if (!$filePointer) {
             throw new RequestException('Cannot establish connection');

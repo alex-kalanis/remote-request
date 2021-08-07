@@ -2,9 +2,13 @@
 
 namespace RemoteRequest\Protocols\Fsp\Query;
 
+
 use RemoteRequest\Protocols\Fsp;
 
+
 /**
+ * Class GetProtection
+ * @package RemoteRequest\Protocols\Fsp\Query
  * Get dir protection details
  */
 class GetProtection extends AQuery

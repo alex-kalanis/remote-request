@@ -2,9 +2,13 @@
 
 namespace RemoteRequest\Protocols\Fsp\Query;
 
+
 use RemoteRequest\Protocols\Fsp;
 
+
 /**
+ * Class Version
+ * @package RemoteRequest\Protocols\Fsp\Query
  * Want FSP version
  */
 class Version extends AQuery

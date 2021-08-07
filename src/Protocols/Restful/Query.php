@@ -2,9 +2,13 @@
 
 namespace RemoteRequest\Protocols\Restful;
 
+
 use RemoteRequest\Protocols;
 
+
 /**
+ * Class Query
+ * @package RemoteRequest\Protocols\Restful
  * Simple RESTful query to remote source
  */
 class Query extends Protocols\Http\Query

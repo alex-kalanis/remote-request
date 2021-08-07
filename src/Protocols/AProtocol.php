@@ -2,9 +2,13 @@
 
 namespace RemoteRequest\Protocols;
 
+
 use RemoteRequest;
 
+
 /**
+ * Class AProtocol
+ * @package RemoteRequest\Protocols
  * Properties for query to remote server - raw UDP
  */
 abstract class AProtocol

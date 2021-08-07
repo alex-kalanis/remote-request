@@ -2,9 +2,13 @@
 
 namespace RemoteRequest\Protocols\Fsp\Query;
 
+
 use RemoteRequest\Protocols\Fsp;
 
+
 /**
+ * Class GetFile
+ * @package RemoteRequest\Protocols\Fsp\Query
  * Want file part
  */
 class GetFile extends AQuery

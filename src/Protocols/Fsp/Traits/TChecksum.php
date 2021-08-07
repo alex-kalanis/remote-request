@@ -2,7 +2,10 @@
 
 namespace RemoteRequest\Protocols\Fsp\Traits;
 
+
 /**
+ * Trait TChecksum
+ * @package RemoteRequest\Protocols\Fsp\Traits
  * Process checksums
 
 /-* assume that we have already zeroed checksum in packet - that means set it to zero - chr(0) *-/
@@ -53,7 +56,7 @@ trait TChecksum
 
     abstract protected function getInitialSumChunk(): int;
 
-    protected function sumBytes(int $sum, string $char): int
+    public function sumBytes(int $sum, string $char): int
     {
         return $sum + ord($char);
     }

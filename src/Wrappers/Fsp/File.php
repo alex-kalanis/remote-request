@@ -2,10 +2,14 @@
 
 namespace RemoteRequest\Wrappers\Fsp;
 
+
 use RemoteRequest;
 use RemoteRequest\Protocols\Fsp as Protocol;
 
+
 /**
+ * Class File
+ * @package RemoteRequest\Wrappers\Fsp
  * Wrapper to plug FSP info into PHP - files part
  */
 class File extends AOperations

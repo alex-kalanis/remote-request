@@ -2,7 +2,10 @@
 
 namespace RemoteRequest\Connection;
 
+
 /**
+ * Interface ITarget
+ * @package RemoteRequest\Connection
  * Settings of remote connection
  */
 interface ITarget

@@ -349,23 +349,20 @@ class AnswerTest extends CommonTestClass
         /** @var Fsp\Answer\GetDir $process */
         $files = $process->getFiles();
         reset($files);
-        next($files);
-        $file = current($files);
+        $file = next($files);
         /** @var Fsp\Answer\GetDir\FileInfo $file */
         $this->assertEquals('open letter.png', $file->getFileName());
         $this->assertEquals(1592227884, $file->getMTime());
         $this->assertEquals(346101, $file->getSize());
         $this->assertFalse($file->isDir());
         $this->assertTrue($file->isFile());
-        next($files);
-        $file = current($files);
+        $file = next($files);
         $this->assertEquals('asyncio.pdf', $file->getFileName());
         $this->assertEquals(1581516489, $file->getMTime());
         $this->assertEquals(86125, $file->getSize());
         $this->assertFalse($file->isDir());
         $this->assertTrue($file->isFile());
-        next($files);
-        $file = current($files);
+        $file = next($files);
         $this->assertEquals('makoto_kino_by_isack503_d8t51er-fullview.jpg', $file->getFileName());
         $this->assertEquals(1592585270, $file->getMTime());
         $this->assertEquals(83956, $file->getSize());

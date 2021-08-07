@@ -2,7 +2,10 @@
 
 namespace RemoteRequest\Protocols\Dummy;
 
+
 /**
+ * Class Answer
+ * @package RemoteRequest\Protocols\Dummy
  * Process server's answer - raw edition
  */
 class Answer

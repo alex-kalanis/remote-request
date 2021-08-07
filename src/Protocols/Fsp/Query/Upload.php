@@ -2,9 +2,13 @@
 
 namespace RemoteRequest\Protocols\Fsp\Query;
 
+
 use RemoteRequest\Protocols\Fsp;
 
+
 /**
+ * Class Upload
+ * @package RemoteRequest\Protocols\Fsp\Query
  * Send file part
  */
 class Upload extends AQuery

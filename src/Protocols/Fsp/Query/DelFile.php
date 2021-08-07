@@ -2,9 +2,13 @@
 
 namespace RemoteRequest\Protocols\Fsp\Query;
 
+
 use RemoteRequest\Protocols\Fsp;
 
+
 /**
+ * Class DelFile
+ * @package RemoteRequest\Protocols\Fsp\Query
  * Delete remote file
  */
 class DelFile extends AQuery

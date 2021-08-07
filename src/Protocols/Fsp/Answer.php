@@ -2,10 +2,14 @@
 
 namespace RemoteRequest\Protocols\Fsp;
 
+
 use RemoteRequest\Protocols;
 use RemoteRequest\RequestException;
 
+
 /**
+ * Class Answer
+ * @package RemoteRequest\Protocols\Fsp
  * Process server's answer - FSP packet
  */
 class Answer extends Protocols\Dummy\Answer

@@ -2,9 +2,13 @@
 
 namespace RemoteRequest\Protocols\Fsp\Query;
 
+
 use RemoteRequest\Protocols\Fsp;
 
+
 /**
+ * Class SetProtection
+ * @package RemoteRequest\Protocols\Fsp\Query
  * Set dir protection details
  */
 class SetProtection extends AQuery
@@ -12,7 +16,7 @@ class SetProtection extends AQuery
     const CAN_CREATE_FILE = 'c';
     const CAN_DELETE_FILE = 'd';
     const CAN_GET_FILE = 'g';
-    const CAN_PRESERVE_FILE = 'p'; // backward compability
+    const CAN_PRESERVE_FILE = 'p'; // backward compatibility
     const CAN_CREATE_DIR = 'c';
     const CAN_LIST_DIR = 'd';
     const CAN_RENAME_FILE = 'g';

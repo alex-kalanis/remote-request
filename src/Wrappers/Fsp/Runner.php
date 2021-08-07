@@ -2,13 +2,17 @@
 
 namespace RemoteRequest\Wrappers\Fsp;
 
+
 use RemoteRequest\Connection;
 use RemoteRequest\Protocols\Fsp as Protocol;
 use RemoteRequest\RequestException;
 use RemoteRequest\Schemas;
 use RemoteRequest\Sockets;
 
+
 /**
+ * Class Runner
+ * @package RemoteRequest\Wrappers\Fsp
  * Runner for FSP under RemoteRequest
  */
 class Runner

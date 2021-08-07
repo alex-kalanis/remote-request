@@ -2,7 +2,10 @@
 
 namespace RemoteRequest\Protocols\Fsp\Answer;
 
+
 /**
+ * Class Upload
+ * @package RemoteRequest\Protocols\Fsp\Answer
  * Process uploading files
  */
 class Upload extends AAnswer

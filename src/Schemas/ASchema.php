@@ -2,9 +2,13 @@
 
 namespace RemoteRequest\Schemas;
 
+
 use RemoteRequest;
 
+
 /**
+ * Class ASchema
+ * @package RemoteRequest\Schemas
  * Schemas for creating a connection
  * Define known schemas for access remote resource via php internal calls
  * @link https://www.php.net/manual/en/wrappers.php

@@ -2,9 +2,13 @@
 
 namespace RemoteRequest\Protocols;
 
+
 use RemoteRequest;
 
+
 /**
+ * Class Https
+ * @package RemoteRequest\Protocols
  * Properties for query to remote server - method HTTP
  */
 class Https extends Http

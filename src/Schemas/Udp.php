@@ -2,10 +2,14 @@
 
 namespace RemoteRequest\Schemas;
 
+
 use RemoteRequest;
+
 
 /**
  * Properties for query to remote server - layer 2 protocol UDP
+ * Class Udp
+ * @package RemoteRequest\Schemas
  */
 class Udp extends ASchema
 {

@@ -2,9 +2,13 @@
 
 namespace RemoteRequest\Protocols\Fsp;
 
+
 use RemoteRequest\Protocols;
 
+
 /**
+ * Class Query
+ * @package RemoteRequest\Protocols\Fsp
  * Simple FSP query to remote source - create packet
  */
 class Query extends Protocols\Dummy\Query

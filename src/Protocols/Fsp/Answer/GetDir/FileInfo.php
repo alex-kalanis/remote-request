@@ -2,10 +2,14 @@
 
 namespace RemoteRequest\Protocols\Fsp\Answer\GetDir;
 
+
 use RemoteRequest\Protocols\Fsp;
 use SplFileInfo;
 
+
 /**
+ * Class FileInfo
+ * @package RemoteRequest\Protocols\Fsp\Answer\GetDir
  * Process Get file info
  * @link https://www.php.net/manual/en/class.splfileobject.php
  */

@@ -2,9 +2,13 @@
 
 namespace RemoteRequest\Protocols\Fsp\Session;
 
+
 use RemoteRequest\RequestException;
 
+
 /**
+ * Class Sequence
+ * @package RemoteRequest\Protocols\Fsp\Session
  * Session sequences in FSP
  */
 class Sequence

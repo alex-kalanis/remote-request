@@ -2,9 +2,13 @@
 
 namespace RemoteRequest\Protocols\Fsp\Traits;
 
+
 use RemoteRequest\Protocols\Fsp;
 
+
 /**
+ * Trait THeader
+ * @package RemoteRequest\Protocols\Fsp\Traits
  * Process header
  */
 trait THeader

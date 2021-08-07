@@ -2,10 +2,14 @@
 
 namespace RemoteRequest\Sockets;
 
+
 use RemoteRequest\RequestException;
 use RemoteRequest\Schemas\ASchema;
 
+
 /**
+ * Class SharedInternal
+ * @package RemoteRequest\Sockets
  * Pointer to the local source (file, memory)
  * Good one for testing (put inside the content you want to get)
  */

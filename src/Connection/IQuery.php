@@ -2,7 +2,10 @@
 
 namespace RemoteRequest\Connection;
 
+
 /**
+ * Interface IQuery
+ * @package RemoteRequest\Connection
  * Content params for connection
  */
 interface IQuery

@@ -2,10 +2,14 @@
 
 namespace RemoteRequest\Sockets;
 
+
 use RemoteRequest\RequestException;
 use RemoteRequest\Schemas\ASchema;
 
+
 /**
+ * Class ASocket
+ * @package RemoteRequest\Sockets
  * Network sockets to the remote server - base abstract method
  */
 abstract class ASocket

@@ -2,9 +2,13 @@
 
 namespace RemoteRequest\Protocols\Fsp\Answer;
 
+
 use RemoteRequest\Protocols\Fsp;
 
+
 /**
+ * Class Stats
+ * @package RemoteRequest\Protocols\Fsp\Answer
  * Process stats answer
  */
 class Stats extends AAnswer

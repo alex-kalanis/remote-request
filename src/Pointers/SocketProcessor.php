@@ -2,10 +2,14 @@
 
 namespace RemoteRequest\Pointers;
 
+
 use RemoteRequest\RequestException;
 use RemoteRequest\Schemas\ASchema;
 
+
 /**
+ * Class SocketProcessor
+ * @package RemoteRequest\Pointers
  * Query to the remote server - read into provided output
  */
 class SocketProcessor extends Processor
@@ -23,11 +27,11 @@ class SocketProcessor extends Processor
     protected function writeRequest($filePointer, ASchema $wrapper): parent
     {
         $input = $this->remoteQuery->getData();
-        $result = socket_sendto($filePointer, $input , strlen($input) , 0 , $wrapper->getHost() , $wrapper->getPort());
+        $result = socket_sendto($filePointer, $input, strlen($input), 0, $wrapper->getHost(), $wrapper->getPort());
         if (!$result) {
             $errorCode = socket_last_error();
-            $errorMesssage = socket_strerror($errorCode);
-            throw new RequestException('Send problem: ' . $errorMesssage, $errorCode);
+            $errorMessage = socket_strerror($errorCode);
+            throw new RequestException('Send problem: ' . $errorMessage, $errorCode);
         }
         return $this;
     }
@@ -41,11 +45,11 @@ class SocketProcessor extends Processor
     protected function readResponse($filePointer): parent
     {
         $reply = '';
-        $result = socket_recv ( $filePointer, $reply , static::PART_SPLIT , MSG_WAITALL );
+        $result = socket_recv($filePointer, $reply , static::PART_SPLIT , MSG_WAITALL);
         if (false === $result) { // because could return size 0 bytes
             $errorCode = socket_last_error();
-            $errorMesssage = socket_strerror($errorCode);
-            throw new RequestException('Receive problem: ' . $errorMesssage, $errorCode);
+            $errorMessage = socket_strerror($errorCode);
+            throw new RequestException('Receive problem: ' . $errorMessage, $errorCode);
         }
         $this->remoteResponse = $reply;
         return $this;

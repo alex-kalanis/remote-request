@@ -2,9 +2,13 @@
 
 namespace RemoteRequest\Protocols\Fsp\Query;
 
+
 use RemoteRequest\Protocols\Fsp;
 
+
 /**
+ * Class GetDir
+ * @package RemoteRequest\Protocols\Fsp\Query
  * Want directory listing
  */
 class GetDir extends AQuery

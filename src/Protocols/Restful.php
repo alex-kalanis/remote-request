@@ -2,9 +2,13 @@
 
 namespace RemoteRequest\Protocols;
 
+
 use RemoteRequest;
 
+
 /**
+ * Class Restful
+ * @package RemoteRequest\Protocols
  * Properties for query to remote server - REST API
  */
 class Restful extends Http

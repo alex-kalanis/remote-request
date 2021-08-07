@@ -2,10 +2,14 @@
 
 namespace RemoteRequest\Protocols\Fsp\Answer;
 
+
 use RemoteRequest\Protocols\Fsp;
 use RemoteRequest\RequestException;
 
+
 /**
+ * Class Error
+ * @package RemoteRequest\Protocols\Fsp\Answer
  * Process default answer aka what did you send?!
  */
 class Error extends AAnswer

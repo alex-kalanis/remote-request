@@ -2,7 +2,10 @@
 
 namespace RemoteRequest\Protocols\Http\Query;
 
+
 /**
+ * Trait TAuthBasic
+ * @package RemoteRequest\Protocols\Http\Query
  * Authorization header trait
  */
 trait TAuthBasic

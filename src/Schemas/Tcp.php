@@ -2,9 +2,13 @@
 
 namespace RemoteRequest\Schemas;
 
+
 use RemoteRequest;
 
+
 /**
+ * Class Tcp
+ * @package RemoteRequest\Schemas
  * Properties for query to remote server - layer 2 protocol TCP
  */
 class Tcp extends ASchema

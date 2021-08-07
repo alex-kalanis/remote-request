@@ -2,11 +2,15 @@
 
 namespace RemoteRequest;
 
+
 use RemoteRequest\Connection;
 use RemoteRequest\Schemas;
 use RemoteRequest\Sockets;
 
+
 /**
+ * Class Helper
+ * @package RemoteRequest
  * Simplified reading from remote machine with a whole power of RemoteRequest and mainly streams underneath
  * -> throw Curl into /dev/null
  */

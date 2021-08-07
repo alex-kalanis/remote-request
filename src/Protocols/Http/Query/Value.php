@@ -2,7 +2,10 @@
 
 namespace RemoteRequest\Protocols\Http\Query;
 
+
 /**
+ * Class Value
+ * @package RemoteRequest\Protocols\Http\Query
  * Single item for query
  */
 class Value

@@ -2,9 +2,13 @@
 
 namespace RemoteRequest\Protocols\Fsp\Query;
 
+
 use RemoteRequest\Protocols\Fsp;
 
+
 /**
+ * Class AQuery
+ * @package RemoteRequest\Protocols\Fsp\Query
  * Abstract processor - common calls across the answer
  */
 abstract class AQuery

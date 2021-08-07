@@ -2,9 +2,13 @@
 
 namespace RemoteRequest\Wrappers\Fsp;
 
+
 use RemoteRequest\RequestException;
 
+
 /**
+ * Class AOperations
+ * @package RemoteRequest\Wrappers\Fsp
  * Wrapper to plug FSP info into PHP - directory part
  */
 class AOperations

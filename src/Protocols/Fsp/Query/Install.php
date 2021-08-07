@@ -2,9 +2,13 @@
 
 namespace RemoteRequest\Protocols\Fsp\Query;
 
+
 use RemoteRequest\Protocols\Fsp;
 
+
 /**
+ * Class Install
+ * @package RemoteRequest\Protocols\Fsp\Query
  * Install file
  * Start file upload - this one will be saved
  * To stop just send Install with zero length

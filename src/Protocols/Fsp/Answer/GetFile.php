@@ -2,7 +2,10 @@
 
 namespace RemoteRequest\Protocols\Fsp\Answer;
 
+
 /**
+ * Class GetFile
+ * @package RemoteRequest\Protocols\Fsp\Answer
  * Process getting files
  */
 class GetFile extends AAnswer

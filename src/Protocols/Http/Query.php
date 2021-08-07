@@ -2,11 +2,15 @@
 
 namespace RemoteRequest\Protocols\Http;
 
+
 use RemoteRequest\Connection;
 use RemoteRequest\Protocols;
 use RemoteRequest\Protocols\Http;
 
+
 /**
+ * Class Query
+ * @package RemoteRequest\Protocols\Http
  * Message to the remote server compilation - protocol http
  */
 class Query extends Protocols\Dummy\Query implements Connection\ITarget

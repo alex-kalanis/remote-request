@@ -2,9 +2,13 @@
 
 namespace RemoteRequest\Protocols\Fsp\Query;
 
+
 use RemoteRequest\Protocols\Fsp;
 
+
 /**
+ * Class Rename
+ * @package RemoteRequest\Protocols\Fsp\Query
  * Rename file on remote
  */
 class Rename extends AQuery

@@ -2,9 +2,13 @@
 
 namespace RemoteRequest\Protocols\Fsp\Query;
 
+
 use RemoteRequest\Protocols\Fsp;
 
+
 /**
+ * Class DelDir
+ * @package RemoteRequest\Protocols\Fsp\Query
  * Delete remote directory
  */
 class DelDir extends AQuery

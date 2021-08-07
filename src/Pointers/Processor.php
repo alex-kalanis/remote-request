@@ -2,11 +2,15 @@
 
 namespace RemoteRequest\Pointers;
 
+
 use RemoteRequest\Connection\IQuery;
 use RemoteRequest\RequestException;
 use RemoteRequest\Schemas\ASchema;
 
+
 /**
+ * Class Processor
+ * @package RemoteRequest\Pointers
  * Query to the remote server - read into provided output
  */
 class Processor

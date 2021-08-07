@@ -2,9 +2,13 @@
 
 namespace RemoteRequest\Protocols;
 
+
 use RemoteRequest;
 
+
 /**
+ * Class Tcp
+ * @package RemoteRequest\Protocols
  * Properties for query to remote server - raw TCP
  */
 class Tcp extends AProtocol

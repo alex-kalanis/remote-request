@@ -2,9 +2,13 @@
 
 namespace RemoteRequest\Protocols\Fsp\Answer;
 
+
 use RemoteRequest\Protocols\Fsp;
 
+
 /**
+ * Class AAnswer
+ * @package RemoteRequest\Protocols\Fsp\Answer
  * Abstract processor - common calls across the answer
  */
 abstract class AAnswer

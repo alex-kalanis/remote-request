@@ -2,9 +2,13 @@
 
 namespace RemoteRequest\Protocols\Dummy;
 
+
 use RemoteRequest\Connection;
 
+
 /**
+ * Class Query
+ * @package RemoteRequest\Protocols\Dummy
  * Simple query to remote source
  */
 class Query implements Connection\IQuery

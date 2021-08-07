@@ -2,8 +2,11 @@
 
 namespace RemoteRequest\Protocols\Fsp;
 
+
 /**
- * Process strings and ints in FSP
+ * Class Strings
+ * @package RemoteRequest\Protocols\Fsp
+ * Process strings and integers in FSP
  */
 class Strings
 {

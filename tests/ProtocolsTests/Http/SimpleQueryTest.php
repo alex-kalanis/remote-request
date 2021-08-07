@@ -65,5 +65,4 @@ class SimpleQueryTest extends CommonTestClass
         $answer = new Http\Answer();
         return $answer->setResponse($processor->getResponse());
     }
-
 }

@@ -2,9 +2,13 @@
 
 namespace RemoteRequest\Wrappers;
 
+
 use RemoteRequest\RequestException;
 
+
 /**
+ * Class Fsp
+ * @package RemoteRequest\Wrappers
  * Wrapper to plug FSP info into PHP
  * - for direct call fsp via php - the connection itself is in libraries outside
  * @link https://www.php.net/manual/en/class.streamwrapper.php

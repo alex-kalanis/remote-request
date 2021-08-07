@@ -2,9 +2,13 @@
 
 namespace RemoteRequest\Schemas;
 
+
 use RemoteRequest;
 
+
 /**
+ * Class Php
+ * @package RemoteRequest\Schemas
  * Properties for query to resource - wrapper for internal calls with available read and write props
  */
 class Php extends ASchema

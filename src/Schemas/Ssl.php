@@ -2,9 +2,13 @@
 
 namespace RemoteRequest\Schemas;
 
+
 use RemoteRequest;
 
+
 /**
+ * Class Ssl
+ * @package RemoteRequest\Schemas
  * Properties for query to remote server - layer 2 protocol TCP
  */
 class Ssl extends ASchema

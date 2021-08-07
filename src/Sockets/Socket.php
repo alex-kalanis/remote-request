@@ -2,10 +2,14 @@
 
 namespace RemoteRequest\Sockets;
 
+
 use RemoteRequest\RequestException;
 use RemoteRequest\Schemas\ASchema;
 
+
 /**
+ * Class Socket
+ * @package RemoteRequest\Sockets
  * Network pointer to the remote server - method Socket
  * This one needs own processor - cannot write here via fwrite(), must use socket_sendto()!
  */
@@ -25,9 +29,9 @@ class Socket extends ASocket
 
         if (!$filePointer) {
             $errorCode = socket_last_error();
-            $errorMesssage = socket_strerror($errorCode);
+            $errorMessage = socket_strerror($errorCode);
 
-            throw new RequestException('Cannot establish connection:' . $errorMesssage, $errorCode);
+            throw new RequestException('Cannot establish connection:' . $errorMessage, $errorCode);
         }
         return $filePointer;
     }

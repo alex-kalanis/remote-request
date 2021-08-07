@@ -2,9 +2,13 @@
 
 namespace RemoteRequest\Protocols\Http;
 
+
 use RemoteRequest\Protocols;
 
+
 /**
+ * Class Answer
+ * @package RemoteRequest\Protocols\Http
  * Process server's answer - parse http
  */
 class Answer extends Protocols\Dummy\Answer

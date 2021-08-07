@@ -2,9 +2,13 @@
 
 namespace RemoteRequest\Schemas;
 
+
 use RemoteRequest;
 
+
 /**
+ * Class File
+ * @package RemoteRequest\Schemas
  * Properties for query to resource - wrapper for file
  */
 class File extends ASchema

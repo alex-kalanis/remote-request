@@ -2,16 +2,20 @@
 
 namespace RemoteRequest\Connection;
 
+
 use RemoteRequest\Pointers;
 use RemoteRequest\RequestException;
 use RemoteRequest\Schemas\ASchema;
 use RemoteRequest\Sockets;
 
+
 /**
+ * Class Processor
+ * @package RemoteRequest\Connection
  * Query to the remote server - completing and simple processing
  * This is the network layer, what lies elsewhere and what has been sent through is not important for processing
  * It only needs to know destination, message to the destination and how to get response from remote; not how to make
- * something sane from response. That is not this one's responsibility.
+ * something sane from response. That is not responsibility of these classes.
  */
 class Processor
 {

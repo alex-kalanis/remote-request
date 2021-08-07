@@ -2,9 +2,13 @@
 
 namespace RemoteRequest\Protocols\Fsp\Answer;
 
+
 use RemoteRequest\Protocols\Fsp;
 
+
 /**
+ * Class AnswerFactory
+ * @package RemoteRequest\Protocols\Fsp\Answer
  * Factory for selecting correct answer - pythonic style
  */
 class AnswerFactory

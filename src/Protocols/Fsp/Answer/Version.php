@@ -2,9 +2,13 @@
 
 namespace RemoteRequest\Protocols\Fsp\Answer;
 
+
 use RemoteRequest\Protocols\Fsp;
 
+
 /**
+ * Class Version
+ * @package RemoteRequest\Protocols\Fsp\Answer
  * Process FSP version
  */
 class Version extends AAnswer

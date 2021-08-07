@@ -12,7 +12,7 @@ although stream variables has been used for passing the options. So no things li
 ```json
 {
     "require": {
-        "alex-kalanis/remote-request": "dev-master"
+        "alex-kalanis/remote-request": ">=4.0"
     }
 }
 ```

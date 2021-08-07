@@ -2,7 +2,10 @@
 
 namespace RemoteRequest\Protocols\Http\Query;
 
+
 /**
+ * Class File
+ * @package RemoteRequest\Protocols\Http\Query
  * Single item for query - file
  * Beware: The content must be already loaded into memory, not stay on volume; there is no additional loading (for reasons)
  */

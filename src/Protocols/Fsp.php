@@ -2,12 +2,15 @@
 
 namespace RemoteRequest\Protocols;
 
+
 use RemoteRequest;
 
+
 /**
+ * Class Fsp
+ * @package RemoteRequest\Protocols
  * Properties for query to remote server - method FSP
  * @link http://fsp.sourceforge.net
- * @link http://fsp.sourceforge.net/doc/PROTOCOL.txt
  * @link https://sourceforge.net/p/fsp/code/ci/master/tree/doc/PROTOCOL
  */
 class Fsp extends Udp

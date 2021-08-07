@@ -2,7 +2,10 @@
 
 namespace RemoteRequest\Protocols\Fsp\Answer;
 
+
 /**
+ * Class GetDir
+ * @package RemoteRequest\Protocols\Fsp\Answer
  * Process Get Directory
 // struct RDIRENT {
 //     struct HEADER {
