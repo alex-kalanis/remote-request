@@ -1,4 +1,4 @@
-Remote Request 4
+Remote Request 5
 ================
 
 Requests for local and remote servers in object way. Contains libraries for querying remote
@@ -12,7 +12,7 @@ although stream variables has been used for passing the options. So no things li
 ```json
 {
     "require": {
-        "alex-kalanis/remote-request": ">=4.0"
+        "alex-kalanis/remote-request": ">=5.0"
     }
 }
 ```
@@ -26,6 +26,7 @@ familiar with composer)
  - Version 2 separated network layers 2 and 3 - transportation and content protocols
  - Version 3 is packaged for Composer
  - Version 4 has internal structure change after adding "new" socket and protocol.
+ - Versino 5 changed paths and namespaces
 
 # Usages
 

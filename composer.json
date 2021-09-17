@@ -27,7 +27,7 @@
   },
   "autoload": {
     "psr-4": {
-      "RemoteRequest\\": "src/"
+      "kalanis\\RemoteRequest\\": "php-src/"
     }
   },
   "scripts": {
