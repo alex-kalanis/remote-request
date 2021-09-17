@@ -3,7 +3,7 @@
 namespace kalanis\RemoteRequest\Protocols\Dummy;
 
 
-use kalanis\RemoteRequest\Connection;
+use kalanis\RemoteRequest\Interfaces;
 
 
 /**
@@ -11,7 +11,7 @@ use kalanis\RemoteRequest\Connection;
  * @package RemoteRequest\Protocols\Dummy
  * Simple query to remote source
  */
-class Query implements Connection\IQuery
+class Query implements Interfaces\IQuery
 {
     public $body = '';
     public $maxLength = null;

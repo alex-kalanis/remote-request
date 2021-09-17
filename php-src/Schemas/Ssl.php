@@ -3,6 +3,9 @@
 namespace kalanis\RemoteRequest\Schemas;
 
 
+use kalanis\RemoteRequest\Interfaces\ISchema;
+
+
 /**
  * Class Ssl
  * @package kalanis\RemoteRequest\Schemas
@@ -12,7 +15,7 @@ class Ssl extends ASchema
 {
     protected function getSchemaType(): string
     {
-        return static::SCHEMA_SSL;
+        return ISchema::SCHEMA_SSL;
     }
 
     public function getProtocol(): int

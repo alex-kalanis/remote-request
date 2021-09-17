@@ -3,6 +3,9 @@
 namespace kalanis\RemoteRequest\Schemas;
 
 
+use kalanis\RemoteRequest\Interfaces\ISchema;
+
+
 /**
  * Class File
  * @package kalanis\RemoteRequest\Schemas
@@ -12,7 +15,7 @@ class File extends ASchema
 {
     protected function getSchemaType(): string
     {
-        return static::SCHEMA_FILE;
+        return ISchema::SCHEMA_FILE;
     }
 
     public function getPort(): ?int

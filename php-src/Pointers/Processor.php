@@ -3,7 +3,7 @@
 namespace kalanis\RemoteRequest\Pointers;
 
 
-use kalanis\RemoteRequest\Connection\IQuery;
+use kalanis\RemoteRequest\Interfaces\IQuery;
 use kalanis\RemoteRequest\RequestException;
 use kalanis\RemoteRequest\Schemas\ASchema;
 

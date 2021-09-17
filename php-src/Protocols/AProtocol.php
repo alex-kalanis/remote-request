@@ -57,7 +57,7 @@ abstract class AProtocol
     public function getAnswer(): Dummy\Answer
     {
         if (empty($this->target->getHost())
-            && ($this->query instanceof RemoteRequest\Connection\ITarget)) {
+            && ($this->query instanceof RemoteRequest\Interfaces\ITarget)) {
             $this->target->setRequest($this->query);
         }
 
@@ -68,28 +68,5 @@ abstract class AProtocol
                 ->getResponse()
         );
         return $this->answer;
-    }
-
-    /**
-     * @param string $schema
-     * @return AProtocol
-     * @throws RemoteRequest\RequestException
-     */
-    public static function getProtocol(string $schema): AProtocol
-    {
-        switch ($schema) {
-            case 'tcp':
-            case 'file':
-                return new Tcp();
-            case 'udp':
-                return new Udp();
-            case 'fsp':
-                return new Fsp();
-            case 'http':
-            case 'https':
-                return new Http();
-            default:
-                throw new RemoteRequest\RequestException('Unknown response available for protocol schema ' . $schema);
-        }
     }
 }

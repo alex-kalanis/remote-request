@@ -1,11 +1,11 @@
 <?php
 
-namespace kalanis\RemoteRequest\Connection;
+namespace kalanis\RemoteRequest\Interfaces;
 
 
 /**
  * Interface IQuery
- * @package kalanis\RemoteRequest\Connection
+ * @package kalanis\RemoteRequest\Interfaces
  * Content params for connection
  */
 interface IQuery

@@ -3,7 +3,7 @@
 namespace kalanis\RemoteRequest\Schemas;
 
 
-use kalanis\RemoteRequest;
+use kalanis\RemoteRequest\Interfaces;
 
 
 /**
@@ -13,16 +13,8 @@ use kalanis\RemoteRequest;
  * Define known schemas for access remote resource via php internal calls
  * @link https://www.php.net/manual/en/wrappers.php
  */
-abstract class ASchema implements RemoteRequest\Connection\ITarget
+abstract class ASchema implements Interfaces\ITarget
 {
-    const SCHEMA_FILE = 'file';
-    const SCHEMA_PHP = 'php';
-    const SCHEMA_TCP = 'tcp';
-    const SCHEMA_TCP6 = 'tcp6'; // prepared
-    const SCHEMA_UDP = 'udp';
-    const SCHEMA_UDP6 = 'udp6'; // prepared
-    const SCHEMA_SSL = 'ssl';
-
     /** @var string */
     protected $host = '';
     /** @var int */
@@ -40,7 +32,7 @@ abstract class ASchema implements RemoteRequest\Connection\ITarget
         return $this;
     }
 
-    public function setRequest(RemoteRequest\Connection\ITarget $request): self
+    public function setRequest(Interfaces\ITarget $request): self
     {
         $this->host = $request->getHost();
         $this->port = $request->getPort();
@@ -85,37 +77,14 @@ abstract class ASchema implements RemoteRequest\Connection\ITarget
     protected function getSchemaProtocol(): string
     {
         return in_array($this->getSchemaType(), [
-                static::SCHEMA_FILE,
-                static::SCHEMA_PHP,
-                static::SCHEMA_TCP,
-                static::SCHEMA_UDP,
-                static::SCHEMA_SSL,
+                Interfaces\ISchema::SCHEMA_FILE,
+                Interfaces\ISchema::SCHEMA_PHP,
+                Interfaces\ISchema::SCHEMA_TCP,
+                Interfaces\ISchema::SCHEMA_UDP,
+                Interfaces\ISchema::SCHEMA_SSL,
             ])
             ? ($this->getSchemaType() . '://')
             : ''
         ;
-    }
-
-    /**
-     * @param string $schema
-     * @return ASchema
-     * @throws RemoteRequest\RequestException
-     */
-    public static function getSchema(string $schema): ASchema
-    {
-        switch ($schema) {
-            case static::SCHEMA_FILE:
-                return new File();
-            case static::SCHEMA_PHP:
-                return new Php();
-            case static::SCHEMA_TCP:
-                return new Tcp();
-            case static::SCHEMA_UDP:
-                return new Udp();
-            case static::SCHEMA_SSL:
-                return new Ssl();
-            default:
-                throw new RemoteRequest\RequestException('Unknown packet wrapper type');
-        }
     }
 }

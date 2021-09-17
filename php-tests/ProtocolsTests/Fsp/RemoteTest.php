@@ -24,7 +24,7 @@ class RemoteTest extends CommonTestClass
         $this->assertTrue(true);
         return;
 
-        $wrapper = Schemas\ASchema::getSchema(Schemas\ASchema::SCHEMA_UDP);
+        $wrapper = Schemas\Factory::getSchema(Schemas\ASchema::SCHEMA_UDP);
 //        $wrapper->setTarget('ftp.vslib.cz', 21);
 //        $wrapper->setTarget('www.720k.net', 21, 60);
 //        $wrapper->setTarget('fsp.720k.net', 21, 60);

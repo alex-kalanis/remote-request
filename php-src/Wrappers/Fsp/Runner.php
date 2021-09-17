@@ -35,7 +35,7 @@ class Runner
      */
     public function __construct()
     {
-        $this->schema = Schemas\ASchema::getSchema(Schemas\ASchema::SCHEMA_UDP);
+        $this->schema = Schemas\Factory::getSchema(Schemas\ASchema::SCHEMA_UDP);
         $this->processor = new Connection\Processor(new Sockets\Socket());
         $this->query = new Protocol\Query();
         $this->answer = new Protocol\Answer();

@@ -4,6 +4,7 @@ namespace BasicTests;
 
 
 use CommonTestClass;
+use kalanis\RemoteRequest\Interfaces\ISchema;
 use kalanis\RemoteRequest\Protocols;
 use kalanis\RemoteRequest\RequestException;
 use kalanis\RemoteRequest\Schemas;
@@ -16,11 +17,11 @@ class SchemasTest extends CommonTestClass
      */
     public function testInit(): void
     {
-        $this->assertInstanceOf('\kalanis\RemoteRequest\Schemas\File', Schemas\ASchema::getSchema(Schemas\ASchema::SCHEMA_FILE));
-        $this->assertInstanceOf('\kalanis\RemoteRequest\Schemas\Php', Schemas\ASchema::getSchema(Schemas\ASchema::SCHEMA_PHP));
-        $this->assertInstanceOf('\kalanis\RemoteRequest\Schemas\Tcp', Schemas\ASchema::getSchema(Schemas\ASchema::SCHEMA_TCP));
-        $this->assertInstanceOf('\kalanis\RemoteRequest\Schemas\Udp', Schemas\ASchema::getSchema(Schemas\ASchema::SCHEMA_UDP));
-        $this->assertInstanceOf('\kalanis\RemoteRequest\Schemas\Ssl', Schemas\ASchema::getSchema(Schemas\ASchema::SCHEMA_SSL));
+        $this->assertInstanceOf('\kalanis\RemoteRequest\Schemas\File', Schemas\Factory::getSchema(ISchema::SCHEMA_FILE));
+        $this->assertInstanceOf('\kalanis\RemoteRequest\Schemas\Php', Schemas\Factory::getSchema(ISchema::SCHEMA_PHP));
+        $this->assertInstanceOf('\kalanis\RemoteRequest\Schemas\Tcp', Schemas\Factory::getSchema(ISchema::SCHEMA_TCP));
+        $this->assertInstanceOf('\kalanis\RemoteRequest\Schemas\Udp', Schemas\Factory::getSchema(ISchema::SCHEMA_UDP));
+        $this->assertInstanceOf('\kalanis\RemoteRequest\Schemas\Ssl', Schemas\Factory::getSchema(ISchema::SCHEMA_SSL));
     }
 
     public function testSimple(): void
@@ -84,6 +85,6 @@ class SchemasTest extends CommonTestClass
     public function testFail(): void
     {
         $this->expectException(RequestException::class);
-        Schemas\ASchema::getSchema('unknown');
+        Schemas\Factory::getSchema('unknown');
     }
 }

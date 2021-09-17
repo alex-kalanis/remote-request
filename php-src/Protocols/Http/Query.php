@@ -3,7 +3,7 @@
 namespace kalanis\RemoteRequest\Protocols\Http;
 
 
-use kalanis\RemoteRequest\Connection;
+use kalanis\RemoteRequest\Interfaces;
 use kalanis\RemoteRequest\Protocols;
 use kalanis\RemoteRequest\Protocols\Http;
 
@@ -13,7 +13,7 @@ use kalanis\RemoteRequest\Protocols\Http;
  * @package kalanis\RemoteRequest\Protocols\Http
  * Message to the remote server compilation - protocol http
  */
-class Query extends Protocols\Dummy\Query implements Connection\ITarget
+class Query extends Protocols\Dummy\Query implements Interfaces\ITarget
 {
     /** @var string */
     protected $host = '';
@@ -92,7 +92,7 @@ class Query extends Protocols\Dummy\Query implements Connection\ITarget
         return $this->port;
     }
 
-    public function setRequestSettings(Connection\ITarget $request)
+    public function setRequestSettings(Interfaces\ITarget $request)
     {
         $this->host = $request->getHost();
         $this->port = $request->getPort();

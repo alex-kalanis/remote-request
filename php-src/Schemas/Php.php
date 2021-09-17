@@ -3,6 +3,9 @@
 namespace kalanis\RemoteRequest\Schemas;
 
 
+use kalanis\RemoteRequest\Interfaces\ISchema;
+
+
 /**
  * Class Php
  * @package kalanis\RemoteRequest\Schemas
@@ -15,7 +18,7 @@ class Php extends ASchema
 
     protected function getSchemaType(): string
     {
-        return static::SCHEMA_PHP;
+        return ISchema::SCHEMA_PHP;
     }
 
     public function getPort(): ?int

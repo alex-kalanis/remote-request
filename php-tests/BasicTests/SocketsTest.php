@@ -4,6 +4,7 @@ namespace BasicTests;
 
 
 use CommonTestClass;
+use kalanis\RemoteRequest\Interfaces;
 use kalanis\RemoteRequest\Sockets;
 
 
@@ -11,11 +12,11 @@ class SocketsTest extends CommonTestClass
 {
     public function testInit(): void
     {
-        $this->assertInstanceOf('\kalanis\RemoteRequest\Sockets\SharedInternal', Sockets\ASocket::getPointer(Sockets\ASocket::SOCKET_INTERNAL));
-        $this->assertInstanceOf('\kalanis\RemoteRequest\Sockets\Stream', Sockets\ASocket::getPointer(Sockets\ASocket::SOCKET_STREAM));
-        $this->assertInstanceOf('\kalanis\RemoteRequest\Sockets\Socket', Sockets\ASocket::getPointer(Sockets\ASocket::SOCKET_SOCKET));
-        $this->assertInstanceOf('\kalanis\RemoteRequest\Sockets\FSocket', Sockets\ASocket::getPointer(Sockets\ASocket::SOCKET_FSOCKET));
-        $this->assertInstanceOf('\kalanis\RemoteRequest\Sockets\PfSocket', Sockets\ASocket::getPointer(Sockets\ASocket::SOCKET_PFSOCKET));
+        $this->assertInstanceOf('\kalanis\RemoteRequest\Sockets\SharedInternal', Sockets\Factory::getPointer(Interfaces\ISocket::SOCKET_INTERNAL));
+        $this->assertInstanceOf('\kalanis\RemoteRequest\Sockets\Stream', Sockets\Factory::getPointer(Interfaces\ISocket::SOCKET_STREAM));
+        $this->assertInstanceOf('\kalanis\RemoteRequest\Sockets\Socket', Sockets\Factory::getPointer(Interfaces\ISocket::SOCKET_SOCKET));
+        $this->assertInstanceOf('\kalanis\RemoteRequest\Sockets\FSocket', Sockets\Factory::getPointer(Interfaces\ISocket::SOCKET_FSOCKET));
+        $this->assertInstanceOf('\kalanis\RemoteRequest\Sockets\PfSocket', Sockets\Factory::getPointer(Interfaces\ISocket::SOCKET_PFSOCKET));
     }
 
     public function testSetSocket(): void

@@ -4,6 +4,7 @@ namespace kalanis\RemoteRequest;
 
 
 use kalanis\RemoteRequest\Connection;
+use kalanis\RemoteRequest\Interfaces;
 use kalanis\RemoteRequest\Schemas;
 use kalanis\RemoteRequest\Sockets;
 
@@ -153,11 +154,11 @@ class Helper
     /**
      * @param string $schema
      * @param array $parsed from parse_url()
-     * @param Connection\ITarget $settings
+     * @param Interfaces\ITarget $settings
      * @return Protocols\Dummy\Query
      * @throws RequestException
      */
-    protected function getLibRequest(string $schema, array $parsed, Connection\ITarget $settings): Protocols\Dummy\Query
+    protected function getLibRequest(string $schema, array $parsed, Interfaces\ITarget $settings): Protocols\Dummy\Query
     {
         switch ($schema) {
             case 'tcp':

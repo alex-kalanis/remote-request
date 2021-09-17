@@ -4,9 +4,9 @@ namespace ProtocolsTests;
 
 
 use CommonTestClass;
+use kalanis\RemoteRequest\Interfaces;
 use kalanis\RemoteRequest\Protocols;
 use kalanis\RemoteRequest\RequestException;
-use kalanis\RemoteRequest\Schemas;
 
 
 class LoadersTest extends CommonTestClass
@@ -16,12 +16,17 @@ class LoadersTest extends CommonTestClass
      */
     public function testInit(): void
     {
-        $this->assertInstanceOf('\kalanis\RemoteRequest\Protocols\Tcp', Protocols\AProtocol::getProtocol(Schemas\ASchema::SCHEMA_TCP));
-        $this->assertInstanceOf('\kalanis\RemoteRequest\Protocols\Tcp', Protocols\AProtocol::getProtocol(Schemas\ASchema::SCHEMA_FILE));
-        $this->assertInstanceOf('\kalanis\RemoteRequest\Protocols\Udp', Protocols\AProtocol::getProtocol(Schemas\ASchema::SCHEMA_UDP));
-        $this->assertInstanceOf('\kalanis\RemoteRequest\Protocols\Http', Protocols\AProtocol::getProtocol('http'));
-        $this->assertInstanceOf('\kalanis\RemoteRequest\Protocols\Http', Protocols\AProtocol::getProtocol('https'));
-        $this->assertInstanceOf('\kalanis\RemoteRequest\Protocols\Fsp', Protocols\AProtocol::getProtocol('fsp'));
+        $this->assertInstanceOf('\kalanis\RemoteRequest\Protocols\Tcp', Protocols\Factory::getProtocol(Interfaces\ISchema::SCHEMA_TCP));
+        $this->assertInstanceOf('\kalanis\RemoteRequest\Protocols\Tcp', Protocols\Factory::getProtocol(Interfaces\ISchema::SCHEMA_FILE));
+        $this->assertInstanceOf('\kalanis\RemoteRequest\Protocols\Udp', Protocols\Factory::getProtocol(Interfaces\ISchema::SCHEMA_UDP));
+        $this->assertInstanceOf('\kalanis\RemoteRequest\Protocols\Http', Protocols\Factory::getProtocol('http'));
+        $this->assertInstanceOf('\kalanis\RemoteRequest\Protocols\Http', Protocols\Factory::getProtocol('https'));
+        $this->assertInstanceOf('\kalanis\RemoteRequest\Protocols\Fsp', Protocols\Factory::getProtocol('fsp'));
+//        $this->assertInstanceOf('\kalanis\RemoteRequest\Protocols\Http2', Protocols\Factory::getProtocol('http2'));
+//        $this->assertInstanceOf('\kalanis\RemoteRequest\Protocols\Http3', Protocols\Factory::getProtocol('http3'));
+//        $this->assertInstanceOf('\kalanis\RemoteRequest\Protocols\WebDAV', Protocols\Factory::getProtocol('webdav'));
+//        $this->assertInstanceOf('\kalanis\RemoteRequest\Protocols\Samba', Protocols\Factory::getProtocol('smb'));
+//        $this->assertInstanceOf('\kalanis\RemoteRequest\Protocols\Git', Protocols\Factory::getProtocol('git'));
     }
 
     /**
@@ -30,7 +35,7 @@ class LoadersTest extends CommonTestClass
     public function testFail(): void
     {
         $this->expectException(RequestException::class);
-        Protocols\AProtocol::getProtocol('unknown');
+        Protocols\Factory::getProtocol('unknown');
     }
 
     public function testTcp(): void

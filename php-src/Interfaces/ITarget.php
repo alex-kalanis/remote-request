@@ -1,11 +1,11 @@
 <?php
 
-namespace kalanis\RemoteRequest\Connection;
+namespace kalanis\RemoteRequest\Interfaces;
 
 
 /**
  * Interface ITarget
- * @package kalanis\RemoteRequest\Connection
+ * @package kalanis\RemoteRequest\Interfaces
  * Settings of remote connection
  */
 interface ITarget

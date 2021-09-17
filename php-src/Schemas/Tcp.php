@@ -3,6 +3,9 @@
 namespace kalanis\RemoteRequest\Schemas;
 
 
+use kalanis\RemoteRequest\Interfaces\ISchema;
+
+
 /**
  * Class Tcp
  * @package kalanis\RemoteRequest\Schemas
@@ -12,7 +15,7 @@ class Tcp extends ASchema
 {
     protected function getSchemaType(): string
     {
-        return static::SCHEMA_TCP;
+        return ISchema::SCHEMA_TCP;
     }
 
     public function getProtocol(): int

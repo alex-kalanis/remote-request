@@ -3,6 +3,9 @@
 namespace kalanis\RemoteRequest\Schemas;
 
 
+use kalanis\RemoteRequest\Interfaces\ISchema;
+
+
 /**
  * Properties for query to remote server - layer 2 protocol UDP
  * Class Udp
@@ -12,7 +15,7 @@ class Udp extends ASchema
 {
     protected function getSchemaType(): string
     {
-        return static::SCHEMA_UDP;
+        return ISchema::SCHEMA_UDP;
     }
 
     public function getProtocol(): int
