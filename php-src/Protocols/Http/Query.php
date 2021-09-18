@@ -105,6 +105,11 @@ class Query extends Protocols\Dummy\Query implements Interfaces\ITarget
         return $this;
     }
 
+    public function getPath(): string
+    {
+        return $this->path;
+    }
+
     /**
      * Is current query set as inline? (Has no multipart definition?)
      * @return bool

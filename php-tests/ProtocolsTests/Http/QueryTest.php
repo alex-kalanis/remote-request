@@ -21,7 +21,7 @@ class QueryMock extends Http\Query
 }
 
 
-class QueryAuthMock extends Http\Query\AuthBasic
+class QueryAuthBasicMock extends Http\Query\AuthBasic
 {
     /**
      * Overwrite because random string in testing does not work
@@ -30,6 +30,24 @@ class QueryAuthMock extends Http\Query\AuthBasic
     protected function generateBoundary(): string
     {
         return '--PHPFSock--';
+    }
+}
+
+
+class QueryAuthDigestMock extends Http\Query\AuthDigest
+{
+    /**
+     * Overwrite because random string in testing does not work
+     * @return string
+     */
+    protected function generateBoundary(): string
+    {
+        return '--PHPFSock--';
+    }
+
+    protected function getRandomString(): string
+    {
+        return '0a4f113b';
     }
 }
 
@@ -140,13 +158,21 @@ class QueryTest extends CommonTestClass
 
     public function testQueryWithAuth(): void
     {
-        $lib = $this->prepareAuth();
+        $lib = $this->prepareAuthBasic();
         $lib->setRequestSettings($this->prepareProtocolSchema('somewhere.example', 126))
             ->addValues(['foo' => 'bar']);
         $this->assertEquals(
             "GET /example?foo=bar HTTP/1.1\r\nHost: somewhere.example:126\r\n"
             . "Authorization: Basic Zm9vZGlkOmJ1dWdnZWU=\r\n\r\n"
             , $lib->getData());
+    }
+
+    public function testQueryWithDigest(): void
+    {
+        $lib = $this->prepareAuthDigest();
+        $lib->setRequestSettings($this->prepareProtocolSchema('localhost'));
+        $this->assertEquals(
+            "GET /dir/index.html HTTP/1.1\r\nHost: localhost\r\nAuthorization: Digest username=\"Mufasa\", realm=\"testrealm@host.com\", nonce=\"dcd98b7102dd2f0e8b11d0f600bfb0c093\", uri=\"/dir/index.html\", qop=\"auth\", nc=\"00000001\", cnonce=\"0a4f113b\", response=\"6629fae49393a05397450978507c4ef1\", opaque=\"5ccc069c403ebaf9f0171e9517f40e41\"\r\n\r\n", $lib->getData());
     }
 
     protected function prepareSimple(): Http\Query
@@ -161,13 +187,27 @@ class QueryTest extends CommonTestClass
         return $lib;
     }
 
-    protected function prepareAuth(): Http\Query
+    protected function prepareAuthBasic(): Http\Query
     {
-        $lib = new QueryAuthMock();
+        $lib = new QueryAuthBasicMock();
         $lib->setMethod('get');
         $lib->setPath('/example');
         $lib->setMultipart(null);
         $lib->setCredentials('foodid', 'buuggee');
+        $lib->removeHeader('Accept');
+        $lib->removeHeader('User-Agent');
+        $lib->removeHeader('Connection');
+        return $lib;
+    }
+
+    protected function prepareAuthDigest(): Http\Query
+    {
+        $lib = new QueryAuthDigestMock();
+        $lib->setMethod('get');
+        $lib->setPath('/dir/index.html');
+        $lib->setMultipart(null);
+        $lib->setCredentials('Mufasa', 'Circle Of Life', 'testrealm@host.com');
+        $lib->setProperties('dcd98b7102dd2f0e8b11d0f600bfb0c093', '5ccc069c403ebaf9f0171e9517f40e41', 'auth');
         $lib->removeHeader('Accept');
         $lib->removeHeader('User-Agent');
         $lib->removeHeader('Connection');

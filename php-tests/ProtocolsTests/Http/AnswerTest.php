@@ -54,6 +54,31 @@ class AnswerMock extends Connection\Processor
             . Http::DELIMITER
             . base64_decode("S0xKTklNS8/IzMrOyc3LLygsKi4pLSuvqKwyMDQyMTUzt7AEAA==");
     }
+
+    /**
+     * @return string
+     * @link https://en.wikipedia.org/wiki/Digest_access_authentication
+     */
+    public function getResponseAuthDigest(): string
+    {
+        return 'HTTP/0.1 401 Unauthorized' . Http::DELIMITER
+            . 'Server: PhpUnit/6.3.0' . Http::DELIMITER
+            . 'Date: Sun, 10 Apr 2014 20:26:47 GMT' . Http::DELIMITER
+            . 'WWW-Authenticate: Digest realm="testrealm@host.com", qop="auth,auth-int", nonce="dcd98b7102dd2f0e8b11d0f600bfb0c093", opaque="5ccc069c403ebaf9f0171e9517f40e41"' . Http::DELIMITER
+            . 'Content-Type: text/html' . Http::DELIMITER
+            . 'Content-Length: 153' . Http::DELIMITER
+            . Http::DELIMITER
+            . '<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Error</title>
+  </head>
+  <body>
+    <h1>401 Unauthorized.</h1>
+  </body>
+</html>';
+    }
 }
 
 
@@ -110,6 +135,20 @@ class AnswerTest extends CommonTestClass
         $this->assertEquals("abcdefghijklmnopqrstuvwxyz012456789", $lib->getContent());
         $this->assertEquals('text/plain', $lib->getHeader('Content-Type'));
         $this->assertEquals('deflate', $lib->getHeader('Content-Encoding'));
+    }
+
+    public function testAuth(): void
+    {
+        $method = new AnswerMock();
+        $lib = (new Http\Answer\AuthDigest())->setResponse($method->getResponseAuthDigest());
+        $lib->processContent();
+        $this->assertEquals(401, $lib->getCode());
+        $this->assertEquals('Digest', $lib->getAuthType());
+        $this->assertEquals('testrealm@host.com', $lib->getAuthRealm());
+        $this->assertEquals(['auth', 'auth-int'], $lib->getQualitiesOfProtection());
+        $this->assertEquals('dcd98b7102dd2f0e8b11d0f600bfb0c093', $lib->getRemoteRandomNumber());
+        $this->assertEquals('5ccc069c403ebaf9f0171e9517f40e41', $lib->getDataToReturn());
+        $this->assertEquals('md5', $lib->getAlgorithm());
     }
 
     protected function prepareSimple(string $content): Http\Answer
