@@ -11,7 +11,7 @@ use kalanis\RemoteRequest\RequestException;
 
 class AnswerMock extends Connection\Processor
 {
-    public function getResponseVersion(): string
+    public function getResponseVersion()
     {
         return Common::makeDummyQuery([
             0x10, # CC_VERSION
@@ -25,7 +25,7 @@ class AnswerMock extends Connection\Processor
         ]);
     }
 
-    public function getResponseVersionPayload(): string
+    public function getResponseVersionPayload()
     {
         return Common::makeDummyQuery([
             0x10, # CC_VERSION
@@ -39,7 +39,7 @@ class AnswerMock extends Connection\Processor
         ]);
     }
 
-    public function getResponseDir(): string
+    public function getResponseDir()
     {
         return Common::makeDummyQuery([
             0x41, # CC_GET_DIR
@@ -68,7 +68,7 @@ class AnswerMock extends Connection\Processor
         ]);
     }
 
-    public function getResponseDirReal(): string
+    public function getResponseDirReal()
     {
         return Common::makeDummyQuery([
             0x41, # CC_GET_DIR
@@ -138,7 +138,7 @@ class AnswerMock extends Connection\Processor
         ]);
     }
 
-    public function getResponseError(): string
+    public function getResponseError()
     {
         return Common::makeDummyQuery([
             0x40, # CC_ERR
@@ -152,7 +152,7 @@ class AnswerMock extends Connection\Processor
         ]);
     }
 
-    public function getResponseErrorDetails(): string
+    public function getResponseErrorDetails()
     {
         return Common::makeDummyQuery([
             0x40, # CC_ERR
@@ -166,7 +166,7 @@ class AnswerMock extends Connection\Processor
         ]);
     }
 
-    public function getResponseTest(): string
+    public function getResponseTest()
     {
         return Common::makeDummyQuery([
             0x81, # CC_TEST
@@ -180,7 +180,7 @@ class AnswerMock extends Connection\Processor
         ]);
     }
 
-    public function getResponseNothing(): string
+    public function getResponseNothing()
     {
         return Common::makeDummyQuery([
             0x4A, # CC_BYE
@@ -194,7 +194,7 @@ class AnswerMock extends Connection\Processor
         ]);
     }
 
-    public function getResponseGetFile(): string
+    public function getResponseGetFile()
     {
         return Common::makeDummyQuery([
             0x42, # CC_GET_FILE
@@ -208,7 +208,7 @@ class AnswerMock extends Connection\Processor
         ]);
     }
 
-    public function getResponseUpload(): string
+    public function getResponseUpload()
     {
         return Common::makeDummyQuery([
             0x43, # CC_UP_LOAD
@@ -222,7 +222,7 @@ class AnswerMock extends Connection\Processor
         ]);
     }
 
-    public function getResponseProtection(): string
+    public function getResponseProtection()
     {
         return Common::makeDummyQuery([
             0x47, # CC_GET_PRO
@@ -236,7 +236,7 @@ class AnswerMock extends Connection\Processor
         ]);
     }
 
-    public function getResponseStats(): string
+    public function getResponseStats()
     {
         return Common::makeDummyQuery([
             0x4D, # CC_STATS

@@ -25,7 +25,7 @@ class DummyTest extends CommonTestClass
     {
         $libValue = new Dummy\Answer();
         $this->assertEmpty($libValue->getContent());
-        $libValue->setResponse('ksdjfasdfgasdjfhsdkf');
+        $libValue->setResponse(static::stringToResource('ksdjfasdfgasdjfhsdkf'));
         $this->assertEquals('ksdjfasdfgasdjfhsdkf', $libValue->getContent());
     }
 }

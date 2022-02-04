@@ -82,7 +82,7 @@ class ConnectionTest extends CommonTestClass
         $processor = new ConnectProcessorMock(new Sockets\SharedInternal());
         $processor->setProtocolSchema($wrapper);
         $processor->setData($query);
-        $this->assertEquals(substr($content, 0, 2000), $processor->getResponse());
+        $this->assertEquals(substr($content, 0, 2000), stream_get_contents($processor->getResponse()));
     }
 
     /**
@@ -99,12 +99,12 @@ class ConnectionTest extends CommonTestClass
         $query1 = new Protocols\Dummy\Query();
         $query1->body = $content1;
         $processor->setData($query1);
-        $this->assertEquals($content1, $processor->getResponse());
+        $this->assertEquals($content1, stream_get_contents($processor->getResponse()));
 
         $query2 = new Protocols\Dummy\Query();
         $query2->body = $content2;
         $processor->setData($query2);
-        $this->assertEquals($content2, $processor->getResponse());
+        $this->assertEquals($content2, stream_get_contents($processor->getResponse()));
     }
 
     /**
@@ -123,6 +123,7 @@ class ConnectionTest extends CommonTestClass
             $query->body = $message;
             $processor->setData($query);
         }
-        return $processor->getResponse();
+        $response = $processor->getResponse();
+        return $response ? stream_get_contents($response) : '' ;
     }
 }

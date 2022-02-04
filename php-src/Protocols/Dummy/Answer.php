@@ -10,9 +10,14 @@ namespace kalanis\RemoteRequest\Protocols\Dummy;
  */
 class Answer
 {
-    protected $body = '';
+    /** @var resource|null */
+    protected $body = null;
 
-    public function setResponse(string $message)
+    /**
+     * @param resource|null $message
+     * @return $this
+     */
+    public function setResponse($message)
     {
         $this->body = $message;
         return $this;
@@ -20,6 +25,6 @@ class Answer
 
     public function getContent(): string
     {
-        return (string)$this->body;
+        return $this->body ? stream_get_contents($this->body, -1, 0) : '';
     }
 }

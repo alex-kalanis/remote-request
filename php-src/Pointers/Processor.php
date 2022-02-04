@@ -20,8 +20,8 @@ class Processor
 
     /** @var IQuery | null */
     protected $remoteQuery = null;
-    /** @var string */
-    protected $remoteResponse = '';
+    /** @var resource|null */
+    protected $remoteResponse = null;
 
     public function setQuery(?IQuery $content): self
     {
@@ -62,29 +62,13 @@ class Processor
      */
     protected function readResponse($filePointer): self
     {
-        $this->remoteResponse = '';
+        $this->remoteResponse = null;
 
         // Read the server response
-        $response = "";
+        $response = fopen('php://temp', 'rw');
         $bytesLeft = $this->remoteQuery->getMaxAnswerLength();
-
-        while (!feof($filePointer)) {
-            $nextCount = (is_null($bytesLeft)) ? static::PART_SPLIT : min(static::PART_SPLIT, $bytesLeft);
-
-            if ($nextCount) {
-                $line = fread($filePointer, $nextCount);
-                $nextCount = mb_strlen($line);
-                $response .= $line;
-            }
-
-            if (!is_null($bytesLeft)) {
-                if ($bytesLeft <= $nextCount) {
-                    break;
-                }
-                $bytesLeft -= $nextCount;
-            }
-        }
-
+        stream_copy_to_stream($filePointer, $response, (is_null($bytesLeft) ? -1 : $bytesLeft), 0);
+        rewind($response);
         $this->remoteResponse = $response;
         return $this;
     }
@@ -112,7 +96,10 @@ class Processor
         }
     }
 
-    public function getContent(): string
+    /**
+     * @return resource|null
+     */
+    public function getContent()
     {
         return $this->remoteResponse;
     }

@@ -13,18 +13,18 @@ use kalanis\RemoteRequest\Schemas;
 
 class TestProcessor extends Connection\Processor
 {
-    public function getResponse(): string
+    public function getResponse()
     {
-        return 'HTTP/0.1 900 KO' . Http::DELIMITER;
+        return CommonTestClass::stringToResource('HTTP/0.1 900 KO' . Http::DELIMITER);
     }
 }
 
 
 class ContentTestProcessor extends TestProcessor
 {
-    public function getResponse(): string
+    public function getResponse()
     {
-        return 'HTTP/0.1 901 KO' . Http::DELIMITER . Http::DELIMITER . 'abcdefghijkl';
+        return CommonTestClass::stringToResource('HTTP/0.1 901 KO' . Http::DELIMITER . Http::DELIMITER . 'abcdefghijkl');
     }
 }
 

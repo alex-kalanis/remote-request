@@ -52,10 +52,10 @@ class Processor
 
     /**
      * Process query itself
-     * @return string
+     * @return resource|null
      * @throws RequestException
      */
-    public function getResponse(): string
+    public function getResponse()
     {
         return $this->processor
                 ->setQuery($this->data)

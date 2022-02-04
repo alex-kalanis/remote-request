@@ -10,6 +10,12 @@ use kalanis\RemoteRequest\Protocols;
  * Class Query
  * @package RemoteRequest\Protocols\Fsp
  * Simple FSP query to remote source - create packet
+ * This is the "transport box"
+ * @todo: throw compute checksum and packet building outside this class; that's logic, not pure data
+ *        then getData() call can have that logic
+ *     - X - -> re-define where are the data storages (local - this class; and remote - the packet into the run)
+ *           - then it's simple case of many adapters and that calculating calls should be there
+ *           - Adapters in HTTP are descendants of Dummy\Query and Dummy\Answer
  */
 class Query extends Protocols\Dummy\Query
 {

@@ -9,4 +9,12 @@ class CommonTestClass extends \PHPUnit\Framework\TestCase
 //            1 => Array(new ORMTestOld())
 //        );
 //    }
+
+    public static function stringToResource(string $content)
+    {
+        $res = fopen('php://memory', 'rw');
+        fputs($res, $content);
+        rewind($res);
+        return $res;
+    }
 }
