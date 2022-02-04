@@ -4,6 +4,7 @@ namespace kalanis\RemoteRequest\Wrappers\Fsp;
 
 
 use kalanis\RemoteRequest\Connection;
+use kalanis\RemoteRequest\Interfaces\ISchema;
 use kalanis\RemoteRequest\Protocols\Fsp as Protocol;
 use kalanis\RemoteRequest\RequestException;
 use kalanis\RemoteRequest\Schemas;
@@ -35,7 +36,7 @@ class Runner
      */
     public function __construct()
     {
-        $this->schema = Schemas\Factory::getSchema(Schemas\ASchema::SCHEMA_UDP);
+        $this->schema = Schemas\Factory::getSchema(ISchema::SCHEMA_UDP);
         $this->processor = new Connection\Processor(new Sockets\Socket());
         $this->query = new Protocol\Query();
         $this->answer = new Protocol\Answer();

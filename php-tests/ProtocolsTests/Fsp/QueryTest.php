@@ -14,7 +14,7 @@ class QueryMock
         return new static();
     }
 
-    public function getRequestVersion(): string
+    public function getRequestVersion()
     {
         return Common::makeDummyQuery([
             0x10, # CC_VERSION
@@ -28,7 +28,7 @@ class QueryMock
         ]);
     }
 
-    public function getRequestGetDir(): string
+    public function getRequestGetDir()
     {
         return Common::makeDummyQuery([
             0x41, # CC_GET_DIR
@@ -42,7 +42,7 @@ class QueryMock
         ]);
     }
 
-    public function getRequestGetFile(): string
+    public function getRequestGetFile()
     {
         return Common::makeDummyQuery([
             0x42, # CC_GET_FILE
@@ -56,7 +56,7 @@ class QueryMock
         ]);
     }
 
-    public function getRequestUpload(): string
+    public function getRequestUpload()
     {
         return Common::makeDummyQuery([
             0x43, # CC_UP_LOAD
@@ -70,7 +70,7 @@ class QueryMock
         ]);
     }
 
-    public function getRequestInstall(): string
+    public function getRequestInstall()
     {
         return Common::makeDummyQuery([
             0x44, # CC_INSTALL
@@ -84,7 +84,7 @@ class QueryMock
         ]);
     }
 
-    public function getRequestDelFile(): string
+    public function getRequestDelFile()
     {
         return Common::makeDummyQuery([
             0x45, # CC_DEL_FILE
@@ -98,7 +98,7 @@ class QueryMock
         ]);
     }
 
-    public function getRequestDelDir(): string
+    public function getRequestDelDir()
     {
         return Common::makeDummyQuery([
             0x46, # CC_DEL_DIR
@@ -112,7 +112,7 @@ class QueryMock
         ]);
     }
 
-    public function getRequestGetProtection(): string
+    public function getRequestGetProtection()
     {
         return Common::makeDummyQuery([
             0x47, # CC_GET_PRO
@@ -126,7 +126,7 @@ class QueryMock
         ]);
     }
 
-    public function getRequestSetProtection(): string
+    public function getRequestSetProtection()
     {
         return Common::makeDummyQuery([
             0x48, # CC_SET_PRO
@@ -140,7 +140,7 @@ class QueryMock
         ]);
     }
 
-    public function getRequestMakeDir(): string
+    public function getRequestMakeDir()
     {
         return Common::makeDummyQuery([
             0x49, # CC_MAKE_DIR
@@ -154,7 +154,7 @@ class QueryMock
         ]);
     }
 
-    public function getRequestBye(): string
+    public function getRequestBye()
     {
         return Common::makeDummyQuery([
             0x4A, # CC_BYE
@@ -168,7 +168,7 @@ class QueryMock
         ]);
     }
 
-    public function getRequestGrabFile(): string
+    public function getRequestGrabFile()
     {
         return Common::makeDummyQuery([
             0x4B, # CC_GRAB_FILE
@@ -182,7 +182,7 @@ class QueryMock
         ]);
     }
 
-    public function getRequestGrabDone(): string
+    public function getRequestGrabDone()
     {
         return Common::makeDummyQuery([
             0x4C, # CC_GRAB_DONE
@@ -196,7 +196,7 @@ class QueryMock
         ]);
     }
 
-    public function getRequestStat(): string
+    public function getRequestStat()
     {
         return Common::makeDummyQuery([
             0x4D, # CC_GET_FILE
@@ -210,7 +210,7 @@ class QueryMock
         ]);
     }
 
-    public function getRequestRename(): string
+    public function getRequestRename()
     {
         return Common::makeDummyQuery([
             0x4E, # CC_RENAME
@@ -232,7 +232,7 @@ class QueryTest extends CommonTestClass
     {
         $lib = new Fsp\Query\Version(new Fsp\Query());
         $lib->setKey(258)->setSequence(772);
-        $this->assertEquals(QueryMock::load()->getRequestVersion(), $lib->compile());
+        $this->assertEquals(stream_get_contents(QueryMock::load()->getRequestVersion()), $lib->compile());
     }
 
     public function testQueryGetDir(): void
@@ -240,7 +240,7 @@ class QueryTest extends CommonTestClass
         $lib = new Fsp\Query\GetDir(new Fsp\Query());
         $lib->setKey(258)->setSequence(772);
         $lib->setDirPath('foo/bar1')->setPosition(37);
-        $this->assertEquals(QueryMock::load()->getRequestGetDir(), $lib->compile());
+        $this->assertEquals(stream_get_contents(QueryMock::load()->getRequestGetDir()), $lib->compile());
     }
 
     public function testQueryGetFile(): void
@@ -248,7 +248,7 @@ class QueryTest extends CommonTestClass
         $lib = new Fsp\Query\GetFile(new Fsp\Query());
         $lib->setKey(258)->setSequence(772);
         $lib->setFilePath('foo/bar2')->setOffset(2780)->setLimit(728);
-        $this->assertEquals(QueryMock::load()->getRequestGetFile(), $lib->compile());
+        $this->assertEquals(stream_get_contents(QueryMock::load()->getRequestGetFile()), $lib->compile());
     }
 
     public function testQueryUpload(): void
@@ -256,7 +256,7 @@ class QueryTest extends CommonTestClass
         $lib = new Fsp\Query\Upload(new Fsp\Query());
         $lib->setKey(258)->setSequence(772);
         $lib->setFilePath('foo/bar3')->setData('ABCDEFGHIJKLMNOPQRSTUVWXYZ012456789abcdefghijklmnopqrstuvwxyz')->setOffset(2780);
-        $this->assertEquals(QueryMock::load()->getRequestUpload(), $lib->compile());
+        $this->assertEquals(stream_get_contents(QueryMock::load()->getRequestUpload()), $lib->compile());
     }
 
     public function testQueryInstall(): void
@@ -264,7 +264,7 @@ class QueryTest extends CommonTestClass
         $lib = new Fsp\Query\Install(new Fsp\Query());
         $lib->setKey(258)->setSequence(772);
         $lib->setFilePath('foo/bar4')->setTimestamp(1234567890);
-        $this->assertEquals(QueryMock::load()->getRequestInstall(), $lib->compile());
+        $this->assertEquals(stream_get_contents(QueryMock::load()->getRequestInstall()), $lib->compile());
     }
 
     public function testQueryDelFile(): void
@@ -272,7 +272,7 @@ class QueryTest extends CommonTestClass
         $lib = new Fsp\Query\DelFile(new Fsp\Query());
         $lib->setKey(258)->setSequence(772);
         $lib->setFilePath('foo/bar5');
-        $this->assertEquals(QueryMock::load()->getRequestDelFile(), $lib->compile());
+        $this->assertEquals(stream_get_contents(QueryMock::load()->getRequestDelFile()), $lib->compile());
     }
 
     public function testQueryDelDir(): void
@@ -280,7 +280,7 @@ class QueryTest extends CommonTestClass
         $lib = new Fsp\Query\DelDir(new Fsp\Query());
         $lib->setKey(258)->setSequence(772);
         $lib->setDirPath('foo/bar6');
-        $this->assertEquals(QueryMock::load()->getRequestDelDir(), $lib->compile());
+        $this->assertEquals(stream_get_contents(QueryMock::load()->getRequestDelDir()), $lib->compile());
     }
 
     public function testQueryGetProtection(): void
@@ -288,7 +288,7 @@ class QueryTest extends CommonTestClass
         $lib = new Fsp\Query\GetProtection(new Fsp\Query());
         $lib->setKey(258)->setSequence(772);
         $lib->setDirPath('foo/bar7');
-        $this->assertEquals(QueryMock::load()->getRequestGetProtection(), $lib->compile());
+        $this->assertEquals(stream_get_contents(QueryMock::load()->getRequestGetProtection()), $lib->compile());
     }
 
     public function testQuerySetProtection(): void
@@ -298,7 +298,7 @@ class QueryTest extends CommonTestClass
         $lib->setDirPath('foo/bar8')
             ->setOperation(Fsp\Query\SetProtection::CAN_PRESERVE_FILE)
             ->allowOperation(false);
-        $this->assertEquals(QueryMock::load()->getRequestSetProtection(), $lib->compile());
+        $this->assertEquals(stream_get_contents(QueryMock::load()->getRequestSetProtection()), $lib->compile());
     }
 
     public function testQueryMakeDir(): void
@@ -306,14 +306,14 @@ class QueryTest extends CommonTestClass
         $lib = new Fsp\Query\MakeDir(new Fsp\Query());
         $lib->setKey(258)->setSequence(772);
         $lib->setDirPath('foo/bar9');
-        $this->assertEquals(QueryMock::load()->getRequestMakeDir(), $lib->compile());
+        $this->assertEquals(stream_get_contents(QueryMock::load()->getRequestMakeDir()), $lib->compile());
     }
 
     public function testQueryBye(): void
     {
         $lib = new Fsp\Query\Bye(new Fsp\Query());
         $lib->setKey(258)->setSequence(772);
-        $this->assertEquals(QueryMock::load()->getRequestBye(), $lib->compile());
+        $this->assertEquals(stream_get_contents(QueryMock::load()->getRequestBye()), $lib->compile());
     }
 
     public function testQueryGrabFile(): void
@@ -321,7 +321,7 @@ class QueryTest extends CommonTestClass
         $lib = new Fsp\Query\GrabFile(new Fsp\Query());
         $lib->setKey(258)->setSequence(772);
         $lib->setFilePath('foo/bar10')->setOffset(2780);
-        $this->assertEquals(QueryMock::load()->getRequestGrabFile(), $lib->compile());
+        $this->assertEquals(stream_get_contents(QueryMock::load()->getRequestGrabFile()), $lib->compile());
     }
 
     public function testQueryGrabDone(): void
@@ -329,7 +329,7 @@ class QueryTest extends CommonTestClass
         $lib = new Fsp\Query\GrabDone(new Fsp\Query());
         $lib->setKey(258)->setSequence(772);
         $lib->setFilePath('foo/bar11')->setTimestamp(1234567890);
-        $this->assertEquals(QueryMock::load()->getRequestGrabDone(), $lib->compile());
+        $this->assertEquals(stream_get_contents(QueryMock::load()->getRequestGrabDone()), $lib->compile());
     }
 
     public function testQueryStat(): void
@@ -337,7 +337,7 @@ class QueryTest extends CommonTestClass
         $lib = new Fsp\Query\Stat(new Fsp\Query());
         $lib->setKey(258)->setSequence(772);
         $lib->setFilePath('foo/bar12');
-        $this->assertEquals(QueryMock::load()->getRequestStat(), $lib->compile());
+        $this->assertEquals(stream_get_contents(QueryMock::load()->getRequestStat()), $lib->compile());
     }
 
     public function testQueryRename(): void
@@ -345,6 +345,6 @@ class QueryTest extends CommonTestClass
         $lib = new Fsp\Query\Rename(new Fsp\Query());
         $lib->setKey(258)->setSequence(772);
         $lib->setFilePath('foo/bar13')->setNewPath('foo/bar14');
-        $this->assertEquals(QueryMock::load()->getRequestRename(), $lib->compile());
+        $this->assertEquals(stream_get_contents(QueryMock::load()->getRequestRename()), $lib->compile());
     }
 }

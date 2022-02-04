@@ -13,9 +13,9 @@ class ProtocolQueryMock
 {
     /**
      * What we send into server
-     * @return string
+     * @return resource|null
      */
-    public function getRequestSimple(): string
+    public function getRequestSimple()
     {
         return Common::makeDummyQuery([
             0x41, # CC_GET_DIR
@@ -30,9 +30,9 @@ class ProtocolQueryMock
     }
     /**
      * What we send into server
-     * @return string
+     * @return resource|null
      */
-    public function getRequestFailedChk(): string
+    public function getRequestFailedChk()
     {
         return Common::makeDummyQuery([
             0x41, # CC_GET_DIR
@@ -51,9 +51,9 @@ class ProcessorMock extends Connection\Processor
 {
     /**
      * What server responds
-     * @return string
+     * @return resource|null
      */
-    public function getResponseSimple(): string
+    public function getResponseSimple()
     {
         return Common::makeDummyQuery([
             0x42, # CC_GET_FILE
@@ -69,9 +69,9 @@ class ProcessorMock extends Connection\Processor
 
     /**
      * What server responds
-     * @return string
+     * @return resource|null
      */
-    public function getResponseReal(): string
+    public function getResponseReal()
     {
         return Common::makeDummyQuery([
             0x10, # CC_VERSION
@@ -87,9 +87,9 @@ class ProcessorMock extends Connection\Processor
 
     /**
      * What server should not respond
-     * @return string
+     * @return resource|null
      */
-    public function getResponseFailedChk(): string
+    public function getResponseFailedChk()
     {
         return Common::makeDummyQuery([
             0x42, # CC_GET_FILE
@@ -102,7 +102,7 @@ class ProcessorMock extends Connection\Processor
         ]);
     }
 
-    public function getResponseShort(): string
+    public function getResponseShort()
     {
         return Common::makeDummyQuery([
             0x81, # CC_TEST
@@ -111,7 +111,7 @@ class ProcessorMock extends Connection\Processor
         ]);
     }
 
-    public function getResponseLong(): string
+    public function getResponseLong()
     {
         return Common::makeDummyQuery([
             0x81, # CC_TEST
@@ -140,7 +140,7 @@ class ProtocolTest extends CommonTestClass
             ->setContent('DATA' . chr(0))
             ->setExtraData(chr(01) . chr(0));
 
-        $this->assertEquals($mock->getRequestSimple(), $lib->getPacket());
+        $this->assertEquals(stream_get_contents($mock->getRequestSimple()), $lib->getPacket());
     }
 
     public function testQueryFailChecksum(): void
@@ -154,7 +154,7 @@ class ProtocolTest extends CommonTestClass
             ->setContent('DATA' . chr(0))
             ->setExtraData(chr(01) . chr(0));
 
-        $this->assertNotEquals($mock->getRequestFailedChk(), $lib->getPacket());
+        $this->assertNotEquals(stream_get_contents($mock->getRequestFailedChk()), $lib->getPacket());
     }
 
     /**

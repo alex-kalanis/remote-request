@@ -11,26 +11,26 @@ use kalanis\RemoteRequest\Protocols\Restful;
 
 class AnswerMock extends Connection\Processor
 {
-    public function getResponseSimple(): string
+    public function getResponseSimple()
     {
-        return 'HTTP/0.1 901 KO' . Http::DELIMITER
+        return CommonTestClass::stringToResource('HTTP/0.1 901 KO' . Http::DELIMITER
             . 'Server: PhpUnit/6.3.0' . Http::DELIMITER
             . 'Content-Length: 29' . Http::DELIMITER
             . 'Content-Type: text/plain' . Http::DELIMITER
             . 'Connection: Closed' . Http::DELIMITER
             . Http::DELIMITER
-            . '{"foou":"barr","abcd":"efgh"}';
+            . '{"foou":"barr","abcd":"efgh"}');
     }
 
-    public function getResponseFile(): string
+    public function getResponseFile()
     {
-        return 'HTTP/0.1 902 KO' . Http::DELIMITER
+        return CommonTestClass::stringToResource('HTTP/0.1 902 KO' . Http::DELIMITER
             . 'Server: PhpUnit/6.3.0' . Http::DELIMITER
             . 'Content-Length: 109' . Http::DELIMITER
             . 'Content-Type: text/plain' . Http::DELIMITER
             . 'Connection: Closed' . Http::DELIMITER
             . Http::DELIMITER
-            . '{"foou":"barr","up":{"type":"file","filename":"unknown.txt","mimetype":"text\/plain","content64":"bW5idmN4"}}';
+            . '{"foou":"barr","up":{"type":"file","filename":"unknown.txt","mimetype":"text\/plain","content64":"bW5idmN4"}}');
     }
 }
 
@@ -65,7 +65,7 @@ class AnswerTest extends CommonTestClass
         $this->assertEquals('Closed', $lib->getHeader('Connection'));
     }
 
-    protected function prepareAnswerSimple(string $content): Restful\Answer
+    protected function prepareAnswerSimple($content): Restful\Answer
     {
         return (new Restful\Answer())->setResponse($content);
     }

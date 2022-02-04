@@ -44,14 +44,20 @@ class SocketProcessor extends Processor
      */
     protected function readResponse($filePointer): parent
     {
-        $reply = '';
+        $this->remoteResponse = null;
+        $reply = null;
         $result = socket_recv($filePointer, $reply , static::PART_SPLIT , MSG_WAITALL);
         if (false === $result) { // because could return size 0 bytes
             $errorCode = socket_last_error();
             $errorMessage = socket_strerror($errorCode);
             throw new RequestException('Receive problem: ' . $errorMessage, $errorCode);
         }
-        $this->remoteResponse = $reply;
+        if (!is_null($reply)) {
+            $response = fopen('php://temp', 'rw');
+            fputs($response, $reply);
+            rewind($response);
+            $this->remoteResponse = $response;
+        }
         return $this;
     }
 }

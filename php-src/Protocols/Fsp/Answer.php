@@ -48,7 +48,7 @@ class Answer extends Protocols\Dummy\Answer
      */
     protected function checkSize(): void
     {
-        $loadSize = strlen($this->body);
+        $loadSize = fstat($this->body)['size'];
         if (Protocols\Fsp::HEADER_SIZE > $loadSize) {
             throw new RequestException('Response too short');
         }
@@ -59,7 +59,7 @@ class Answer extends Protocols\Dummy\Answer
 
     protected function getHeader(): void
     {
-        $this->header = substr($this->body, 0, Protocols\Fsp::HEADER_SIZE);
+        $this->header = stream_get_contents($this->body, Protocols\Fsp::HEADER_SIZE, 0);
     }
 
     protected function processHeader(): void
@@ -74,7 +74,7 @@ class Answer extends Protocols\Dummy\Answer
 
     protected function processContent(): void
     {
-        $content = substr($this->body, Protocols\Fsp::HEADER_SIZE);
+        $content = stream_get_contents($this->body, -1, Protocols\Fsp::HEADER_SIZE);
         $this->content = substr($content, 0, $this->getDataLength());
         $this->extra = substr($content, $this->getDataLength());
         $this->extra = (false !== $this->extra) ? $this->extra : '';
@@ -108,7 +108,7 @@ class Answer extends Protocols\Dummy\Answer
 
     public function getChecksumPacket(): string
     {
-        $content = $this->body;
+        $content = $this->header . $this->content . $this->extra ;
         $content[1] = chr(0); // null checksum
         return $content;
     }

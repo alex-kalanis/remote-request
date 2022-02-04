@@ -10,30 +10,33 @@ use kalanis\RemoteRequest\Protocols;
  * Class Answer
  * @package kalanis\RemoteRequest\Protocols\Http
  * Process server's answer - parse http
+ * @todo: body shall be in stream and parsed via stream filters; not this direct way as string
  */
 class Answer extends Protocols\Dummy\Answer
 {
     /** @var string[][] */
     protected $headers = [];
     protected $code = 0;
+    protected $headerSize = 17000; // over 16384 - 16K
 
     protected function clearValues(): void
     {
         $this->headers = [];
         $this->code = 0;
-        $this->body = '';
+        $this->body = null;
     }
 
-    public function setResponse(string $message)
+    public function setResponse($message)
     {
+        $data = $message ? stream_get_contents($message, $this->headerSize, 0) : '';
         $this->clearValues();
-        if (false !== mb_strpos($message, Protocols\Http::DELIMITER . Protocols\Http::DELIMITER)) {
-            list($header, $body) = explode(Protocols\Http::DELIMITER . Protocols\Http::DELIMITER, $message, 2);
+        if (false !== mb_strpos($data, Protocols\Http::DELIMITER . Protocols\Http::DELIMITER)) {
+            list($header, $unusedBody) = explode(Protocols\Http::DELIMITER . Protocols\Http::DELIMITER, $data, 2);
             $this->parseHeader($header);
-            $this->parseBody($body);
+            $this->parseBody(stream_get_contents($message, -1, strlen($header) + strlen(Protocols\Http::DELIMITER . Protocols\Http::DELIMITER)));
         } else {
-            $this->parseHeader($message);
-            $this->body = '';
+            $this->parseHeader($data);
+            $this->body = null;
         }
         return $this;
     }
@@ -85,7 +88,10 @@ class Answer extends Protocols\Dummy\Answer
                 $content = $this->parseDeflated($content);
             }
         }
-        $this->body = $content;
+        $res = fopen('php://temp', 'rw');
+        fputs($res, $content);
+        rewind($res);
+        $this->body = $res;
     }
 
     /**
