@@ -3,6 +3,7 @@
 namespace kalanis\RemoteRequest\Wrappers\Fsp;
 
 
+use kalanis\RemoteRequest\Interfaces\IRRTranslations;
 use kalanis\RemoteRequest\RequestException;
 
 
@@ -13,10 +14,12 @@ use kalanis\RemoteRequest\RequestException;
  */
 class AOperations
 {
+    protected $lang = null;
     protected $runner = null;
 
-    public function __construct(Runner $runner)
+    public function __construct(IRRTranslations $lang, Runner $runner)
     {
+        $this->lang = $lang;
         $this->runner = $runner;
     }
 
@@ -32,7 +35,7 @@ class AOperations
         $port = parse_url($path, PHP_URL_PORT);
         $into = parse_url($path, PHP_URL_PATH);
         if (empty($host)) {
-            throw new RequestException('Malformed path: ' . $path);
+            throw new RequestException($this->lang->rrFspWrapMalformedPath($path));
         }
         if ($setTarget) {
             $this->runner->getSchema()->setTarget(

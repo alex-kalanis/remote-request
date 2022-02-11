@@ -3,6 +3,7 @@
 namespace kalanis\RemoteRequest\Sockets;
 
 
+use kalanis\RemoteRequest\Interfaces\IRRTranslations;
 use kalanis\RemoteRequest\RequestException;
 use kalanis\RemoteRequest\Schemas\ASchema;
 
@@ -15,6 +16,13 @@ use kalanis\RemoteRequest\Schemas\ASchema;
 abstract class ASocket
 {
     protected $pointer = null;
+    /** @var IRRTranslations|null */
+    protected $lang = null;
+
+    public function __construct(IRRTranslations $lang)
+    {
+        $this->lang = $lang;
+    }
 
     public function __destruct()
     {

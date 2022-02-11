@@ -3,6 +3,7 @@
 namespace kalanis\RemoteRequest\Sockets;
 
 
+use kalanis\RemoteRequest\Interfaces\IRRTranslations;
 use kalanis\RemoteRequest\Interfaces\ISocket;
 
 
@@ -13,20 +14,20 @@ use kalanis\RemoteRequest\Interfaces\ISocket;
  */
 class Factory
 {
-    public static function getPointer(int $type = ISocket::SOCKET_STREAM): ASocket
+    public static function getPointer(IRRTranslations $lang, int $type = ISocket::SOCKET_STREAM): ASocket
     {
         switch ($type) {
             case ISocket::SOCKET_INTERNAL:
-                return new SharedInternal();
+                return new SharedInternal($lang);
             case ISocket::SOCKET_STREAM:
-                return new Stream();
+                return new Stream($lang);
             case ISocket::SOCKET_PFSOCKET:
-                return new PfSocket();
+                return new PfSocket($lang);
             case ISocket::SOCKET_SOCKET:
-                return new Socket();
+                return new Socket($lang);
             case ISocket::SOCKET_FSOCKET:
             default:
-                return new FSocket();
+                return new FSocket($lang);
         }
     }
 }

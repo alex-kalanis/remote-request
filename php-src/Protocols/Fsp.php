@@ -55,6 +55,6 @@ class Fsp extends Udp
 
     protected function loadAnswer(): RemoteRequest\Protocols\Dummy\Answer
     {
-        return new Fsp\Answer();
+        return new Fsp\Answer($this->lang);
     }
 }

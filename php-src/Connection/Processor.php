@@ -4,6 +4,7 @@ namespace kalanis\RemoteRequest\Connection;
 
 
 use kalanis\RemoteRequest\Interfaces\IQuery;
+use kalanis\RemoteRequest\Interfaces\IRRTranslations;
 use kalanis\RemoteRequest\Pointers;
 use kalanis\RemoteRequest\RequestException;
 use kalanis\RemoteRequest\Schemas\ASchema;
@@ -29,12 +30,12 @@ class Processor
     /** @var Sockets\ASocket */
     protected $socket = null;
 
-    public function __construct(Sockets\ASocket $method = null)
+    public function __construct(IRRTranslations $lang, Sockets\ASocket $method = null)
     {
-        $this->socket = (empty($method)) ? new Sockets\FSocket() : $method ;
+        $this->socket = (empty($method)) ? new Sockets\FSocket($lang) : $method ;
         $this->processor = ($this->socket instanceof Sockets\Socket)
-            ? new Pointers\SocketProcessor()
-            : new Pointers\Processor()
+            ? new Pointers\SocketProcessor($lang)
+            : new Pointers\Processor($lang)
         ;
     }
 

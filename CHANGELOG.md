@@ -1,6 +1,11 @@
 Changelog
 =========
 
+#### 5.0.0 - 2022-02-02
+
+* Add streams underneath
+* Use translations in class and interface
+
 #### 4.2.0 - 2020-12-30
 
 * Changes in tests for using with Travis service

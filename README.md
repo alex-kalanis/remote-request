@@ -26,7 +26,7 @@ familiar with composer)
  - Version 2 separated network layers 2 and 3 - transportation and content protocols
  - Version 3 is packaged for Composer
  - Version 4 has internal structure change after adding "new" socket and protocol.
- - Versino 5 changed paths and namespaces
+ - Version 5 changed paths and namespaces, use streams and translations
 
 # Usages
 

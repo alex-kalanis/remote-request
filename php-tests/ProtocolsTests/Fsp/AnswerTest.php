@@ -7,6 +7,7 @@ use CommonTestClass;
 use kalanis\RemoteRequest\Connection;
 use kalanis\RemoteRequest\Protocols\Fsp;
 use kalanis\RemoteRequest\RequestException;
+use kalanis\RemoteRequest\Translations;
 
 
 class AnswerMock extends Connection\Processor
@@ -258,8 +259,9 @@ class AnswerTest extends CommonTestClass
      */
     public function testAnswerVersion(): void
     {
-        $mock = new AnswerMock();
-        $read = new Fsp\Answer();
+        $lang = new Translations();
+        $mock = new AnswerMock($lang);
+        $read = new Fsp\Answer($lang);
 //        $read->canDump = true;
         $read->setResponse($mock->getResponseVersion())->process();
         $process = Fsp\Answer\AnswerFactory::getObject($read)->process();
@@ -279,8 +281,9 @@ class AnswerTest extends CommonTestClass
      */
     public function testAnswerVersionPayload(): void
     {
-        $mock = new AnswerMock();
-        $read = new Fsp\Answer();
+        $lang = new Translations();
+        $mock = new AnswerMock($lang);
+        $read = new Fsp\Answer($lang);
         $read->setResponse($mock->getResponseVersionPayload())->process();
         $process = Fsp\Answer\AnswerFactory::getObject($read)->process();
         /** @var Fsp\Answer\Version $process */
@@ -300,8 +303,9 @@ class AnswerTest extends CommonTestClass
      */
     public function testAnswerDir(): void
     {
-        $mock = new AnswerMock();
-        $read = new Fsp\Answer();
+        $lang = new Translations();
+        $mock = new AnswerMock($lang);
+        $read = new Fsp\Answer($lang);
 //        $read->canDump = true;
         $read->setResponse($mock->getResponseDir())->process();
         $process = Fsp\Answer\AnswerFactory::getObject($read)->process();
@@ -342,8 +346,9 @@ class AnswerTest extends CommonTestClass
      */
     public function testAnswerDirReal(): void
     {
-        $mock = new AnswerMock();
-        $read = new Fsp\Answer();
+        $lang = new Translations();
+        $mock = new AnswerMock($lang);
+        $read = new Fsp\Answer($lang);
         $read->setResponse($mock->getResponseDirReal())->process();
         $process = Fsp\Answer\AnswerFactory::getObject($read)->process();
         /** @var Fsp\Answer\GetDir $process */
@@ -375,8 +380,9 @@ class AnswerTest extends CommonTestClass
      */
     public function testAnswerError(): void
     {
-        $mock = new AnswerMock();
-        $read = new Fsp\Answer();
+        $lang = new Translations();
+        $mock = new AnswerMock($lang);
+        $read = new Fsp\Answer($lang);
 //        $read->canDump = true;
         $read->setResponse($mock->getResponseError())->process();
         $process = Fsp\Answer\AnswerFactory::getObject($read)->process();
@@ -390,8 +396,9 @@ class AnswerTest extends CommonTestClass
      */
     public function testAnswerErrorDetails(): void
     {
-        $mock = new AnswerMock();
-        $read = new Fsp\Answer();
+        $lang = new Translations();
+        $mock = new AnswerMock($lang);
+        $read = new Fsp\Answer($lang);
         $read->setResponse($mock->getResponseErrorDetails())->process();
         $process = Fsp\Answer\AnswerFactory::getObject($read)->process();
         /** @var Fsp\Answer\Error $process */
@@ -404,8 +411,9 @@ class AnswerTest extends CommonTestClass
      */
     public function testAnswerErrorRun(): void
     {
-        $mock = new AnswerMock();
-        $read = new Fsp\Answer();
+        $lang = new Translations();
+        $mock = new AnswerMock($lang);
+        $read = new Fsp\Answer($lang);
         $read->setResponse($mock->getResponseError())->process();
         $process = Fsp\Answer\AnswerFactory::getObject($read)->process();
         /** @var Fsp\Answer\Error $process */
@@ -418,8 +426,9 @@ class AnswerTest extends CommonTestClass
      */
     public function testAnswerTest(): void
     {
-        $mock = new AnswerMock();
-        $read = new Fsp\Answer();
+        $lang = new Translations();
+        $mock = new AnswerMock($lang);
+        $read = new Fsp\Answer($lang);
         $read->setResponse($mock->getResponseTest())->process();
         $process = Fsp\Answer\AnswerFactory::getObject($read)->process();
         /** @var Fsp\Answer\Test $process */
@@ -431,8 +440,9 @@ class AnswerTest extends CommonTestClass
      */
     public function testAnswerNothing(): void
     {
-        $mock = new AnswerMock();
-        $read = new Fsp\Answer();
+        $lang = new Translations();
+        $mock = new AnswerMock($lang);
+        $read = new Fsp\Answer($lang);
         $read->setResponse($mock->getResponseNothing())->process();
         Fsp\Answer\AnswerFactory::getObject($read)->process();
         $this->assertTrue(true); // nothing to do
@@ -443,8 +453,9 @@ class AnswerTest extends CommonTestClass
      */
     public function testAnswerGetFile(): void
     {
-        $mock = new AnswerMock();
-        $read = new Fsp\Answer();
+        $lang = new Translations();
+        $mock = new AnswerMock($lang);
+        $read = new Fsp\Answer($lang);
         $read->setResponse($mock->getResponseGetFile())->process();
         $process = Fsp\Answer\AnswerFactory::getObject($read)->process();
         /** @var Fsp\Answer\GetFile $process */
@@ -457,8 +468,9 @@ class AnswerTest extends CommonTestClass
      */
     public function testAnswerUpload(): void
     {
-        $mock = new AnswerMock();
-        $read = new Fsp\Answer();
+        $lang = new Translations();
+        $mock = new AnswerMock($lang);
+        $read = new Fsp\Answer($lang);
 //        $read->canDump = true;
         $read->setResponse($mock->getResponseUpload())->process();
         $process = Fsp\Answer\AnswerFactory::getObject($read)->process();
@@ -471,8 +483,9 @@ class AnswerTest extends CommonTestClass
      */
     public function testAnswerProtection(): void
     {
-        $mock = new AnswerMock();
-        $read = new Fsp\Answer();
+        $lang = new Translations();
+        $mock = new AnswerMock($lang);
+        $read = new Fsp\Answer($lang);
         $read->setResponse($mock->getResponseProtection())->process();
         $process = Fsp\Answer\AnswerFactory::getObject($read)->process();
         /** @var Fsp\Answer\Protection $process */
@@ -492,8 +505,9 @@ class AnswerTest extends CommonTestClass
      */
     public function testAnswerStats(): void
     {
-        $mock = new AnswerMock();
-        $read = new Fsp\Answer();
+        $lang = new Translations();
+        $mock = new AnswerMock($lang);
+        $read = new Fsp\Answer($lang);
         $read->setResponse($mock->getResponseStats())->process();
         $process = Fsp\Answer\AnswerFactory::getObject($read)->process();
         /** @var Fsp\Answer\Stats $process */

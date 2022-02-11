@@ -4,6 +4,7 @@ namespace kalanis\RemoteRequest\Pointers;
 
 
 use kalanis\RemoteRequest\Interfaces\IQuery;
+use kalanis\RemoteRequest\Interfaces\IRRTranslations;
 use kalanis\RemoteRequest\RequestException;
 use kalanis\RemoteRequest\Schemas\ASchema;
 
@@ -18,10 +19,17 @@ class Processor
     /** @var int how many bytes for load split */
     const PART_SPLIT = 1024;
 
-    /** @var IQuery | null */
+    /** @var IRRTranslations|null */
+    protected $lang = null;
+    /** @var IQuery|null */
     protected $remoteQuery = null;
     /** @var resource|null */
     protected $remoteResponse = null;
+
+    public function __construct(IRRTranslations $lang)
+    {
+        $this->lang = $lang;
+    }
 
     public function setQuery(?IQuery $content): self
     {
@@ -80,7 +88,7 @@ class Processor
     {
         if (empty($this->remoteQuery)
             || !($this->remoteQuery instanceof IQuery)) {
-            throw new RequestException('Unknown target data for request');
+            throw new RequestException($this->lang->rrPointUnknownTarget());
         }
     }
 
@@ -92,7 +100,7 @@ class Processor
     {
         if (empty($filePointer)
             || !is_resource($filePointer)) {
-            throw new RequestException('No stream pointer defined');
+            throw new RequestException($this->lang->rrPointNoStreamPointer());
         }
     }
 

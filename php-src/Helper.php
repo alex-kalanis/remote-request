@@ -17,6 +17,8 @@ use kalanis\RemoteRequest\Sockets;
  */
 class Helper
 {
+    /** @var Interfaces\IRRTranslations|null */
+    protected static $lang = null; // translations
     protected $link = ''; // target
     protected $postContent = ''; // what to say to the target
     protected $connectionParams = [
@@ -50,6 +52,16 @@ class Helper
         return $lib->getResponse()->getContent();
     }
 
+    public static function fillLang(?Interfaces\IRRTranslations $lang = null)
+    {
+        if ($lang) {
+            static::$lang = $lang;
+        }
+        if (empty(static::$lang)) {
+            static::$lang = new Translations();
+        }
+    }
+
     public function setLink(string $link): self
     {
         $this->link = $link;
@@ -80,6 +92,7 @@ class Helper
      */
     public function getResponse(): Protocols\Dummy\Answer
     {
+        static::fillLang();
         $parsedLink = parse_url($this->link);
         $schema = strtolower($parsedLink["scheme"]);
         $libSchema = $this->getLibSchema($schema, $parsedLink);
@@ -94,20 +107,20 @@ class Helper
 
     protected function getLibConnection(Protocols\Dummy\Query $libQuery): Connection\Processor
     {
-        return new Connection\Processor($this->getLibSockets($libQuery));
+        return new Connection\Processor(static::$lang, $this->getLibSockets($libQuery));
     }
 
     protected function getLibSockets(Protocols\Dummy\Query $libQuery): ?Sockets\ASocket
     {
         if (!empty($this->contextParams)) {
-            $processing = new Sockets\Stream();
+            $processing = new Sockets\Stream(static::$lang);
             return $processing->setContextOptions($this->contextParams);
         } elseif ($this->connectionParams['permanent']) {
-            return new Sockets\Pfsocket();
+            return new Sockets\Pfsocket(static::$lang);
         } elseif ($libQuery instanceof Protocols\Fsp\Query) {
-            return new Sockets\Socket();
+            return new Sockets\Socket(static::$lang);
         } else {
-            return new Sockets\Fsocket();
+            return new Sockets\Fsocket(static::$lang);
         }
     }
 
@@ -147,7 +160,7 @@ class Helper
             case 'file':
                 return new Schemas\File();
             default:
-                throw new RequestException('Unknown protocol schema for known schema ' . $schema);
+                throw new RequestException(static::$lang->rrHelpInvalidProtocolSchema($schema));
         }
     }
 
@@ -194,7 +207,7 @@ class Helper
                     ->addValues(empty($this->postContent) ? [] : (array)$this->postContent)
                 ;
             default:
-                throw new RequestException('Unknown request available for schema ' . $schema);
+                throw new RequestException(static::$lang->rrHelpInvalidRequestSchema($schema));
         }
     }
 
@@ -217,12 +230,12 @@ class Helper
             case 'file':
                 return new Protocols\Dummy\Answer();
             case 'fsp':
-                return new Protocols\Fsp\Answer();
+                return new Protocols\Fsp\Answer(static::$lang);
             case 'http':
             case 'https':
                 return new Protocols\Http\Answer();
             default:
-                throw new RequestException('Unknown response available for schema ' . $schema);
+                throw new RequestException(static::$lang->rrHelpInvalidResponseSchema($schema));
         }
     }
 }

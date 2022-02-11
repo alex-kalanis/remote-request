@@ -51,7 +51,7 @@ class Stream extends ASocket
         $filePointer = stream_socket_client($link, $errno, $errStr, $protocolWrapper->getTimeout(), STREAM_CLIENT_CONNECT, $context);
 
         if (!$filePointer) {
-            throw new RequestException('Cannot establish connection');
+            throw new RequestException($this->lang->rrSocketCannotConnect());
         }
         return $filePointer;
     }

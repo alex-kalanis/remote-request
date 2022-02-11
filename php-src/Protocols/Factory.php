@@ -14,35 +14,36 @@ use kalanis\RemoteRequest;
 class Factory
 {
     /**
+     * @param RemoteRequest\Interfaces\IRRTranslations $lang
      * @param string $schema
      * @return AProtocol
      * @throws RemoteRequest\RequestException
      */
-    public static function getProtocol(string $schema): AProtocol
+    public static function getProtocol(RemoteRequest\Interfaces\IRRTranslations $lang, string $schema): AProtocol
     {
         switch ($schema) {
             case 'tcp':
             case 'file':
-                return new Tcp();
+                return new Tcp($lang);
             case 'udp':
-                return new Udp();
+                return new Udp($lang);
             case 'fsp':
-                return new Fsp();
+                return new Fsp($lang);
             case 'http':
             case 'https':
-                return new Http();
+                return new Http($lang);
 //            case 'http2':
-//                return new Http2();
+//                return new Http2($lang);
 //            case 'http3':
-//                return new Http3();
+//                return new Http3($lang);
 //            case 'webdav':
-//                return new WebDAV();
+//                return new WebDAV($lang);
 //            case 'smb':
-//                return new Samba();
+//                return new Samba($lang);
 //            case 'git':
-//                return new Git();
+//                return new Git($lang);
             default:
-                throw new RemoteRequest\RequestException('Unknown response available for protocol schema ' . $schema);
+                throw new RemoteRequest\RequestException($lang->rrSchemaUnknownResponse($schema));
         }
     }
 }

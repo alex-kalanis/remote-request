@@ -4,6 +4,7 @@ namespace kalanis\RemoteRequest\Wrappers;
 
 
 use kalanis\RemoteRequest\RequestException;
+use kalanis\RemoteRequest\Translations;
 
 
 /**
@@ -40,9 +41,10 @@ class Fsp
 
     public function __construct()
     {
-        $this->runner = new Fsp\Runner();
-        $this->dir = new Fsp\Dir($this->runner);
-        $this->file = new Fsp\File($this->runner);
+        $lang = new Translations();
+        $this->runner = new Fsp\Runner($lang);
+        $this->dir = new Fsp\Dir($lang, $this->runner);
+        $this->file = new Fsp\File($lang, $this->runner);
     }
 
     public function __destruct()

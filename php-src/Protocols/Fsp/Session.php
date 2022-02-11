@@ -3,6 +3,7 @@
 namespace kalanis\RemoteRequest\Protocols\Fsp;
 
 
+use kalanis\RemoteRequest\Interfaces\IRRTranslations;
 use kalanis\RemoteRequest\RequestException;
 
 
@@ -13,12 +14,19 @@ use kalanis\RemoteRequest\RequestException;
  */
 class Session
 {
+    /** @var IRRTranslations|null */
+    protected $lang = null;
     /** @var string|null */
     protected $host = null;
     /** @var string[] */
     protected static $key = null;
     /** @var Session\Sequence[] */
     protected static $sequence = [];
+
+    public function __construct(IRRTranslations $lang)
+    {
+        $this->lang = $lang;
+    }
 
     public function setHost(string $host): self
     {
@@ -114,7 +122,7 @@ class Session
      */
     protected function sequencer(): Session\Sequence
     {
-        return Session\Sequence::newSequence();
+        return Session\Sequence::newSequence($this->lang);
     }
 
     /**
@@ -126,7 +134,7 @@ class Session
         $this->checkHost();
         $last = end(static::$sequence[$this->host]);
         if (false === $last) {
-            throw new RequestException('Empty sequence!');
+            throw new RequestException($this->lang->rrFspEmptySequence());
         }
         return $last;
     }
@@ -138,7 +146,7 @@ class Session
     protected function checkHost(): self
     {
         if (empty($this->host)) {
-            throw new RequestException('Empty host!');
+            throw new RequestException($this->lang->rrFspEmptyHost());
         }
         return $this;
     }

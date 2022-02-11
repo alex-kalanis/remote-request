@@ -7,6 +7,7 @@ use CommonTestClass;
 use kalanis\RemoteRequest\Connection;
 use kalanis\RemoteRequest\Protocols\Http;
 use kalanis\RemoteRequest\Protocols\Restful;
+use kalanis\RemoteRequest\Translations;
 
 
 class AnswerMock extends Connection\Processor
@@ -39,7 +40,7 @@ class AnswerTest extends CommonTestClass
 {
     public function testSimple(): void
     {
-        $method = new AnswerMock();
+        $method = new AnswerMock(new Translations());
         $lib = $this->prepareAnswerSimple($method->getResponseSimple());
         $this->assertEquals(901, $lib->getCode());
         $data = $lib->getDecodedContent(true);
@@ -51,7 +52,7 @@ class AnswerTest extends CommonTestClass
 
     public function testFiles(): void
     {
-        $method = new AnswerMock();
+        $method = new AnswerMock(new Translations());
         $lib = $this->prepareAnswerSimple($method->getResponseFile());
         $this->assertEquals(902, $lib->getCode());
         $data = $lib->getDecodedContent();

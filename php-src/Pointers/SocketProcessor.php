@@ -31,7 +31,7 @@ class SocketProcessor extends Processor
         if (!$result) {
             $errorCode = socket_last_error();
             $errorMessage = socket_strerror($errorCode);
-            throw new RequestException('Send problem: ' . $errorMessage, $errorCode);
+            throw new RequestException($this->lang->rrPointSentProblem($errorMessage), $errorCode);
         }
         return $this;
     }
@@ -50,7 +50,7 @@ class SocketProcessor extends Processor
         if (false === $result) { // because could return size 0 bytes
             $errorCode = socket_last_error();
             $errorMessage = socket_strerror($errorCode);
-            throw new RequestException('Receive problem: ' . $errorMessage, $errorCode);
+            throw new RequestException($this->lang->rrPointReceivedProblem($errorMessage), $errorCode);
         }
         if (!is_null($reply)) {
             $response = fopen('php://temp', 'rw');

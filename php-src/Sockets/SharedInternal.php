@@ -25,7 +25,7 @@ class SharedInternal extends ASocket
     {
         $filePointer = fopen($protocolWrapper->getHostname(), 'r+');
         if (!$filePointer) {
-            throw new RequestException('Cannot establish connection');
+            throw new RequestException($this->lang->rrSocketCannotConnect());
         }
         return $filePointer;
     }

@@ -3,6 +3,7 @@
 namespace kalanis\RemoteRequest\Protocols\Fsp;
 
 
+use kalanis\RemoteRequest\Interfaces\IRRTranslations;
 use kalanis\RemoteRequest\Protocols;
 use kalanis\RemoteRequest\RequestException;
 
@@ -27,7 +28,13 @@ class Answer extends Protocols\Dummy\Answer
     protected $content = '';
     protected $extra = '';
 
+    protected $lang = null;
     public $canDump = false; // for dump info about checksums
+
+    public function __construct(IRRTranslations $lang)
+    {
+        $this->lang = $lang;
+    }
 
     /**
      * @return Answer
@@ -50,10 +57,10 @@ class Answer extends Protocols\Dummy\Answer
     {
         $loadSize = fstat($this->body)['size'];
         if (Protocols\Fsp::HEADER_SIZE > $loadSize) {
-            throw new RequestException('Response too short');
+            throw new RequestException($this->lang->rrFspResponseShort($loadSize));
         }
         if (Protocols\Fsp::MAX_PACKET_SIZE < $loadSize) {
-            throw new RequestException('Response too large');
+            throw new RequestException($this->lang->rrFspResponseLarge($loadSize));
         }
     }
 
@@ -97,7 +104,7 @@ class Answer extends Protocols\Dummy\Answer
         }
         // @codeCoverageIgnoreEnd
         if ($checksum != $this->headChecksum ) {
-            throw new RequestException('Invalid checksum');
+            throw new RequestException($this->lang->rrFspInvalidChecksum($checksum, $this->headChecksum));
         }
     }
 

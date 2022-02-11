@@ -4,6 +4,7 @@ namespace kalanis\RemoteRequest\Wrappers\Fsp;
 
 
 use kalanis\RemoteRequest\Connection;
+use kalanis\RemoteRequest\Interfaces\IRRTranslations;
 use kalanis\RemoteRequest\Interfaces\ISchema;
 use kalanis\RemoteRequest\Protocols\Fsp as Protocol;
 use kalanis\RemoteRequest\RequestException;
@@ -18,6 +19,8 @@ use kalanis\RemoteRequest\Sockets;
  */
 class Runner
 {
+    /** @var IRRTranslations */
+    protected $lang = null;
     /** @var Schemas\ASchema */
     protected $schema = null;
     /** @var Connection\Processor */
@@ -34,13 +37,14 @@ class Runner
     /**
      * @throws RequestException
      */
-    public function __construct()
+    public function __construct(IRRTranslations $lang)
     {
-        $this->schema = Schemas\Factory::getSchema(ISchema::SCHEMA_UDP);
-        $this->processor = new Connection\Processor(new Sockets\Socket());
+        $this->lang = $lang;
+        $this->schema = Schemas\Factory::getSchema($lang, ISchema::SCHEMA_UDP);
+        $this->processor = new Connection\Processor($lang, new Sockets\Socket($lang));
         $this->query = new Protocol\Query();
-        $this->answer = new Protocol\Answer();
-        $this->session = new Protocol\Session();
+        $this->answer = new Protocol\Answer($lang);
+        $this->session = new Protocol\Session($lang);
     }
 
     /**
@@ -83,10 +87,10 @@ class Runner
     public function process(): Protocol\Answer\AAnswer
     {
         if (empty($this->actionQuery)) {
-            throw new RequestException('No action set.');
+            throw new RequestException($this->lang->rrFspNoAction());
         }
         if (empty($this->schema->getHost())) {
-            throw new RequestException('No target.');
+            throw new RequestException($this->lang->rrFspNoTarget());
         }
         $this->session->setHost($this->schema->getHost());
         $this->actionQuery
@@ -120,7 +124,7 @@ class Runner
         ;
         /** @var Protocol\Answer\Nothing $answer */
         if (!$answer instanceof Protocol\Answer\Nothing) {
-            throw new RequestException('Got something bad with close. Class ' . get_class($answer));
+            throw new RequestException($this->lang->rrFspBadResponseClose(get_class($answer)));
         }
         $this->session->clear();
     }

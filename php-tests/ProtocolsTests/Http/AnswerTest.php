@@ -6,6 +6,7 @@ namespace ProtocolsTests\Http;
 use CommonTestClass;
 use kalanis\RemoteRequest\Connection;
 use kalanis\RemoteRequest\Protocols\Http;
+use kalanis\RemoteRequest\Translations;
 
 
 class AnswerMock extends Connection\Processor
@@ -86,7 +87,7 @@ class AnswerTest extends CommonTestClass
 {
     public function testSimple(): void
     {
-        $method = new AnswerMock();
+        $method = new AnswerMock(new Translations());
         $lib = $this->prepareSimple($method->getResponseSimple());
         $this->assertEquals(900, $lib->getCode());
         $this->assertEquals('abcdefghijkl', $lib->getContent());
@@ -94,7 +95,7 @@ class AnswerTest extends CommonTestClass
 
     public function testEmpty(): void
     {
-        $method = new AnswerMock();
+        $method = new AnswerMock(new Translations());
         $lib = $this->prepareSimple($method->getResponseEmpty());
         $this->assertEquals(901, $lib->getCode());
         $this->assertEquals('', $lib->getContent());
@@ -102,7 +103,7 @@ class AnswerTest extends CommonTestClass
 
     public function testHeaders(): void
     {
-        $method = new AnswerMock();
+        $method = new AnswerMock(new Translations());
         $lib = $this->prepareSimple($method->getResponseHeaders());
         $this->assertEquals(902, $lib->getCode());
         $this->assertEquals('abcdefghijkl', $lib->getContent());
@@ -119,7 +120,7 @@ class AnswerTest extends CommonTestClass
 
     public function testChunked(): void
     {
-        $method = new AnswerMock();
+        $method = new AnswerMock(new Translations());
         $lib = $this->prepareSimple($method->getResponseChunked());
         $this->assertEquals(903, $lib->getCode());
         $this->assertEquals("Wikipedia in\r\n\r\nchunks.", $lib->getContent());
@@ -129,7 +130,7 @@ class AnswerTest extends CommonTestClass
 
     public function testDeflated(): void
     {
-        $method = new AnswerMock();
+        $method = new AnswerMock(new Translations());
         $lib = $this->prepareSimple($method->getResponseDeflated());
         $this->assertEquals(904, $lib->getCode());
         $this->assertEquals("abcdefghijklmnopqrstuvwxyz012456789", $lib->getContent());
@@ -139,7 +140,7 @@ class AnswerTest extends CommonTestClass
 
     public function testAuth(): void
     {
-        $method = new AnswerMock();
+        $method = new AnswerMock(new Translations());
         $lib = (new Http\Answer\AuthDigest())->setResponse($method->getResponseAuthDigest());
         $lib->processContent();
         $this->assertEquals(401, $lib->getCode());

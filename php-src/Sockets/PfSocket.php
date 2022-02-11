@@ -27,7 +27,7 @@ class PfSocket extends ASocket
         $filePointer = pfsockopen($protocolWrapper->getHostname(), $protocolWrapper->getPort(), $errno, $errStr, $protocolWrapper->getTimeout());
 
         if (!$filePointer) {
-            throw new RequestException('Cannot establish connection');
+            throw new RequestException($this->lang->rrSocketCannotConnect());
         }
         return $filePointer;
     }

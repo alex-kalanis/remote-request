@@ -21,13 +21,16 @@ abstract class AProtocol
     protected $query = null;
     /** @var Dummy\Answer */
     protected $answer = null;
+    /** @var RemoteRequest\Interfaces\IRRTranslations */
+    protected $lang = null;
 
-    public function __construct(array $contextOptions = [], bool $long = false)
+    public function __construct(RemoteRequest\Interfaces\IRRTranslations $lang, array $contextOptions = [], bool $long = false)
     {
+        $this->lang = $lang;
         $pointer = empty($contextParams)
-            ? ($long ? new RemoteRequest\Sockets\Pfsocket() : new RemoteRequest\Sockets\Fsocket())
-            : (new RemoteRequest\Sockets\Stream())->setContextOptions($contextOptions) ;
-        $this->processor = new RemoteRequest\Connection\Processor($pointer);
+            ? ($long ? new RemoteRequest\Sockets\Pfsocket($lang) : new RemoteRequest\Sockets\Fsocket($lang))
+            : (new RemoteRequest\Sockets\Stream($lang))->setContextOptions($contextOptions) ;
+        $this->processor = new RemoteRequest\Connection\Processor($lang, $pointer);
         $this->target = $this->loadTarget();
         $this->query = $this->loadQuery();
         $this->answer = $this->loadAnswer();

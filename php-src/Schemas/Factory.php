@@ -3,6 +3,7 @@
 namespace kalanis\RemoteRequest\Schemas;
 
 
+use kalanis\RemoteRequest\Interfaces\IRRTranslations;
 use kalanis\RemoteRequest\Interfaces\ISchema;
 use kalanis\RemoteRequest\RequestException;
 
@@ -17,11 +18,12 @@ use kalanis\RemoteRequest\RequestException;
 class Factory
 {
     /**
+     * @param IRRTranslations $lang
      * @param string $schema
      * @return ASchema
      * @throws RequestException
      */
-    public static function getSchema(string $schema): ASchema
+    public static function getSchema(IRRTranslations $lang, string $schema): ASchema
     {
         switch ($schema) {
             case ISchema::SCHEMA_FILE:
@@ -35,7 +37,7 @@ class Factory
             case ISchema::SCHEMA_SSL:
                 return new Ssl();
             default:
-                throw new RequestException('Unknown packet wrapper type');
+                throw new RequestException($lang->rrSchemaUnknownPacketWrapper());
         }
     }
 }
