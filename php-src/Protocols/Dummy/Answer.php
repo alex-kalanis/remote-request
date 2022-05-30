@@ -12,7 +12,11 @@ class Answer
 {
     protected $body = '';
 
-    public function setResponse(string $message)
+    /**
+     * @param resource|string|null $message
+     * @return $this
+     */
+    public function setResponse($message): self
     {
         $this->body = $message;
         return $this;

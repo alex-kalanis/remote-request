@@ -24,7 +24,7 @@ class Answer extends Protocols\Dummy\Answer
         $this->body = '';
     }
 
-    public function setResponse(string $message)
+    public function setResponse($message): parent
     {
         $this->clearValues();
         if (false !== mb_strpos($message, Protocols\Http::DELIMITER . Protocols\Http::DELIMITER)) {
@@ -93,7 +93,7 @@ class Answer extends Protocols\Dummy\Answer
      * @param string|null $encode
      * @return string[]
      */
-    protected function encodings($encode)
+    protected function encodings(?string $encode): array
     {
         if (empty($encode)) {
             return [];
@@ -171,7 +171,7 @@ class Answer extends Protocols\Dummy\Answer
      * @param string $key
      * @return string[]
      */
-    public function getHeaders(string $key)
+    public function getHeaders(string $key): array
     {
         return isset($this->headers[$key])? $this->headers[$key] : [];
     }
@@ -180,7 +180,7 @@ class Answer extends Protocols\Dummy\Answer
      * Dump all obtained headers - usually for DEVEL
      * @return \string[][]
      */
-    public function getAllHeaders()
+    public function getAllHeaders(): array
     {
         return $this->headers;
     }

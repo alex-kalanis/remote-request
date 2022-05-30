@@ -18,7 +18,7 @@ class Query extends Protocols\Http\Query
         return false;
     }
 
-    protected function prepareQuery()
+    protected function prepareQuery(): parent
     {
         $content = [];
         foreach ($this->content as $key => $item) {
