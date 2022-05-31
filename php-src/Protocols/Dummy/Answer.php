@@ -14,10 +14,10 @@ class Answer
     protected $body = null;
 
     /**
-     * @param resource|null $message
+     * @param resource|string|null $message
      * @return $this
      */
-    public function setResponse($message)
+    public function setResponse($message): self
     {
         $this->body = $message;
         return $this;

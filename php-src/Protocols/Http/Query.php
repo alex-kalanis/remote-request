@@ -50,7 +50,7 @@ class Query extends Protocols\Dummy\Query implements Interfaces\ITarget
         $this->addHeader('Connection', 'close');
     }
 
-    public function setMethod(string $method)
+    public function setMethod(string $method): self
     {
         $method = strtoupper($method);
         if (in_array($method, $this->availableMethods)) {
@@ -92,14 +92,14 @@ class Query extends Protocols\Dummy\Query implements Interfaces\ITarget
         return $this->port;
     }
 
-    public function setRequestSettings(Interfaces\ITarget $request)
+    public function setRequestSettings(Interfaces\ITarget $request): self
     {
         $this->host = $request->getHost();
         $this->port = $request->getPort();
         return $this;
     }
 
-    public function setPath(string $path)
+    public function setPath(string $path): self
     {
         $this->path = $path;
         return $this;
@@ -137,7 +137,7 @@ class Query extends Protocols\Dummy\Query implements Interfaces\ITarget
      * @param string $value
      * @return $this
      */
-    public function addHeader(string $name, string $value)
+    public function addHeader(string $name, string $value): self
     {
         $this->headers[$name] = $value;
         return $this;
@@ -148,7 +148,7 @@ class Query extends Protocols\Dummy\Query implements Interfaces\ITarget
      * @param string $name
      * @return $this
      */
-    public function removeHeader(string $name)
+    public function removeHeader(string $name): self
     {
         unset($this->headers[$name]);
         return $this;
@@ -159,7 +159,7 @@ class Query extends Protocols\Dummy\Query implements Interfaces\ITarget
      * @param string[] $array
      * @return $this
      */
-    public function addValues($array)
+    public function addValues($array): self
     {
         array_walk($array, function ($value, $key) {
             $this->addValue($key, $value);
@@ -173,7 +173,7 @@ class Query extends Protocols\Dummy\Query implements Interfaces\ITarget
      * @param string|Query\Value $value
      * @return $this
      */
-    public function addValue(string $key, $value)
+    public function addValue(string $key, $value): self
     {
         $this->content[$key] = ($value instanceof Query\Value) ? $value : new Query\Value((string)$value);
         return $this;
@@ -184,7 +184,7 @@ class Query extends Protocols\Dummy\Query implements Interfaces\ITarget
      * @param string $key
      * @return $this
      */
-    public function removeValue(string $key)
+    public function removeValue(string $key): self
     {
         unset($this->content[$key]);
         return $this;
@@ -214,7 +214,7 @@ class Query extends Protocols\Dummy\Query implements Interfaces\ITarget
         return $this->host . $portPart;
     }
 
-    protected function checkForMethod()
+    protected function checkForMethod(): self
     {
         if (in_array($this->getMethod(), $this->multipartMethods) && is_null($this->multipart)) {
             $this->multipart = false;
@@ -222,7 +222,7 @@ class Query extends Protocols\Dummy\Query implements Interfaces\ITarget
         return $this;
     }
 
-    protected function checkForFiles()
+    protected function checkForFiles(): self
     {
         if ((bool)count(array_filter($this->content, function ($content) {
             return $content instanceof Query\File;
@@ -232,7 +232,7 @@ class Query extends Protocols\Dummy\Query implements Interfaces\ITarget
         return $this;
     }
 
-    protected function prepareBoundary()
+    protected function prepareBoundary(): self
     {
         $this->boundary = $this->isMultipart() ? $this->generateBoundary() : null ;
         return $this;
@@ -243,14 +243,14 @@ class Query extends Protocols\Dummy\Query implements Interfaces\ITarget
         return 'PHPFsock------------------' . $this->generateRandomString();
     }
 
-    protected function prepareQuery()
+    protected function prepareQuery(): self
     {
         $this->contentQuery = !$this->isInline() ? ($this->isMultipart() ? $this->getMultipartRequest() : $this->getSimpleRequest()) : '';
         $this->contentLength = !$this->isInline() ? mb_strlen($this->contentQuery) : null ;
         return $this;
     }
 
-    protected function contentLengthHeader()
+    protected function contentLengthHeader(): self
     {
         if (is_null($this->contentLength)) {
             $this->removeHeader('Content-Length');
@@ -260,7 +260,7 @@ class Query extends Protocols\Dummy\Query implements Interfaces\ITarget
         return $this;
     }
 
-    protected function contentTypeHeader()
+    protected function contentTypeHeader(): self
     {
         if (in_array($this->getMethod(), $this->multipartMethods)) {
             if (is_null($this->boundary)) {

@@ -22,13 +22,13 @@ abstract class AQuery
         $this->query = $query;
     }
 
-    public function setKey(int $key = 0)
+    public function setKey(int $key = 0): self
     {
         $this->serverKey = $key;
         return $this;
     }
 
-    public function setSequence(int $sequenceNumber = 0)
+    public function setSequence(int $sequenceNumber = 0): self
     {
         $this->localSequence = $sequenceNumber;
         return $this;

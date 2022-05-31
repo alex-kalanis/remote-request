@@ -56,9 +56,10 @@ abstract class AProtocol
      */
     public function getAnswer(): Dummy\Answer
     {
+        $target = $this->query;
         if (empty($this->target->getHost())
-            && ($this->query instanceof RemoteRequest\Interfaces\ITarget)) {
-            $this->target->setRequest($this->query);
+            && ($target instanceof RemoteRequest\Interfaces\ITarget)) {
+            $this->target->setRequest($target);
         }
 
         $this->answer->setResponse(

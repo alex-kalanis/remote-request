@@ -26,7 +26,7 @@ class Answer extends Protocols\Dummy\Answer
         $this->body = null;
     }
 
-    public function setResponse($message)
+    public function setResponse($message): parent
     {
         $data = $message ? stream_get_contents($message, $this->headerSize, 0) : '';
         $this->clearValues();
@@ -99,7 +99,7 @@ class Answer extends Protocols\Dummy\Answer
      * @param string|null $encode
      * @return string[]
      */
-    protected function encodings($encode)
+    protected function encodings(?string $encode): array
     {
         if (empty($encode)) {
             return [];
@@ -177,7 +177,7 @@ class Answer extends Protocols\Dummy\Answer
      * @param string $key
      * @return string[]
      */
-    public function getHeaders(string $key)
+    public function getHeaders(string $key): array
     {
         return isset($this->headers[$key])? $this->headers[$key] : [];
     }
@@ -186,7 +186,7 @@ class Answer extends Protocols\Dummy\Answer
      * Dump all obtained headers - usually for DEVEL
      * @return \string[][]
      */
-    public function getAllHeaders()
+    public function getAllHeaders(): array
     {
         return $this->headers;
     }
