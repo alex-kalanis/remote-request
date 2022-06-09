@@ -4,6 +4,7 @@ namespace kalanis\RemoteRequest\Pointers;
 
 
 use kalanis\RemoteRequest\Interfaces\IQuery;
+use kalanis\RemoteRequest\Protocols\Helper;
 use kalanis\RemoteRequest\RequestException;
 use kalanis\RemoteRequest\Schemas\ASchema;
 
@@ -65,7 +66,7 @@ class Processor
         $this->remoteResponse = null;
 
         // Read the server response
-        $response = fopen('php://temp', 'rw');
+        $response = Helper::getTempStorage();
         $bytesLeft = $this->remoteQuery->getMaxAnswerLength();
         stream_copy_to_stream($filePointer, $response, (is_null($bytesLeft) ? -1 : $bytesLeft), 0);
         rewind($response);

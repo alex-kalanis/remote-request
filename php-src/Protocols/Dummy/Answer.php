@@ -25,6 +25,13 @@ class Answer
 
     public function getContent(): string
     {
-        return $this->body ? stream_get_contents($this->body, -1, 0) : '';
+        return is_null($this->body)
+            ? ''
+            : (
+                is_resource($this->body)
+                ? stream_get_contents($this->body, -1, 0)
+                : strval($this->body)
+            )
+        ;
     }
 }

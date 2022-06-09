@@ -3,6 +3,7 @@
 namespace kalanis\RemoteRequest\Pointers;
 
 
+use kalanis\RemoteRequest\Protocols\Helper;
 use kalanis\RemoteRequest\RequestException;
 use kalanis\RemoteRequest\Schemas\ASchema;
 
@@ -53,7 +54,7 @@ class SocketProcessor extends Processor
             throw new RequestException('Receive problem: ' . $errorMessage, $errorCode);
         }
         if (!is_null($reply)) {
-            $response = fopen('php://temp', 'rw');
+            $response = Helper::getTempStorage();
             fputs($response, $reply);
             rewind($response);
             $this->remoteResponse = $response;

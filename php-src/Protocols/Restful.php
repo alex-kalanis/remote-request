@@ -20,6 +20,11 @@ class Restful extends Http
 
     protected function loadAnswer(): RemoteRequest\Protocols\Dummy\Answer
     {
-        return new Restful\Answer();
+        $lib = new Restful\Answer();
+        $lib->addStringDecoding(new Http\Answer\DecodeStrings\Chunked());
+        $lib->addStringDecoding(new Http\Answer\DecodeStrings\Zipped());
+        $lib->addStringDecoding(new Http\Answer\DecodeStrings\Compressed());
+        $lib->addStringDecoding(new Http\Answer\DecodeStrings\Deflated());
+        return $lib;
     }
 }
