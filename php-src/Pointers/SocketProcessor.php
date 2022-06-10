@@ -27,7 +27,7 @@ class SocketProcessor extends Processor
      */
     protected function writeRequest($filePointer, ASchema $wrapper): parent
     {
-        $input = $this->remoteQuery->getData();
+        $input = stream_get_contents($this->remoteQuery->getData(), -1, 0);
         $result = socket_sendto($filePointer, $input, strlen($input), 0, $wrapper->getHost(), $wrapper->getPort());
         if (!$result) {
             $errorCode = socket_last_error();
@@ -55,7 +55,7 @@ class SocketProcessor extends Processor
         }
         if (!is_null($reply)) {
             $response = Helper::getTempStorage();
-            fputs($response, $reply);
+            fwrite($response, $reply);
             rewind($response);
             $this->remoteResponse = $response;
         }

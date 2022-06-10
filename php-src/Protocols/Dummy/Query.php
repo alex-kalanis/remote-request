@@ -4,6 +4,7 @@ namespace kalanis\RemoteRequest\Protocols\Dummy;
 
 
 use kalanis\RemoteRequest\Interfaces;
+use kalanis\RemoteRequest\Protocols\Helper;
 
 
 /**
@@ -27,8 +28,11 @@ class Query implements Interfaces\IQuery
         return $this->maxLength;
     }
 
-    public function getData(): string
+    public function getData()
     {
-        return (string)$this->body;
+        $storage = Helper::getMemStorage();
+        fwrite($storage, $this->body);
+        rewind($storage);
+        return $storage;
     }
 }

@@ -3,6 +3,9 @@
 namespace kalanis\RemoteRequest\Protocols\Http\Query;
 
 
+use kalanis\RemoteRequest\Protocols\Helper;
+
+
 /**
  * Class File
  * @package kalanis\RemoteRequest\Protocols\Http\Query
@@ -22,5 +25,27 @@ class File extends Value
     public function getMimeType(): string
     {
         return (string)$this->mime;
+    }
+
+    public function getContent(): string
+    {
+        return is_resource($this->content)
+            ? strval(stream_get_contents($this->content, -1, 0))
+            : strval($this->content)
+        ;
+    }
+
+    /**
+     * @return resource
+     */
+    public function getStream()
+    {
+        if (is_resource($this->content)) {
+            return $this->content;
+        }
+        $stream = Helper::getMemStorage();
+        fwrite($stream, strval($this->content));
+        rewind($stream);
+        return $stream;
     }
 }

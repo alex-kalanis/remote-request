@@ -53,7 +53,9 @@ class Processor
      */
     protected function writeRequest($filePointer, ASchema $wrapper): self
     {
-        fwrite($filePointer, $this->remoteQuery->getData());
+        $srcStream = $this->remoteQuery->getData();
+        rewind($srcStream);
+        stream_copy_to_stream($srcStream, $filePointer);
         return $this;
     }
 
