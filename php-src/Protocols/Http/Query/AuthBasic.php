@@ -15,7 +15,7 @@ class AuthBasic extends Http\Query
 {
     use TAuthBasic;
 
-    public function getData(): string
+    public function getData()
     {
         $this->authHeader();
         return parent::getData();

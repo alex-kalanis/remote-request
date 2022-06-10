@@ -29,16 +29,16 @@ class Query extends Protocols\Dummy\Query implements Interfaces\ITarget
     protected $multipartMethods = ['POST', 'PUT'];
     /** @var Query\Value[] */
     protected $content = [];
-    /** @var bool|null */
-    protected $multipart = false;
+    /** @var bool */
+    protected $inline = false;
     /** @var string */
     protected $userAgent = 'php-agent/1.2';
     /** @var string[] */
     protected $headers = [];
-    /** @var string */
-    protected $contentQuery = '';
-    /** @var int|null */
-    protected $contentLength = null;
+    /** @var resource */
+    protected $contentStream = null;
+    /** @var int */
+    protected $contentLength = 0;
     /** @var string|null */
     protected $boundary = null;
 
@@ -50,7 +50,7 @@ class Query extends Protocols\Dummy\Query implements Interfaces\ITarget
         $this->addHeader('Connection', 'close');
     }
 
-    public function setMethod(string $method)
+    public function setMethod(string $method): self
     {
         $method = strtoupper($method);
         if (in_array($method, $this->availableMethods)) {
@@ -64,9 +64,9 @@ class Query extends Protocols\Dummy\Query implements Interfaces\ITarget
         return $this->method;
     }
 
-    public function setMultipart(?bool $multipart)
+    public function setInline(bool $inline)
     {
-        $this->multipart = $multipart;
+        $this->inline = $inline;
         return $this;
     }
 
@@ -92,14 +92,14 @@ class Query extends Protocols\Dummy\Query implements Interfaces\ITarget
         return $this->port;
     }
 
-    public function setRequestSettings(Interfaces\ITarget $request)
+    public function setRequestSettings(Interfaces\ITarget $request): self
     {
         $this->host = $request->getHost();
         $this->port = $request->getPort();
         return $this;
     }
 
-    public function setPath(string $path)
+    public function setPath(string $path): self
     {
         $this->path = $path;
         return $this;
@@ -111,24 +111,12 @@ class Query extends Protocols\Dummy\Query implements Interfaces\ITarget
     }
 
     /**
-     * Is current query set as inline? (Has no multipart definition?)
+     * Is current query set as inline?
      * @return bool
      */
     public function isInline(): bool
     {
-        return is_null($this->multipart);
-    }
-
-    /**
-     * Is current query set as multipart? (Know how to work with content values?)
-     * @return bool
-     */
-    public function isMultipart(): bool
-    {
-        if (is_bool($this->multipart)) {
-            return $this->multipart;
-        }
-        return false;
+        return $this->inline;
     }
 
     /**
@@ -137,7 +125,7 @@ class Query extends Protocols\Dummy\Query implements Interfaces\ITarget
      * @param string $value
      * @return $this
      */
-    public function addHeader(string $name, string $value)
+    public function addHeader(string $name, string $value): self
     {
         $this->headers[$name] = $value;
         return $this;
@@ -148,7 +136,7 @@ class Query extends Protocols\Dummy\Query implements Interfaces\ITarget
      * @param string $name
      * @return $this
      */
-    public function removeHeader(string $name)
+    public function removeHeader(string $name): self
     {
         unset($this->headers[$name]);
         return $this;
@@ -159,7 +147,7 @@ class Query extends Protocols\Dummy\Query implements Interfaces\ITarget
      * @param string[] $array
      * @return $this
      */
-    public function addValues($array)
+    public function addValues($array): self
     {
         array_walk($array, function ($value, $key) {
             $this->addValue($key, $value);
@@ -173,7 +161,7 @@ class Query extends Protocols\Dummy\Query implements Interfaces\ITarget
      * @param string|Query\Value $value
      * @return $this
      */
-    public function addValue(string $key, $value)
+    public function addValue(string $key, $value): self
     {
         $this->content[$key] = ($value instanceof Query\Value) ? $value : new Query\Value((string)$value);
         return $this;
@@ -184,14 +172,16 @@ class Query extends Protocols\Dummy\Query implements Interfaces\ITarget
      * @param string $key
      * @return $this
      */
-    public function removeValue(string $key)
+    public function removeValue(string $key): self
     {
         unset($this->content[$key]);
         return $this;
     }
 
-    public function getData(): string
+    public function getData()
     {
+        $this->contentStream = Protocols\Helper::getTempStorage();
+        $this->contentLength = 0;
         $this->addHeader('Host', $this->getHostAndPort());
 
         $this->checkForMethod();
@@ -202,7 +192,12 @@ class Query extends Protocols\Dummy\Query implements Interfaces\ITarget
         $this->contentLengthHeader();
         $this->contentTypeHeader();
 
-        return sprintf("%s%s", $this->renderRequestHeader(), $this->contentQuery);
+        $storage = Protocols\Helper::getTempStorage();
+        fwrite($storage, $this->renderRequestHeader());
+        rewind($this->contentStream);
+        stream_copy_to_stream($this->contentStream, $storage);
+        rewind($storage);
+        return $storage;
     }
 
     protected function getHostAndPort(): string
@@ -214,25 +209,23 @@ class Query extends Protocols\Dummy\Query implements Interfaces\ITarget
         return $this->host . $portPart;
     }
 
-    protected function checkForMethod()
+    protected function checkForMethod(): self
     {
-        if (in_array($this->getMethod(), $this->multipartMethods) && is_null($this->multipart)) {
-            $this->multipart = false;
+        if (in_array($this->getMethod(), $this->multipartMethods)) {
+            $this->inline = false;
         }
         return $this;
     }
 
-    protected function checkForFiles()
+    protected function checkForFiles(): self
     {
-        if ((bool)count(array_filter($this->content, function ($content) {
-            return $content instanceof Query\File;
-        }))) { // for files
-            $this->multipart = true;
+        if (!empty(array_filter($this->content, [$this, 'fileAnywhere']))) { // for files
+            $this->inline = false;
         }
         return $this;
     }
 
-    protected function prepareBoundary()
+    protected function prepareBoundary(): self
     {
         $this->boundary = $this->isMultipart() ? $this->generateBoundary() : null ;
         return $this;
@@ -243,24 +236,43 @@ class Query extends Protocols\Dummy\Query implements Interfaces\ITarget
         return 'PHPFsock------------------' . $this->generateRandomString();
     }
 
-    protected function prepareQuery()
+    protected function prepareQuery(): self
     {
-        $this->contentQuery = !$this->isInline() ? ($this->isMultipart() ? $this->getMultipartRequest() : $this->getSimpleRequest()) : '';
-        $this->contentLength = !$this->isInline() ? mb_strlen($this->contentQuery) : null ;
-        return $this;
-    }
-
-    protected function contentLengthHeader()
-    {
-        if (is_null($this->contentLength)) {
-            $this->removeHeader('Content-Length');
-        } else {
-            $this->addHeader('Content-Length', $this->contentLength);
+        if (!$this->isInline()) {
+            if ($this->isMultipart()) {
+                $this->createMultipartRequest();
+            } else {
+                $this->contentLength += (int)fwrite($this->contentStream, $this->getSimpleRequest());
+            }
         }
         return $this;
     }
 
-    protected function contentTypeHeader()
+    /**
+     * Is current query set as multipart? (Know how to work with content values?)
+     * @return bool
+     */
+    public function isMultipart(): bool
+    {
+        return !empty(array_filter($this->content, [$this, 'fileAnywhere']));
+    }
+
+    public function fileAnywhere($variable): bool
+    {
+        return is_object($variable) && ($variable instanceof Query\File);
+    }
+
+    protected function contentLengthHeader(): self
+    {
+        if (empty($this->contentLength)) {
+            $this->removeHeader('Content-Length');
+        } else {
+            $this->addHeader('Content-Length', (int)$this->contentLength);
+        }
+        return $this;
+    }
+
+    protected function contentTypeHeader(): self
     {
         if (in_array($this->getMethod(), $this->multipartMethods)) {
             if (is_null($this->boundary)) {
@@ -290,23 +302,25 @@ class Query extends Protocols\Dummy\Query implements Interfaces\ITarget
         return $string;
     }
 
-    protected function getMultipartRequest(): string
+    protected function createMultipartRequest(): string
     {
-        $tempContent = '';
         foreach ($this->content as $key => $value) {
-            $tempContent .= '--' . $this->boundary . Http::DELIMITER;
+            $this->contentLength += (int)fwrite($this->contentStream, '--' . $this->boundary . Http::DELIMITER);
             if ($value instanceof Query\File) {
                 $filename = empty($value->getFilename()) ? '' : '; filename="' . urlencode($value->getFilename()) . '"';
-                $tempContent .= 'Content-Disposition: form-data; name="' . urlencode($key) . '"' . $filename . Http::DELIMITER;
-                $tempContent .= 'Content-Type: ' . $value->getMimeType() . Http::DELIMITER . Http::DELIMITER;
-                $tempContent .= $value->getContent() . Http::DELIMITER;
+                $this->contentLength += (int)fwrite($this->contentStream, 'Content-Disposition: form-data; name="' . urlencode($key) . '"' . $filename . Http::DELIMITER);
+                $this->contentLength += (int)fwrite($this->contentStream, 'Content-Type: ' . $value->getMimeType() . Http::DELIMITER . Http::DELIMITER);
+                $source = $value->getStream();
+                rewind($source);
+                $this->contentLength += (int)stream_copy_to_stream($source, $this->contentStream);
+                $this->contentLength += (int)fwrite($this->contentStream, Http::DELIMITER);
             } else {
-                $tempContent .= 'Content-Disposition: form-data; name="' . urlencode($key) . '"' . Http::DELIMITER . Http::DELIMITER;
-                $tempContent .= $value->getContent() . Http::DELIMITER;
+                $this->contentLength += (int)fwrite($this->contentStream, 'Content-Disposition: form-data; name="' . urlencode($key) . '"' . Http::DELIMITER . Http::DELIMITER);
+                $this->contentLength += (int)fwrite($this->contentStream, $value->getContent() . Http::DELIMITER);
             }
         }
-        $tempContent .= '--' . $this->boundary . '--' . Http::DELIMITER;
-        return $tempContent;
+        $this->contentLength += (int)fwrite($this->contentStream, '--' . $this->boundary . '--' . Http::DELIMITER);
+        return '';
     }
 
     /**

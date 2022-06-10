@@ -15,7 +15,7 @@ class AuthDigest extends Http\Query
 {
     use TAuthDigest;
 
-    public function getData(): string
+    public function getData()
     {
         $this->authHeader();
         return parent::getData();

@@ -14,10 +14,10 @@ class Answer
     protected $body = null;
 
     /**
-     * @param resource|null $message
+     * @param resource|string|null $message
      * @return $this
      */
-    public function setResponse($message)
+    public function setResponse($message): self
     {
         $this->body = $message;
         return $this;
@@ -25,6 +25,13 @@ class Answer
 
     public function getContent(): string
     {
-        return $this->body ? stream_get_contents($this->body, -1, 0) : '';
+        return is_null($this->body)
+            ? ''
+            : (
+                is_resource($this->body)
+                ? stream_get_contents($this->body, -1, 0)
+                : strval($this->body)
+            )
+        ;
     }
 }

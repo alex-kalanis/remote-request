@@ -17,7 +17,7 @@ class Value
         $this->content = $content;
     }
 
-    public function setContent($content)
+    public function setContent($content): self
     {
         $this->content = $content;
         return $this;

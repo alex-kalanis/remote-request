@@ -24,13 +24,16 @@ class QueryTest extends CommonTestClass
         $lib->addValues(['foo' => 'bar', 'abc' => 'def',]);
 
         $this->assertEquals("GET /example HTTP/1.1\r\nHost: somewhere.example\r\nContent-Length: 25\r\n\r\n"
-            . '{"foo":"bar","abc":"def"}', $lib->getData());
+            . '{"foo":"bar","abc":"def"}'
+            , stream_get_contents($lib->getData(), -1, 0));
         $lib->setPort(444);
         $this->assertEquals("GET /example HTTP/1.1\r\nHost: somewhere.example:444\r\nContent-Length: 25\r\n\r\n"
-            . '{"foo":"bar","abc":"def"}', $lib->getData());
+            . '{"foo":"bar","abc":"def"}'
+            , stream_get_contents($lib->getData(), -1, 0));
         $lib->setPath('/example?baz=abc');
         $this->assertEquals("GET /example?baz=abc HTTP/1.1\r\nHost: somewhere.example:444\r\nContent-Length: 25\r\n\r\n"
-            . '{"foo":"bar","abc":"def"}', $lib->getData());
+            . '{"foo":"bar","abc":"def"}'
+            , stream_get_contents($lib->getData(), -1, 0));
     }
 
     public function testFiles(): void
@@ -40,11 +43,13 @@ class QueryTest extends CommonTestClass
             ->addValues(['foo' => 'bar', 'up' => $this->prepareTestFile('mnbvcx')]);
         $this->assertEquals(
             "GET /example HTTP/1.1\r\nHost: somewhere.example:512\r\nContent-Length: 105\r\n\r\n"
-            . '{"foo":"bar","up":{"type":"file","filename":"dummy.txt","mimetype":"text\/plain","content64":"bW5idmN4"}}', $lib->getData());
+            . '{"foo":"bar","up":{"type":"file","filename":"dummy.txt","mimetype":"text\/plain","content64":"bW5idmN4"}}'
+            , stream_get_contents($lib->getData(), -1, 0));
         $lib->setPath('/example?baz=abc');
         $this->assertEquals(
             "GET /example?baz=abc HTTP/1.1\r\nHost: somewhere.example:512\r\nContent-Length: 105\r\n\r\n"
-            . '{"foo":"bar","up":{"type":"file","filename":"dummy.txt","mimetype":"text\/plain","content64":"bW5idmN4"}}', $lib->getData());
+            . '{"foo":"bar","up":{"type":"file","filename":"dummy.txt","mimetype":"text\/plain","content64":"bW5idmN4"}}'
+            , stream_get_contents($lib->getData(), -1, 0));
     }
 
     protected function prepareQuerySimple(): Restful\Query
@@ -52,7 +57,7 @@ class QueryTest extends CommonTestClass
         $lib = new QueryMock();
         $lib->setMethod('get');
         $lib->setPath('/example');
-        $lib->setMultipart(null);
+        $lib->setInline(true);
         $lib->removeHeader('Accept');
         $lib->removeHeader('User-Agent');
         $lib->removeHeader('Connection');

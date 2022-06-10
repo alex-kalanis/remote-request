@@ -4,6 +4,7 @@ namespace ProtocolsTests\Http;
 
 
 use CommonTestClass;
+use kalanis\RemoteRequest\Protocols\Helper;
 use kalanis\RemoteRequest\Protocols\Http;
 
 
@@ -29,6 +30,18 @@ class ProtocolTest extends CommonTestClass
         $this->assertEquals('lkjhgfdsa', $libValue2->getContent());
         $this->assertEquals('dummy.txt', $libValue2->getFilename());
         $this->assertEquals('text/plain', $libValue2->getMimeType());
+    }
+
+    public function testValueFileStream1(): void
+    {
+        $libValue = $this->prepareTestFile('lkjhgfdsa');
+        $this->assertEquals('lkjhgfdsa', $libValue->getContent());
+        $this->assertEquals('lkjhgfdsa', stream_get_contents($libValue->getStream(), -1, 0));
+        $cnt = Helper::getMemStorage();
+        fwrite($cnt, 'okmijnuhbzgvtfcdrxsey');
+        $libValue->setContent($cnt);
+        $this->assertEquals('okmijnuhbzgvtfcdrxsey', $libValue->getContent());
+        $this->assertEquals('okmijnuhbzgvtfcdrxsey', stream_get_contents($libValue->getStream(), -1, 0));
     }
 
     protected function prepareTestValue($content): Http\Query\Value

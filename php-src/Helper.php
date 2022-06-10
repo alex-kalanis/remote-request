@@ -203,7 +203,7 @@ class Helper
                     ->setRequestSettings($settings)
                     ->setPath($parsed["path"] . (!empty($parsed["query"]) ? '?' . $parsed["query"] : '' ))
                     ->setMethod($this->getMethod())
-                    ->setMultipart($this->connectionParams['multipart'])
+                    ->setInline($this->connectionParams['multipart'])
                     ->addValues(empty($this->postContent) ? [] : (array)$this->postContent)
                 ;
             default:

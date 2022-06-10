@@ -12,9 +12,9 @@ interface IQuery
 {
     /**
      * Query itself
-     * @return string
+     * @return resource
      */
-    public function getData(): string;
+    public function getData();
 
     /**
      * How many bytes it expects in the answer?

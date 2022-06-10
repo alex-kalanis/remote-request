@@ -4,20 +4,29 @@ namespace kalanis\RemoteRequest\Protocols\Http;
 
 
 use kalanis\RemoteRequest\Protocols;
+use kalanis\RemoteRequest\RequestException;
 
 
 /**
  * Class Answer
  * @package kalanis\RemoteRequest\Protocols\Http
  * Process server's answer - parse http
- * @todo: body shall be in stream and parsed via stream filters; not this direct way as string
+ *
+ * hints:
+ *  - zip, compress, deflate -> now only on blocks - up to 16MB of content
  */
 class Answer extends Protocols\Dummy\Answer
 {
+    use Answer\DecodeStreams\TDecoding;
+    use Answer\DecodeStrings\TDecoding;
+
     /** @var string[][] */
     protected $headers = [];
     protected $code = 0;
-    protected $headerSize = 17000; // over 16384 - 16K
+    protected $maxHeaderSize = 17000; // over 16384 - 16K
+    protected $maxStringSize = 10000;
+    protected $seekSize = 1024; // in how big block we will look for delimiters
+    protected $seekPos = 1000; // must be reasonably lower than seekSize - because it's necessary to find delimiters even on edges
 
     protected function clearValues(): void
     {
@@ -26,19 +35,73 @@ class Answer extends Protocols\Dummy\Answer
         $this->body = null;
     }
 
-    public function setResponse($message)
+    /**
+     * @param resource|string|null $message
+     * @return $this
+     * @throws RequestException
+     */
+    public function setResponse($message): parent
     {
-        $data = $message ? stream_get_contents($message, $this->headerSize, 0) : '';
         $this->clearValues();
-        if (false !== mb_strpos($data, Protocols\Http::DELIMITER . Protocols\Http::DELIMITER)) {
-            list($header, $unusedBody) = explode(Protocols\Http::DELIMITER . Protocols\Http::DELIMITER, $data, 2);
+        if (is_resource($message)) {
+            $this->processStreamResponse($message);
+        } elseif (is_string($message)) {
+            $this->processStringResponse($message);
+        }
+        return $this;
+    }
+
+    /**
+     * @param resource $message
+     * @throws RequestException
+     */
+    protected function processStreamResponse($message): void
+    {
+        $headerSize = $position = 0;
+        $onlyHeader = false;
+        rewind($message);
+        while ($data = fread($message, $this->seekSize)) {
+            if (false !== $pos = mb_strpos($data, Protocols\Http::DELIMITER . Protocols\Http::DELIMITER)) {
+                $headerSize = $position + $pos;
+                break;
+            }
+            $position += $this->seekPos;
+            fseek($message, $position);
+        }
+        if (0 == $headerSize) {
+            $headerSize = $position;
+            $onlyHeader = true;
+        }
+        if ($headerSize > $this->maxHeaderSize) {
+            throw new RequestException(sprintf('Page header is too large! Expects *%d*, got *%d*', $this->maxHeaderSize, $headerSize));
+        }
+        rewind($message);
+        $this->parseHeader((string)stream_get_contents($message, $headerSize, 0));
+        if ($onlyHeader) {
+            return;
+        }
+        $headerSize += mb_strlen(Protocols\Http::DELIMITER . Protocols\Http::DELIMITER);
+        if ($this->bodySizeMightBeTooLarge()) {
+            $this->processStreamBody($message, $headerSize);
+        } else {
+            $this->processStringBody((string)stream_get_contents($message, -1, $headerSize));
+        }
+    }
+
+    protected function processStringResponse(string $data): void
+    {
+        if (false !== $split = mb_strpos($data, Protocols\Http::DELIMITER . Protocols\Http::DELIMITER)) {
+            list($header, $body) = explode(Protocols\Http::DELIMITER . Protocols\Http::DELIMITER, $data, 2);
             $this->parseHeader($header);
-            $this->parseBody(stream_get_contents($message, -1, strlen($header) + strlen(Protocols\Http::DELIMITER . Protocols\Http::DELIMITER)));
+            if ($this->bodySizeMightBeTooLarge()) {
+                $this->processStreamBodyFromString($body);
+            } else {
+                $this->processStringBody($body);
+            }
         } else {
             $this->parseHeader($data);
             $this->body = null;
         }
-        return $this;
     }
 
     protected function parseHeader(string $header): void
@@ -59,113 +122,37 @@ class Answer extends Protocols\Dummy\Answer
         }
     }
 
-    /**
-     * Parse body of query
-     * Due changes by content encoding there is a way to expand to the original content
-     * @param string $content
-     * @link https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Encoding
-     * @-codeCoverageIgnore why usage not found?!
-     */
-    protected function parseBody(string $content): void
+    protected function bodySizeMightBeTooLarge(): bool
     {
-        $transfer = $this->getHeader('Transfer-Encoding');
-        if (!is_null($transfer) && ('chunked' == mb_strtolower($transfer))) {
-            $content = $this->parseChunked($content);
-        }
-        $encode = $this->encodings($this->getHeader('Content-Encoding'));
-        foreach ($encode as $coding) {
-            if (in_array($coding, ['gzip', 'x-gzip'])) {
-                // @codeCoverageIgnoreStart
-                $content = $this->parseZipped($content);
-                // @codeCoverageIgnoreEnd
-            }
-            if (in_array($coding, ['compress', 'x-compress'])) {
-                // @codeCoverageIgnoreStart
-                $content = $this->parseCompressed($content);
-                // @codeCoverageIgnoreEnd
-            }
-            if (in_array($coding, ['deflate', 'x-deflate'])) {
-                $content = $this->parseDeflated($content);
-            }
-        }
-        $res = fopen('php://temp', 'rw');
-        fputs($res, $content);
+        return (int)$this->getHeader('Content-Length', 0) > $this->maxStringSize;
+    }
+
+    /**
+     * @param resource $body
+     * @param int $headerSize
+     */
+    protected function processStreamBody($body, int $headerSize): void
+    {
+        $res = Protocols\Helper::getTempStorage();
+        stream_copy_to_stream($body, $res, -1, $headerSize);
+        rewind($res);
+        $this->body = $this->processStreamDecode($res);
+    }
+
+    protected function processStreamBodyFromString(string $body): void
+    {
+        $res = Protocols\Helper::getTempStorage();
+        fwrite($res, $body);
+        rewind($res);
+        $this->body = $this->processStreamDecode($res);
+    }
+
+    protected function processStringBody(string $body): void
+    {
+        $res = Protocols\Helper::getMemStorage();
+        fwrite($res, $this->processStringDecode($body));
         rewind($res);
         $this->body = $res;
-    }
-
-    /**
-     * Extract encodings from its compiled content
-     * @param string|null $encode
-     * @return string[]
-     */
-    protected function encodings($encode)
-    {
-        if (empty($encode)) {
-            return [];
-        }
-        return array_map(function ($enc) {
-            return trim(mb_strtolower($enc));
-        }, explode(',', $encode));
-    }
-
-    /**
-     * Repair chunked transport
-     * do not ask how it works...
-     * @param string $content
-     * @return string
-     * @link https://en.wikipedia.org/wiki/Chunked_transfer_encoding
-     * @link https://tools.ietf.org/html/rfc2616#section-3.6
-     */
-    protected function parseChunked(string $content): string
-    {
-        $partialData = $content;
-        $cleared = '';
-        do {
-            preg_match('#^(([0-9a-fA-F]+)\r\n)(.*)#m', $partialData, $matches);
-            $segmentLength = hexdec($matches[2]);
-            // skip bytes defined as chunk size and get next with length of chunk size
-            $chunk = mb_substr($partialData, mb_strlen($matches[1]), $segmentLength);
-            $cleared .= $chunk;
-            // remove bytes with chunk size, chunk itself and ending crlf
-            $partialData = mb_substr($partialData, mb_strlen($matches[1]) + mb_strlen($chunk) + mb_strlen(Protocols\Http::DELIMITER));
-        } while ($segmentLength > 0);
-        $content = $cleared;
-        return $content;
-    }
-
-    /**
-     * Unzip zipped content - Lempel-Ziv coding (LZ77); contains crc32
-     * @param string $content
-     * @return string
-     * search and add zipped content first
-     * @codeCoverageIgnore
-     */
-    protected function parseZipped(string $content): string
-    {
-        return gzdecode($content);
-    }
-
-    /**
-     * Unzip zipped content - Lempel-Ziv-Welch (LZW)
-     * @param string $content
-     * @return string
-     * search and add compressed content first
-     * @codeCoverageIgnore
-     */
-    protected function parseCompressed(string $content): string
-    {
-        return gzuncompress($content);
-    }
-
-    /**
-     * Uncompress content - zlib by rfc-1950, rfc-1951
-     * @param string $content
-     * @return string
-     */
-    protected function parseDeflated(string $content): string
-    {
-        return gzinflate($content);
     }
 
     public function getHeader($key, $default = null): ?string
@@ -177,7 +164,7 @@ class Answer extends Protocols\Dummy\Answer
      * @param string $key
      * @return string[]
      */
-    public function getHeaders(string $key)
+    public function getHeaders(string $key): array
     {
         return isset($this->headers[$key])? $this->headers[$key] : [];
     }
@@ -186,7 +173,7 @@ class Answer extends Protocols\Dummy\Answer
      * Dump all obtained headers - usually for DEVEL
      * @return \string[][]
      */
-    public function getAllHeaders()
+    public function getAllHeaders(): array
     {
         return $this->headers;
     }

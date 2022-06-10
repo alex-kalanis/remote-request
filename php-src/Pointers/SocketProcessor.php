@@ -3,6 +3,7 @@
 namespace kalanis\RemoteRequest\Pointers;
 
 
+use kalanis\RemoteRequest\Protocols\Helper;
 use kalanis\RemoteRequest\RequestException;
 use kalanis\RemoteRequest\Schemas\ASchema;
 
@@ -26,7 +27,7 @@ class SocketProcessor extends Processor
      */
     protected function writeRequest($filePointer, ASchema $wrapper): parent
     {
-        $input = $this->remoteQuery->getData();
+        $input = stream_get_contents($this->remoteQuery->getData(), -1, 0);
         $result = socket_sendto($filePointer, $input, strlen($input), 0, $wrapper->getHost(), $wrapper->getPort());
         if (!$result) {
             $errorCode = socket_last_error();
@@ -53,8 +54,8 @@ class SocketProcessor extends Processor
             throw new RequestException($this->lang->rrPointReceivedProblem($errorMessage), $errorCode);
         }
         if (!is_null($reply)) {
-            $response = fopen('php://temp', 'rw');
-            fputs($response, $reply);
+            $response = Helper::getTempStorage();
+            fwrite($response, $reply);
             rewind($response);
             $this->remoteResponse = $response;
         }
