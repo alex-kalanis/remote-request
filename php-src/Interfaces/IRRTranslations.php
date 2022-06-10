@@ -34,6 +34,8 @@ interface IRRTranslations
 
     public function rrHelpInvalidResponseSchema(string $schema): string;
 
+    public function rrHttpAnswerHeaderTooLarge(int $wantedSize, int $gotSize): string;
+
     public function rrFspResponseShort(int $size): string;
 
     public function rrFspResponseLarge(int $size): string;

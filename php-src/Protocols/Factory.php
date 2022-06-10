@@ -36,8 +36,8 @@ class Factory
 //                return new Http2($lang);
 //            case 'http3':
 //                return new Http3($lang);
-//            case 'webdav':
-//                return new WebDAV($lang);
+            case 'webdav':
+                return new WebDAV($lang);
 //            case 'smb':
 //                return new Samba($lang);
 //            case 'git':

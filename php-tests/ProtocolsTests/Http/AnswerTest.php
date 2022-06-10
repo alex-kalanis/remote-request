@@ -210,8 +210,9 @@ class AnswerTest extends CommonTestClass
      */
     public function testAuthBasic(): void
     {
-        $method = new AnswerMock(new Translations());
-        $lib = (new Http\Answer\AuthDigest())->setResponse($method->getResponseAuthDigest());
+        $lang = new Translations();
+        $method = new AnswerMock($lang);
+        $lib = (new Http\Answer\AuthDigest($lang))->setResponse($method->getResponseAuthDigest());
         $lib->processContent();
         $this->assertEquals(401, $lib->getCode());
         $this->assertEquals('Digest', $lib->getAuthType());
@@ -227,8 +228,9 @@ class AnswerTest extends CommonTestClass
      */
     public function testAuthString(): void
     {
-        $method = new AnswerMock(new Translations());
-        $lib = (new XAuthDigest())->setResponse($method->getResponseAuthDigest());
+        $lang = new Translations();
+        $method = new AnswerMock($lang);
+        $lib = (new XAuthDigest($lang))->setResponse($method->getResponseAuthDigest());
         $lib->processContent();
         $this->assertEquals(401, $lib->getCode());
         $this->assertEquals('Digest', $lib->getAuthType());
@@ -244,8 +246,9 @@ class AnswerTest extends CommonTestClass
      */
     public function testAuthStream(): void
     {
-        $method = new AnswerMock(new Translations());
-        $lib = (new XAuthDigest())->setResponse(CommonTestClass::stringToResource($method->getResponseAuthDigest()));
+        $lang = new Translations();
+        $method = new AnswerMock($lang);
+        $lib = (new XAuthDigest($lang))->setResponse(CommonTestClass::stringToResource($method->getResponseAuthDigest()));
         $lib->processContent();
         $this->assertEquals(401, $lib->getCode());
         $this->assertEquals('Digest', $lib->getAuthType());
@@ -263,7 +266,7 @@ class AnswerTest extends CommonTestClass
      */
     protected function prepareSimple($content): Http\Answer
     {
-        $lib = new XAnswer();
+        $lib = new XAnswer(new Translations());
         $lib->addStringDecoding(new Http\Answer\DecodeStrings\Chunked());
         $lib->addStringDecoding(new Http\Answer\DecodeStrings\Deflated());
         return $lib->setResponse($content);

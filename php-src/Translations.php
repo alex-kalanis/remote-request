@@ -70,6 +70,11 @@ class Translations implements Interfaces\IRRTranslations
         return 'Unknown response available for schema ' . $schema;
     }
 
+    public function rrHttpAnswerHeaderTooLarge(int $wantedSize, int $gotSize): string
+    {
+        return sprintf('Page header is too large! Want *%d*, got *%d*', $wantedSize, $gotSize);
+    }
+
     public function rrFspResponseShort(int $size): string
     {
         return 'Response too short';
@@ -107,7 +112,7 @@ class Translations implements Interfaces\IRRTranslations
 
     public function rrFspWrongSequence(int $sequence, int $key): string
     {
-        return sprintf('Wrong sequence! Got %d want %d', $sequence, $key);
+        return sprintf('Wrong sequence! Want *%d*, got *%d*', $key, $sequence);
     }
 
     public function rrFspWrapMalformedPath(string $path): string
@@ -187,11 +192,11 @@ class Translations implements Interfaces\IRRTranslations
 
     public function rrFspReadWrongSeek(int $wanted, int $got): string
     {
-        return sprintf('Bad read seek. Want %d got %d ', $wanted, $got);
+        return sprintf('Bad read seek. Want *%d* got *%d* ', $wanted, $got);
     }
 
     public function rrFspWriteWrongSeek(int $wanted, int $got): string
     {
-        return sprintf('Bad write seek. Want %d got %d ', $wanted, $got);
+        return sprintf('Bad write seek. Want *%d* got *%d* ', $wanted, $got);
     }
 }

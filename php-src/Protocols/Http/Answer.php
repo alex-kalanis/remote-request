@@ -3,6 +3,7 @@
 namespace kalanis\RemoteRequest\Protocols\Http;
 
 
+use kalanis\RemoteRequest\Interfaces\IRRTranslations;
 use kalanis\RemoteRequest\Protocols;
 use kalanis\RemoteRequest\RequestException;
 
@@ -20,6 +21,8 @@ class Answer extends Protocols\Dummy\Answer
     use Answer\DecodeStreams\TDecoding;
     use Answer\DecodeStrings\TDecoding;
 
+    /** @var IRRTranslations */
+    protected $lang = null;
     /** @var string[][] */
     protected $headers = [];
     protected $code = 0;
@@ -27,6 +30,11 @@ class Answer extends Protocols\Dummy\Answer
     protected $maxStringSize = 10000;
     protected $seekSize = 1024; // in how big block we will look for delimiters
     protected $seekPos = 1000; // must be reasonably lower than seekSize - because it's necessary to find delimiters even on edges
+
+    public function __construct(IRRTranslations $lang)
+    {
+        $this->lang = $lang;
+    }
 
     protected function clearValues(): void
     {
@@ -73,7 +81,7 @@ class Answer extends Protocols\Dummy\Answer
             $onlyHeader = true;
         }
         if ($headerSize > $this->maxHeaderSize) {
-            throw new RequestException(sprintf('Page header is too large! Expects *%d*, got *%d*', $this->maxHeaderSize, $headerSize));
+            throw new RequestException($this->lang->rrHttpAnswerHeaderTooLarge($this->maxHeaderSize, $headerSize));
         }
         rewind($message);
         $this->parseHeader((string)stream_get_contents($message, $headerSize, 0));

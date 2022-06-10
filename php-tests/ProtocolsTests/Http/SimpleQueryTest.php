@@ -63,7 +63,7 @@ class SimpleQueryTest extends CommonTestClass
     {
         $processor->setData(new Dummy\Query());
         $processor->setProtocolSchema(new Schemas\Tcp());
-        $answer = new Http\Answer();
+        $answer = new Http\Answer(new Translations());
         return $answer->setResponse($processor->getResponse());
     }
 }

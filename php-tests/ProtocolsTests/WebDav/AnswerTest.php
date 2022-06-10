@@ -1,12 +1,12 @@
 <?php
 
-namespace ProtocolsTests\Restful;
+namespace ProtocolsTests\WebDav;
 
 
 use CommonTestClass;
 use kalanis\RemoteRequest\Connection;
 use kalanis\RemoteRequest\Protocols\Http;
-use kalanis\RemoteRequest\Protocols\Restful;
+use kalanis\RemoteRequest\Protocols\WebDAV;
 use kalanis\RemoteRequest\Translations;
 
 
@@ -43,11 +43,6 @@ class AnswerTest extends CommonTestClass
         $method = new AnswerMock(new Translations());
         $lib = $this->prepareAnswerSimple($method->getResponseSimple());
         $this->assertEquals(901, $lib->getCode());
-        $data = $lib->getDecodedContent(true);
-        $this->assertEquals('barr', $data['foou']);
-        $this->assertEquals('efgh', $data['abcd']);
-        $this->assertEquals('text/plain', $lib->getHeader('Content-Type'));
-        $this->assertEquals('Closed', $lib->getHeader('Connection'));
     }
 
     public function testFiles(): void
@@ -55,19 +50,10 @@ class AnswerTest extends CommonTestClass
         $method = new AnswerMock(new Translations());
         $lib = $this->prepareAnswerSimple($method->getResponseFile());
         $this->assertEquals(902, $lib->getCode());
-        $data = $lib->getDecodedContent();
-        $this->assertEquals('barr', $data->foou);
-        $this->assertInstanceOf('\stdClass', $data->up);
-        $this->assertEquals('file', $data->up->type);
-        $this->assertEquals('unknown.txt', $data->up->filename);
-        $this->assertEquals('text/plain', $data->up->mimetype);
-        $this->assertEquals('mnbvcx', base64_decode($data->up->content64));
-        $this->assertEquals('text/plain', $lib->getHeader('Content-Type'));
-        $this->assertEquals('Closed', $lib->getHeader('Connection'));
     }
 
-    protected function prepareAnswerSimple($content): Restful\Answer
+    protected function prepareAnswerSimple($content): WebDAV\Answer
     {
-        return (new Restful\Answer(new Translations()))->setResponse($content);
+        return (new WebDAV\Answer(new Translations()))->setResponse($content);
     }
 }

@@ -26,7 +26,7 @@ class LoadersTest extends CommonTestClass
         $this->assertInstanceOf('\kalanis\RemoteRequest\Protocols\Fsp', Protocols\Factory::getProtocol($lang, 'fsp'));
 //        $this->assertInstanceOf('\kalanis\RemoteRequest\Protocols\Http2', Protocols\Factory::getProtocol($lang, 'http2'));
 //        $this->assertInstanceOf('\kalanis\RemoteRequest\Protocols\Http3', Protocols\Factory::getProtocol($lang, 'http3'));
-//        $this->assertInstanceOf('\kalanis\RemoteRequest\Protocols\WebDAV', Protocols\Factory::getProtocol($lang, 'webdav'));
+        $this->assertInstanceOf('\kalanis\RemoteRequest\Protocols\WebDAV', Protocols\Factory::getProtocol($lang, 'webdav'));
 //        $this->assertInstanceOf('\kalanis\RemoteRequest\Protocols\Samba', Protocols\Factory::getProtocol($lang, 'smb'));
 //        $this->assertInstanceOf('\kalanis\RemoteRequest\Protocols\Git', Protocols\Factory::getProtocol($lang, 'git'));
     }
@@ -73,6 +73,13 @@ class LoadersTest extends CommonTestClass
         $protocol = new Protocols\Restful(new Translations());
         $this->assertInstanceOf('\kalanis\RemoteRequest\Schemas\Tcp', $protocol->getTarget());
         $this->assertInstanceOf('\kalanis\RemoteRequest\Protocols\Restful\Query', $protocol->getQuery());
+    }
+
+    public function testWebDav(): void
+    {
+        $protocol = new Protocols\WebDAV(new Translations());
+        $this->assertInstanceOf('\kalanis\RemoteRequest\Schemas\Tcp', $protocol->getTarget());
+        $this->assertInstanceOf('\kalanis\RemoteRequest\Protocols\WebDAV\Query', $protocol->getQuery());
     }
 
     public function testFsp(): void
