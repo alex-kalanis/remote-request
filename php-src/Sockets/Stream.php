@@ -52,11 +52,17 @@ class Stream extends ASocket
 
         $context = stream_context_create($this->contextOptions);
         $link = $protocolWrapper->getHostname() . (!empty($protocolWrapper->getPort()) ? ':' . $protocolWrapper->getPort() : '' );
-        $filePointer = stream_socket_client($link, $errno, $errStr, $protocolWrapper->getTimeout(), STREAM_CLIENT_CONNECT, $context);
+        $timeout = is_null($protocolWrapper->getTimeout()) ? 10.0 : floatval($protocolWrapper->getTimeout()); // do NOT ask - php7 + phpstan
+        $filePointer = stream_socket_client($link, $errno, $errStr, $timeout, STREAM_CLIENT_CONNECT, $context);
 
         if (!$filePointer) {
             throw new RequestException($this->lang->rrSocketCannotConnect());
         }
+
+        if (!is_null($protocolWrapper->getTimeout())) {
+            stream_set_timeout($filePointer, intval($protocolWrapper->getTimeout()));
+        }
+
         return $filePointer;
     }
 }
