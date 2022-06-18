@@ -42,7 +42,7 @@ class AOperations
         if ($setTarget) {
             $this->runner->getSchema()->setTarget(
                 $host,
-                !empty($port) ? (int)$port : 21,
+                !empty($port) ? intval($port) : 21,
                 $this->runner->getTimeout($host)
             );
         }

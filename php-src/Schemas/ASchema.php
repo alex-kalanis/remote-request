@@ -59,9 +59,9 @@ abstract class ASchema implements Interfaces\ITarget
         return intval($this->port);
     }
 
-    public function getTimeout(): ?int
+    public function getTimeout(): ?float
     {
-        return intval($this->timeout);
+        return floatval($this->timeout);
     }
 
     public function getProtocol(): int

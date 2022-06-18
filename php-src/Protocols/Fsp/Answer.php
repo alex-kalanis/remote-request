@@ -139,36 +139,36 @@ class Answer extends Protocols\Dummy\Answer
 
     public function getCommand(): int
     {
-        return (int)$this->headCommand;
+        return intval($this->headCommand);
     }
 
     public function getKey(): int
     {
-        return (int)$this->headServerKey;
+        return intval($this->headServerKey);
     }
 
     public function getSequence(): int
     {
-        return (int)$this->headSequence;
+        return intval($this->headSequence);
     }
 
     public function getDataLength(): int
     {
-        return (int)$this->headDataLength;
+        return intval($this->headDataLength);
     }
 
     public function getFilePosition(): int
     {
-        return (int)$this->headFilePosition;
+        return intval($this->headFilePosition);
     }
 
     public function getContent(): string
     {
-        return (string)$this->content;
+        return strval($this->content);
     }
 
     public function getExtraData(): string
     {
-        return (string)$this->extra;
+        return strval($this->extra);
     }
 }

@@ -89,7 +89,7 @@ class Answer extends Protocols\Dummy\Answer
             throw new RequestException($this->lang->rrHttpAnswerHeaderTooLarge($this->maxHeaderSize, $headerSize));
         }
         rewind($message);
-        $this->parseHeader((string)stream_get_contents($message, $headerSize, 0));
+        $this->parseHeader(strval(stream_get_contents($message, $headerSize, 0)));
         if ($onlyHeader) {
             return;
         }
@@ -98,7 +98,7 @@ class Answer extends Protocols\Dummy\Answer
         if ($this->bodySizeMightBeTooLarge()) {
             $this->processStreamBody($message, $headerSize);
         } else {
-            $this->processStringBody((string)stream_get_contents($message, -1, $headerSize));
+            $this->processStringBody(strval(stream_get_contents($message, -1, $headerSize)));
         }
     }
 
@@ -171,7 +171,7 @@ class Answer extends Protocols\Dummy\Answer
 
     public function getHeader(string $key, ?string $default = null): ?string
     {
-        return isset($this->headers[$key])? (string)reset($this->headers[$key]) : $default;
+        return isset($this->headers[$key])? strval(reset($this->headers[$key])) : $default;
     }
 
     /**

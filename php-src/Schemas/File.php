@@ -23,7 +23,7 @@ class File extends ASchema
         return null;
     }
 
-    public function getTimeout(): ?int
+    public function getTimeout(): ?float
     {
         return null;
     }

@@ -138,7 +138,7 @@ class File extends AOperations
     {
         switch ($whence) {
             case SEEK_SET:
-                if ($offset < $this->size && $offset >= 0) {
+                if ($offset < $this->size && 0 <= $offset) {
                     $this->position = $offset;
                     return true;
                 } else {
@@ -146,7 +146,7 @@ class File extends AOperations
                 }
 
             case SEEK_CUR:
-                if ($offset >= 0) {
+                if (0 <= $offset) {
                     $this->position += $offset;
                     return true;
                 } else {
@@ -154,7 +154,7 @@ class File extends AOperations
                 }
 
             case SEEK_END:
-                if ($this->size + $offset >= 0) {
+                if (0 <= $this->size + $offset) {
                     $this->position = $this->size + $offset;
                     return true;
                 } else {

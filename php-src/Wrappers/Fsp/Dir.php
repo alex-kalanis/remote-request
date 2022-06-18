@@ -34,8 +34,8 @@ class Dir extends AOperations
     }
 
     /**
-     * @return string|bool
      * @throws RemoteRequest\RequestException
+     * @return string|bool
      */
     public function read()
     {

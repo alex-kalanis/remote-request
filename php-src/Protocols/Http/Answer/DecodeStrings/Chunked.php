@@ -43,7 +43,7 @@ class Chunked extends ADecoder
             $cleared .= $chunk;
             // remove bytes with chunk size, chunk itself and ending crlf
             $partialData = mb_substr($partialData, mb_strlen($matches[1]) + mb_strlen($chunk) + mb_strlen(Protocols\Http::DELIMITER));
-        } while ($segmentLength > 0);
+        } while (0 < $segmentLength);
         $content = $cleared;
         return $content;
     }

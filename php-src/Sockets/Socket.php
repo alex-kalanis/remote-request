@@ -17,8 +17,8 @@ class Socket extends ASocket
 {
     /**
      * @param ASchema $protocolWrapper
-     * @return resource
      * @throws RequestException
+     * @return resource
      * @codeCoverageIgnore because accessing remote source via internal socket
      */
     protected function remotePointer(ASchema $protocolWrapper)

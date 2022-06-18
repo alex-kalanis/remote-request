@@ -163,7 +163,7 @@ class Query extends Protocols\Dummy\Query implements Interfaces\ITarget
      */
     public function addValue(string $key, $value): self
     {
-        $this->content[$key] = ($value instanceof Query\Value) ? $value : new Query\Value((string)$value);
+        $this->content[$key] = ($value instanceof Query\Value) ? $value : new Query\Value(strval($value));
         return $this;
     }
 
@@ -242,7 +242,7 @@ class Query extends Protocols\Dummy\Query implements Interfaces\ITarget
             if ($this->isMultipart()) {
                 $this->createMultipartRequest();
             } else {
-                $this->contentLength += (int)fwrite($this->contentStream, $this->getSimpleRequest());
+                $this->contentLength += intval(fwrite($this->contentStream, $this->getSimpleRequest()));
             }
         }
         return $this;
@@ -309,21 +309,21 @@ class Query extends Protocols\Dummy\Query implements Interfaces\ITarget
     protected function createMultipartRequest(): string
     {
         foreach ($this->content as $key => $value) {
-            $this->contentLength += (int)fwrite($this->contentStream, '--' . $this->boundary . Http::DELIMITER);
+            $this->contentLength += intval(fwrite($this->contentStream, '--' . $this->boundary . Http::DELIMITER));
             if ($value instanceof Query\File) {
                 $filename = empty($value->getFilename()) ? '' : '; filename="' . urlencode($value->getFilename()) . '"';
-                $this->contentLength += (int)fwrite($this->contentStream, 'Content-Disposition: form-data; name="' . urlencode($key) . '"' . $filename . Http::DELIMITER);
-                $this->contentLength += (int)fwrite($this->contentStream, 'Content-Type: ' . $value->getMimeType() . Http::DELIMITER . Http::DELIMITER);
+                $this->contentLength += intval(fwrite($this->contentStream, 'Content-Disposition: form-data; name="' . urlencode($key) . '"' . $filename . Http::DELIMITER));
+                $this->contentLength += intval(fwrite($this->contentStream, 'Content-Type: ' . $value->getMimeType() . Http::DELIMITER . Http::DELIMITER));
                 $source = $value->getStream();
                 rewind($source);
-                $this->contentLength += (int)stream_copy_to_stream($source, $this->contentStream);
-                $this->contentLength += (int)fwrite($this->contentStream, Http::DELIMITER);
+                $this->contentLength += intval(stream_copy_to_stream($source, $this->contentStream));
+                $this->contentLength += intval(fwrite($this->contentStream, Http::DELIMITER));
             } else {
-                $this->contentLength += (int)fwrite($this->contentStream, 'Content-Disposition: form-data; name="' . urlencode($key) . '"' . Http::DELIMITER . Http::DELIMITER);
-                $this->contentLength += (int)fwrite($this->contentStream, $value->getContent() . Http::DELIMITER);
+                $this->contentLength += intval(fwrite($this->contentStream, 'Content-Disposition: form-data; name="' . urlencode($key) . '"' . Http::DELIMITER . Http::DELIMITER));
+                $this->contentLength += intval(fwrite($this->contentStream, $value->getContent() . Http::DELIMITER));
             }
         }
-        $this->contentLength += (int)fwrite($this->contentStream, '--' . $this->boundary . '--' . Http::DELIMITER);
+        $this->contentLength += intval(fwrite($this->contentStream, '--' . $this->boundary . '--' . Http::DELIMITER));
         return '';
     }
 

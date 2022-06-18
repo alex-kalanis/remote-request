@@ -32,7 +32,7 @@ trait TDecoding
     protected function getStringHeader(string $key, ?string $default = null): ?string
     {
         $headers = $this->getAllHeaders();
-        return isset($headers[$key])? (string)reset($headers[$key]) : $default;
+        return isset($headers[$key]) ? strval(reset($headers[$key])) : $default;
     }
 
     /**

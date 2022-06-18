@@ -16,8 +16,8 @@ class PfSocket extends ASocket
 {
     /**
      * @param ASchema $protocolWrapper
-     * @return resource
      * @throws RequestException
+     * @return resource
      * @codeCoverageIgnore because accessing remote source
      */
     protected function remotePointer(ASchema $protocolWrapper)

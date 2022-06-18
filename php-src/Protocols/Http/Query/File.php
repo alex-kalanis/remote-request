@@ -23,12 +23,12 @@ class File extends Value
 
     public function getFilename(): string
     {
-        return (string)$this->filename;
+        return strval($this->filename);
     }
 
     public function getMimeType(): string
     {
-        return (string)$this->mime;
+        return strval($this->mime);
     }
 
     public function getContent(): string

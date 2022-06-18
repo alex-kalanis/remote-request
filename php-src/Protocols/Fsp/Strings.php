@@ -21,8 +21,8 @@ class Strings
     public static function mb_ord(string $str): int
     {
         $len = strlen($str);
-        $char = ($len > 1) ? substr($str, $len - 1) : $str;
-        $next = ($len > 1) ? substr($str, 0, $len - 1) : '' ;
+        $char = (1 < $len) ? substr($str, $len - 1) : $str;
+        $next = (1 < $len) ? substr($str, 0, $len - 1) : '' ;
         return
             ( (!empty($next)) ? ( static::mb_ord($next) * 256 ) : 0 )
             + ord($char) ;

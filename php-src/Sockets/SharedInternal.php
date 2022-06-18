@@ -17,8 +17,8 @@ class SharedInternal extends ASocket
 {
     /**
      * @param ASchema $protocolWrapper
-     * @return resource
      * @throws RequestException
+     * @return resource
      * @codeCoverageIgnore because accessing volume
      */
     protected function remotePointer(ASchema $protocolWrapper)

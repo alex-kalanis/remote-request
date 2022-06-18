@@ -28,7 +28,7 @@ class SocketProcessor extends Processor
     protected function writeRequest($filePointer, ASchema $wrapper): parent
     {
         $input = $this->remoteQuery ? strval(stream_get_contents($this->remoteQuery->getData(), -1, 0)) : '';
-        $result = socket_sendto($filePointer, $input, strlen($input), 0, $wrapper->getHost(), $wrapper->getPort());
+        $result = socket_sendto($filePointer, $input, strlen($input), 0, $wrapper->getHost(), intval($wrapper->getPort()));
         if (!$result) {
             $errorCode = socket_last_error();
             $errorMessage = socket_strerror($errorCode);

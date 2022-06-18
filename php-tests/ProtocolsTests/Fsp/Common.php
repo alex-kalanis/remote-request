@@ -20,6 +20,6 @@ class Common
 
     public static function makeDummyChars($input): string
     {
-        return (is_int($input)) ? chr($input) : (string)$input;
+        return (is_int($input)) ? chr($input) : strval($input);
     }
 }

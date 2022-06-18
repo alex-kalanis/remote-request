@@ -156,7 +156,7 @@ class Helper
         return $libWrapper->setTarget(
             strval($parsedLink["host"]),
             empty($parsedLink["port"]) ? $libWrapper->getPort() : intval($parsedLink["port"]),
-            empty($this->connectionParams['timeout']) ? null : (int)$this->connectionParams['timeout']
+            empty($this->connectionParams['timeout']) ? null : intval($this->connectionParams['timeout'])
         );
     }
 
@@ -204,10 +204,10 @@ class Helper
             case 'fsp':
                 $query = new Protocols\Fsp\Query();
                 return $query
-                    ->setCommand((int)$this->connectionParams['method'])
-                    ->setSequence((int)$this->connectionParams['sequence'])
-                    ->setKey((int)$this->connectionParams['secret'])
-                    ->setFilePosition((int)$this->connectionParams['seek'])
+                    ->setCommand(intval($this->connectionParams['method']))
+                    ->setSequence(intval($this->connectionParams['sequence']))
+                    ->setKey(intval($this->connectionParams['secret']))
+                    ->setFilePosition(intval($this->connectionParams['seek']))
                     ->setContent(strval($this->postContent))
                 ;
             case 'http':
@@ -227,7 +227,7 @@ class Helper
                     ->setPath($parsed['path'] . (!empty($parsed['query']) ? '?' . $parsed['query'] : '' ))
                     ->setMethod($this->getMethod())
                     ->setInline(boolval($this->connectionParams['multipart']))
-                    ->addValues(empty($this->postContent) ? [] : (array)$this->postContent)
+                    ->addValues(empty($this->postContent) ? [] : (array) $this->postContent)
                 ;
             default:
                 throw new RequestException(static::$lang->rrHelpInvalidRequestSchema($schema));
