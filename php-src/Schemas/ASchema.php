@@ -51,7 +51,7 @@ abstract class ASchema implements Interfaces\ITarget
     public function getHost(): string
     {
         $host = '' . $this->host;
-        return (preg_match('#^[0-9a-f:]+$#', $host) ? '[' . $host .']' : $host ); // IPv6
+        return (preg_match('#^[0-9a-f:]+$#', $host) ? '[' . $host . ']' : $host ); // IPv6
     }
 
     public function getPort(): ?int
@@ -61,7 +61,7 @@ abstract class ASchema implements Interfaces\ITarget
 
     public function getTimeout(): ?float
     {
-        return empty($this->timeout) ? null : floatval($this->timeout) ;
+        return empty($this->timeout) ? null : floatval($this->timeout);
     }
 
     public function getProtocol(): int
