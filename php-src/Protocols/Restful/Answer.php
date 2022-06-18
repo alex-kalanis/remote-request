@@ -13,6 +13,10 @@ use kalanis\RemoteRequest\Protocols;
  */
 class Answer extends Protocols\Http\Answer
 {
+    /**
+     * @param bool $asArray
+     * @return mixed
+     */
     public function getDecodedContent(bool $asArray = false)
     {
         return json_decode(trim($this->getContent()), $asArray);

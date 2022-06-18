@@ -33,7 +33,7 @@ class Query extends Protocols\Http\Query
                 $content[$key] = $item->getContent();
             }
         }
-        $this->contentLength += (int)fwrite($this->contentStream, json_encode($content));
+        $this->contentLength += intval(fwrite($this->contentStream, strval(json_encode($content))));
         return $this;
     }
 }

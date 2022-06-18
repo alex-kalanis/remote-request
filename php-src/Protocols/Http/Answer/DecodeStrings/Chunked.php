@@ -39,7 +39,7 @@ class Chunked extends ADecoder
             preg_match('#^(([0-9a-fA-F]+)\r\n)(.*)#m', $partialData, $matches);
             $segmentLength = hexdec($matches[2]);
             // skip bytes defined as chunk size and get next with length of chunk size
-            $chunk = mb_substr($partialData, mb_strlen($matches[1]), $segmentLength);
+            $chunk = mb_substr($partialData, mb_strlen($matches[1]), intval($segmentLength));
             $cleared .= $chunk;
             // remove bytes with chunk size, chunk itself and ending crlf
             $partialData = mb_substr($partialData, mb_strlen($matches[1]) + mb_strlen($chunk) + mb_strlen(Protocols\Http::DELIMITER));

@@ -10,13 +10,21 @@ namespace kalanis\RemoteRequest\Protocols\Http\Query;
  */
 class Value
 {
+    /** @var mixed */
     protected $content = '';
 
+    /**
+     * @param mixed $content
+     */
     public function __construct($content = '')
     {
         $this->content = $content;
     }
 
+    /**
+     * @param mixed $content
+     * @return $this
+     */
     public function setContent($content): self
     {
         $this->content = $content;
@@ -25,6 +33,6 @@ class Value
 
     public function getContent(): string
     {
-        return (string)$this->content;
+        return strval($this->content);
     }
 }

@@ -15,6 +15,6 @@ class Deflated extends ADecoder
 
     public function processDecode(string $content): string
     {
-        return gzinflate($content);
+        return strval(gzinflate($content));
     }
 }

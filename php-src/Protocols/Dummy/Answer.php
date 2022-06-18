@@ -10,7 +10,7 @@ namespace kalanis\RemoteRequest\Protocols\Dummy;
  */
 class Answer
 {
-    /** @var resource|null */
+    /** @var resource|string|null */
     protected $body = null;
 
     /**
@@ -29,7 +29,7 @@ class Answer
             ? ''
             : (
                 is_resource($this->body)
-                ? stream_get_contents($this->body, -1, 0)
+                ? strval(stream_get_contents($this->body, -1, 0))
                 : strval($this->body)
             )
         ;

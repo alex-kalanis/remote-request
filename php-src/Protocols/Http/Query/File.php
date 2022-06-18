@@ -14,7 +14,11 @@ use kalanis\RemoteRequest\Protocols\Helper;
  */
 class File extends Value
 {
+    /** @var string|resource */
+    protected $content = '';
+    /** @var string */
     public $filename = 'binary';
+    /** @var string */
     public $mime = 'octet/stream';
 
     public function getFilename(): string

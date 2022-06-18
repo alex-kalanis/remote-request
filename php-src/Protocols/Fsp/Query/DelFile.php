@@ -13,6 +13,7 @@ use kalanis\RemoteRequest\Protocols\Fsp;
  */
 class DelFile extends AQuery
 {
+    /** @var string */
     protected $filePath = '';
 
     protected function getCommand(): int

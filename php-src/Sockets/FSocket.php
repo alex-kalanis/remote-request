@@ -16,15 +16,15 @@ class FSocket extends ASocket
 {
     /**
      * @param ASchema $protocolWrapper
-     * @return false|resource
      * @throws RequestException
+     * @return resource
      * @codeCoverageIgnore because accessing remote source
      */
     protected function remotePointer(ASchema $protocolWrapper)
     {
         // Make the request to the server
         // If possible, securely post using HTTPS, your PHP server will need to be SSL enabled
-        $filePointer = fsockopen($protocolWrapper->getHostname(), $protocolWrapper->getPort(), $errno, $errStr, $protocolWrapper->getTimeout());
+        $filePointer = fsockopen($protocolWrapper->getHostname(), intval($protocolWrapper->getPort()), $errno, $errStr, $protocolWrapper->getTimeout());
 
         if (!$filePointer) {
             throw new RequestException($this->lang->rrSocketCannotConnect());

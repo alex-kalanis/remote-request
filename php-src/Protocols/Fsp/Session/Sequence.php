@@ -14,10 +14,15 @@ use kalanis\RemoteRequest\RequestException;
  */
 class Sequence
 {
+    /** @var IRRTranslations */
     protected $lang = null;
+    /** @var int */
     protected $key = 0;
+    /** @var float */
     protected $created = 0.0;
+    /** @var float */
     protected $done = 0.0;
+    /** @var float */
     protected $length = 0.0;
 
     public static function newSequence(IRRTranslations $lang): self
@@ -26,7 +31,7 @@ class Sequence
         return $lib->generateSequence();
     }
 
-    public function __construct(IRRTranslations $lang)
+    final public function __construct(IRRTranslations $lang)
     {
         $this->lang = $lang;
     }
@@ -54,8 +59,8 @@ class Sequence
 
     /**
      * @param int $sequence
-     * @return $this
      * @throws RequestException
+     * @return $this
      */
     public function checkSequence(int $sequence): self
     {

@@ -25,10 +25,15 @@ class Answer extends Protocols\Dummy\Answer
     protected $lang = null;
     /** @var string[][] */
     protected $headers = [];
+    /** @var int */
     protected $code = 0;
+    /** @var int */
     protected $maxHeaderSize = 17000; // over 16384 - 16K
+    /** @var int */
     protected $maxStringSize = 10000;
+    /** @var int<0, max> */
     protected $seekSize = 1024; // in how big block we will look for delimiters
+    /** @var int */
     protected $seekPos = 1000; // must be reasonably lower than seekSize - because it's necessary to find delimiters even on edges
 
     public function __construct(IRRTranslations $lang)
@@ -45,8 +50,8 @@ class Answer extends Protocols\Dummy\Answer
 
     /**
      * @param resource|string|null $message
-     * @return $this
      * @throws RequestException
+     * @return $this
      */
     public function setResponse($message): parent
     {
@@ -88,7 +93,8 @@ class Answer extends Protocols\Dummy\Answer
         if ($onlyHeader) {
             return;
         }
-        $headerSize += mb_strlen(Protocols\Http::DELIMITER . Protocols\Http::DELIMITER);
+        // phpstan is only blind...
+        $headerSize += mb_strlen(Protocols\Http::DELIMITER . Protocols\Http::DELIMITER); // @phpstan-ignore-line
         if ($this->bodySizeMightBeTooLarge()) {
             $this->processStreamBody($message, $headerSize);
         } else {
@@ -132,7 +138,7 @@ class Answer extends Protocols\Dummy\Answer
 
     protected function bodySizeMightBeTooLarge(): bool
     {
-        return (int)$this->getHeader('Content-Length', 0) > $this->maxStringSize;
+        return intval($this->getHeader('Content-Length', '0')) > $this->maxStringSize;
     }
 
     /**
@@ -163,7 +169,7 @@ class Answer extends Protocols\Dummy\Answer
         $this->body = $res;
     }
 
-    public function getHeader($key, $default = null): ?string
+    public function getHeader(string $key, ?string $default = null): ?string
     {
         return isset($this->headers[$key])? (string)reset($this->headers[$key]) : $default;
     }
@@ -179,7 +185,7 @@ class Answer extends Protocols\Dummy\Answer
 
     /**
      * Dump all obtained headers - usually for DEVEL
-     * @return \string[][]
+     * @return array<string, array<string>>
      */
     public function getAllHeaders(): array
     {

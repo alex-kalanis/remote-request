@@ -20,8 +20,8 @@ class Factory
     /**
      * @param IRRTranslations $lang
      * @param string $schema
-     * @return ASchema
      * @throws RequestException
+     * @return ASchema
      */
     public static function getSchema(IRRTranslations $lang, string $schema): ASchema
     {

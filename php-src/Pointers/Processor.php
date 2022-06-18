@@ -20,7 +20,7 @@ class Processor
     /** @var int how many bytes for load split */
     const PART_SPLIT = 1024;
 
-    /** @var IRRTranslations|null */
+    /** @var IRRTranslations */
     protected $lang = null;
     /** @var IQuery|null */
     protected $remoteQuery = null;
@@ -39,29 +39,32 @@ class Processor
     }
 
     /**
-     * @param resource $filePointer
+     * @param resource|null $filePointer
      * @param ASchema $wrapper
-     * @return $this
      * @throws RequestException
+     * @return $this
      * @codeCoverageIgnore because accessing remote resources, similar code is in overwrite
      */
     public function processPointer($filePointer, ASchema $wrapper): self
     {
         $this->checkQuery();
         $this->checkPointer($filePointer);
-        $this->writeRequest($filePointer, $wrapper);
-        $this->readResponse($filePointer);
+        $this->writeRequest($filePointer, $wrapper); // @phpstan-ignore-line
+        $this->readResponse($filePointer); // @phpstan-ignore-line
         return $this;
     }
 
     /**
      * @param resource $filePointer
      * @param ASchema $wrapper
+     * @throws RequestException
      * @return $this
      */
     protected function writeRequest($filePointer, ASchema $wrapper): self
     {
-        $srcStream = $this->remoteQuery->getData();
+        $this->checkQuery();
+        // @phpstan-ignore-next-line
+        $srcStream = $this->remoteQuery->getData(); // always exists - checked
         rewind($srcStream);
         stream_copy_to_stream($srcStream, $filePointer);
         return $this;
@@ -69,15 +72,18 @@ class Processor
 
     /**
      * @param resource $filePointer
+     * @throws RequestException
      * @return $this
      */
     protected function readResponse($filePointer): self
     {
+        $this->checkQuery();
         $this->remoteResponse = null;
 
         // Read the server response
         $response = Helper::getTempStorage();
-        $bytesLeft = $this->remoteQuery->getMaxAnswerLength();
+        // @phpstan-ignore-next-line
+        $bytesLeft = $this->remoteQuery->getMaxAnswerLength(); // always exists - checked
         stream_copy_to_stream($filePointer, $response, (is_null($bytesLeft) ? -1 : $bytesLeft), 0);
         rewind($response);
         $this->remoteResponse = $response;

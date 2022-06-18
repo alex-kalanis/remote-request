@@ -14,7 +14,7 @@ class AnswerMock extends Connection\Processor
 {
     public function getResponseVersion()
     {
-        return Common::makeDummyQuery([
+        return Common::makeDummyString([
             0x10, # CC_VERSION
             0x31, # checksum
             0x01, 0x02, # key

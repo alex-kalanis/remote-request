@@ -22,35 +22,43 @@ class Query extends Protocols\Dummy\Query
     use Traits\THeader;
     use Traits\TChecksum;
 
+    /** @var int */
     public $maxLength = Protocols\Fsp::MAX_PACKET_SIZE;
+    /** @var int */
     protected $headCommand = 0;
+    /** @var int */
     protected $headServerKey = 0;
+    /** @var int */
     protected $headSequence = 0;
+    /** @var int */
     protected $headFilePosition = 0;
+    /** @var string */
     protected $contentData = '';
+    /** @var string */
     protected $contentExtraData = '';
 
+    /** @var string */
     private $preparedPacket = '';
 
-    public function setKey(int $key = 0)
+    public function setKey(int $key = 0): self
     {
         $this->headServerKey = $key;
         return $this;
     }
 
-    public function setSequence(int $sequenceNumber = 0)
+    public function setSequence(int $sequenceNumber = 0): self
     {
         $this->headSequence = $sequenceNumber;
         return $this;
     }
 
-    public function setCommand(int $command)
+    public function setCommand(int $command): self
     {
         $this->headCommand = $command;
         return $this;
     }
 
-    public function setFilePosition(int $filePosition)
+    public function setFilePosition(int $filePosition): self
     {
         $this->headFilePosition = $filePosition;
         return $this;
@@ -77,7 +85,7 @@ class Query extends Protocols\Dummy\Query
 
     public function getChecksumPacket(): string
     {
-        return $this->preparedPacket;
+        return strval($this->preparedPacket);
     }
 
     public function getInitialSumChunk(): int
@@ -87,17 +95,17 @@ class Query extends Protocols\Dummy\Query
 
     protected function getCommand(): int
     {
-        return (int)$this->headCommand;
+        return intval($this->headCommand);
     }
 
     protected function getKey(): int
     {
-        return (int)$this->headServerKey;
+        return intval($this->headServerKey);
     }
 
     protected function getSequence(): int
     {
-        return (int)$this->headSequence;
+        return intval($this->headSequence);
     }
 
     protected function getDataLength(): int
@@ -107,16 +115,16 @@ class Query extends Protocols\Dummy\Query
 
     protected function getFilePosition(): int
     {
-        return (int)$this->headFilePosition;
+        return intval($this->headFilePosition);
     }
 
     protected function getContent(): string
     {
-        return (string)$this->contentData;
+        return strval($this->contentData);
     }
 
     protected function getExtraData(): string
     {
-        return (string)$this->contentExtraData;
+        return strval($this->contentExtraData);
     }
 }

@@ -17,7 +17,7 @@ class SharedInternal extends ASocket
 {
     /**
      * @param ASchema $protocolWrapper
-     * @return bool|resource|null
+     * @return resource
      * @throws RequestException
      * @codeCoverageIgnore because accessing volume
      */

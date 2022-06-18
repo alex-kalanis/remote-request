@@ -12,14 +12,15 @@ trait TAuthBasic
 {
     use TAuth;
 
+    /** @var string */
     protected $username = '';
+    /** @var string */
     protected $password = '';
 
-    public function setCredentials(string $username, string $password = '')
+    public function setCredentials(string $username, string $password = ''): void
     {
         $this->username = $username;
         $this->password = $password;
-        return $this;
     }
 
     protected function authType(): string

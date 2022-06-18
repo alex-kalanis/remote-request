@@ -261,8 +261,8 @@ class AnswerTest extends CommonTestClass
 
     /**
      * @param string|resource $content
-     * @return Http\Answer
      * @throws RequestException
+     * @return Http\Answer
      */
     protected function prepareSimple($content): Http\Answer
     {

@@ -13,8 +13,11 @@ use kalanis\RemoteRequest\Protocols\Fsp;
  */
 class Upload extends AQuery
 {
+    /** @var string */
     protected $filePath = '';
+    /** @var string */
     protected $data = '';
+    /** @var int */
     protected $offset = 0;
 
     protected function getCommand(): int
@@ -34,7 +37,7 @@ class Upload extends AQuery
         return $this;
     }
 
-    public function setOffset(string $offset): self
+    public function setOffset(int $offset): self
     {
         $this->offset = $offset;
         return $this;

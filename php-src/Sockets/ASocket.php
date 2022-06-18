@@ -15,8 +15,9 @@ use kalanis\RemoteRequest\Schemas\ASchema;
  */
 abstract class ASocket
 {
+    /** @var resource|null */
     protected $pointer = null;
-    /** @var IRRTranslations|null */
+    /** @var IRRTranslations */
     protected $lang = null;
 
     public function __construct(IRRTranslations $lang)
@@ -39,15 +40,15 @@ abstract class ASocket
 
     /**
      * @param ASchema $protocolWrapper
-     * @return resource|null
      * @throws RequestException
+     * @return resource
      */
     abstract protected function remotePointer(ASchema $protocolWrapper);
 
     /**
      * @param ASchema $protocolWrapper
-     * @return resource|null
      * @throws RequestException
+     * @return resource|null
      */
     public function getResourcePointer(ASchema $protocolWrapper)
     {

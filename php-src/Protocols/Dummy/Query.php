@@ -14,10 +14,12 @@ use kalanis\RemoteRequest\Protocols\Helper;
  */
 class Query implements Interfaces\IQuery
 {
+    /** @var string */
     public $body = '';
+    /** @var int|null */
     public $maxLength = null;
 
-    public function setExpectedAnswerSize(?int $maxLength = null)
+    public function setExpectedAnswerSize(?int $maxLength = null): self
     {
         $this->maxLength = !is_null($maxLength) ? $maxLength : $this->maxLength;
         return $this;

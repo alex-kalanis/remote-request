@@ -16,8 +16,8 @@ class Factory
     /**
      * @param RemoteRequest\Interfaces\IRRTranslations $lang
      * @param string $schema
-     * @return AProtocol
      * @throws RemoteRequest\RequestException
+     * @return AProtocol
      */
     public static function getProtocol(RemoteRequest\Interfaces\IRRTranslations $lang, string $schema): AProtocol
     {

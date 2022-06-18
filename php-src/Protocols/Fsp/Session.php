@@ -14,13 +14,13 @@ use kalanis\RemoteRequest\RequestException;
  */
 class Session
 {
-    /** @var IRRTranslations|null */
+    /** @var IRRTranslations */
     protected $lang = null;
     /** @var string|null */
     protected $host = null;
-    /** @var string[] */
+    /** @var int[] */
     protected static $key = null;
-    /** @var Session\Sequence[] */
+    /** @var array<string, array<int, Session\Sequence>> */
     protected static $sequence = [];
 
     public function __construct(IRRTranslations $lang)
@@ -54,8 +54,8 @@ class Session
     }
 
     /**
-     * @return int
      * @throws RequestException
+     * @return int
      */
     public function getKey(): int
     {
@@ -74,8 +74,8 @@ class Session
 
     /**
      * @param int $key
-     * @return Session
      * @throws RequestException
+     * @return Session
      */
     public function setKey(int $key): self
     {
@@ -85,8 +85,8 @@ class Session
     }
 
     /**
-     * @return int
      * @throws RequestException
+     * @return int
      */
     public function getSequence(): int
     {
@@ -95,8 +95,8 @@ class Session
 
     /**
      * @param int $sequence
-     * @return $this
      * @throws RequestException
+     * @return $this
      */
     public function updateSequence(int $sequence): self
     {
@@ -105,8 +105,8 @@ class Session
     }
 
     /**
-     * @return Session\Sequence
      * @throws RequestException
+     * @return Session\Sequence
      */
     protected function generateSequence(): Session\Sequence
     {
@@ -126,8 +126,8 @@ class Session
     }
 
     /**
-     * @return Session\Sequence
      * @throws RequestException
+     * @return Session\Sequence
      */
     protected function getLastSequence(): Session\Sequence
     {
@@ -140,8 +140,8 @@ class Session
     }
 
     /**
-     * @return $this
      * @throws RequestException
+     * @return $this
      */
     protected function checkHost(): self
     {

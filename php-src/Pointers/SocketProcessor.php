@@ -21,13 +21,13 @@ class SocketProcessor extends Processor
     /**
      * @param resource $filePointer
      * @param ASchema $wrapper
-     * @return $this
      * @throws RequestException
+     * @return $this
      * @codeCoverageIgnore because accessing remote source via internal socket
      */
     protected function writeRequest($filePointer, ASchema $wrapper): parent
     {
-        $input = stream_get_contents($this->remoteQuery->getData(), -1, 0);
+        $input = $this->remoteQuery ? strval(stream_get_contents($this->remoteQuery->getData(), -1, 0)) : '';
         $result = socket_sendto($filePointer, $input, strlen($input), 0, $wrapper->getHost(), $wrapper->getPort());
         if (!$result) {
             $errorCode = socket_last_error();
@@ -39,8 +39,8 @@ class SocketProcessor extends Processor
 
     /**
      * @param resource $filePointer
-     * @return $this
      * @throws RequestException
+     * @return $this
      * @codeCoverageIgnore because accessing remote source via internal socket
      */
     protected function readResponse($filePointer): parent

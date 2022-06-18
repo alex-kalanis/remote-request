@@ -64,13 +64,13 @@ class Query extends Protocols\Dummy\Query implements Interfaces\ITarget
         return $this->method;
     }
 
-    public function setInline(bool $inline)
+    public function setInline(bool $inline): self
     {
         $this->inline = $inline;
         return $this;
     }
 
-    public function setHost(string $host)
+    public function setHost(string $host): self
     {
         $this->host = $host;
         return $this;
@@ -81,7 +81,7 @@ class Query extends Protocols\Dummy\Query implements Interfaces\ITarget
         return $this->host;
     }
 
-    public function setPort(int $port)
+    public function setPort(int $port): self
     {
         $this->port = $port;
         return $this;
@@ -95,7 +95,7 @@ class Query extends Protocols\Dummy\Query implements Interfaces\ITarget
     public function setRequestSettings(Interfaces\ITarget $request): self
     {
         $this->host = $request->getHost();
-        $this->port = $request->getPort();
+        $this->port = $request->getPort() ?? $this->port;
         return $this;
     }
 
@@ -257,6 +257,10 @@ class Query extends Protocols\Dummy\Query implements Interfaces\ITarget
         return !empty(array_filter($this->content, [$this, 'fileAnywhere']));
     }
 
+    /**
+     * @param mixed $variable
+     * @return bool
+     */
     public function fileAnywhere($variable): bool
     {
         return is_object($variable) && ($variable instanceof Query\File);
@@ -267,7 +271,7 @@ class Query extends Protocols\Dummy\Query implements Interfaces\ITarget
         if (empty($this->contentLength)) {
             $this->removeHeader('Content-Length');
         } else {
-            $this->addHeader('Content-Length', (int)$this->contentLength);
+            $this->addHeader('Content-Length', strval($this->contentLength));
         }
         return $this;
     }

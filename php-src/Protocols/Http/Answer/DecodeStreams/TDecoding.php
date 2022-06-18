@@ -33,11 +33,14 @@ trait TDecoding
         return $content;
     }
 
-    protected function getStreamHeader($key, $default = null): ?string
+    protected function getStreamHeader(string $key, ?string $default = null): ?string
     {
         $headers = $this->getAllHeaders();
         return isset($headers[$key])? (string)reset($headers[$key]) : $default;
     }
 
+    /**
+     * @return array<string, array<string>>
+     */
     abstract public function getAllHeaders(): array;
 }

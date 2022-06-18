@@ -15,6 +15,7 @@ use SplFileInfo;
  */
 class FileInfo extends SplFileInfo
 {
+    /** @var array<int, string> */
     protected static $types = [
         Fsp::RDTYPE_DIR => 'dir',
         Fsp::RDTYPE_FILE => 'file',
@@ -23,11 +24,17 @@ class FileInfo extends SplFileInfo
         Fsp::RDTYPE_END => 'end',
     ];
 
+    /** @var string */
     protected $path = '';
+    /** @var string */
     protected $file_name = '';
+    /** @var string */
     protected $link_name = '';
+    /** @var int */
     protected $size = 0;
+    /** @var int */
     protected $time = 0;
+    /** @var int */
     protected $type = 0;
 
     public function setData(string $data, string $path = ''): self
@@ -52,7 +59,7 @@ class FileInfo extends SplFileInfo
         $this->file_name = $this->link_name && $nlpos ? substr($this->file_name, 0, $nlpos) : $this->file_name ;
     }
 
-    public function setPath($path): self
+    public function setPath(string $path): self
     {
         $this->path = $path;
         return $this;
@@ -167,6 +174,7 @@ class FileInfo extends SplFileInfo
         return $this->isLink() ? $this->link_name : '' ;
     }
 
+    #[\ReturnTypeWillChange]
     public function getRealPath()
     {
         return $this->path . DIRECTORY_SEPARATOR . $this->file_name;

@@ -14,7 +14,9 @@ use kalanis\RemoteRequest\RequestException;
  */
 class AOperations
 {
+    /** @var IRRTranslations */
     protected $lang = null;
+    /** @var Runner */
     protected $runner = null;
 
     public function __construct(IRRTranslations $lang, Runner $runner)
@@ -26,15 +28,15 @@ class AOperations
     /**
      * @param string $path
      * @param bool $setTarget
-     * @return string
      * @throws RequestException
+     * @return string
      */
     protected function parsePath(string $path, bool $setTarget = true): string
     {
         $host = parse_url($path, PHP_URL_HOST);
         $port = parse_url($path, PHP_URL_PORT);
         $into = parse_url($path, PHP_URL_PATH);
-        if (empty($host)) {
+        if (empty($host) || empty($into)) {
             throw new RequestException($this->lang->rrFspWrapMalformedPath($path));
         }
         if ($setTarget) {

@@ -14,27 +14,36 @@ trait TAuthDigest
 {
     use TAuth;
 
+    /** @var string */
     protected $username = '';
+    /** @var string */
     protected $password = '';
+    /** @var string */
     protected $realm = '';
+    /** @var string */
     protected $remoteRandomNumber = '';
+    /** @var string */
     protected $localRandomNumber = '';
+    /** @var string */
     protected $returnToServer = '';
+    /** @var string */
     protected $qualityOfProtection = '';
+    /** @var string */
     protected $algorithm = 'md5';
+    /** @var string */
     protected $requestCounter = '';
 
+    /** @var int */
     protected static $queriesCounter = 1;
 
-    public function setCredentials(string $username, string $password, string $realm)
+    public function setCredentials(string $username, string $password, string $realm): void
     {
         $this->username = $username;
         $this->password = $password;
         $this->realm = $realm;
-        return $this;
     }
 
-    public function setProperties(string $remoteRandomNumber, string $returnToServer, string $qualityOfProtection, string $algorithm = 'md5')
+    public function setProperties(string $remoteRandomNumber, string $returnToServer, string $qualityOfProtection, string $algorithm = 'md5'): void
     {
         $this->localRandomNumber = $this->getRandomString();
         $this->remoteRandomNumber = $remoteRandomNumber;
@@ -43,7 +52,6 @@ trait TAuthDigest
         $this->algorithm = $algorithm;
         $this->requestCounter = sprintf('%08d', static::$queriesCounter);
         static::$queriesCounter++;
-        return $this;
     }
 
     /**
@@ -52,7 +60,7 @@ trait TAuthDigest
      */
     protected function getRandomString(): string
     {
-        return substr(md5(rand()), 0, 8);
+        return substr(md5(strval(rand())), 0, 8);
     }
 
     public function authHeader(): void

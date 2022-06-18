@@ -13,8 +13,11 @@ use kalanis\RemoteRequest\Protocols\Fsp;
  */
 class Stats extends AAnswer
 {
+    /** @var int */
     protected $time = 0;
+    /** @var int */
     protected $size = 0;
+    /** @var int */
     protected $type = 0;
 
     public function process(): parent

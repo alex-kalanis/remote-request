@@ -25,7 +25,7 @@ namespace kalanis\RemoteRequest\Protocols\Fsp\Answer;
  */
 class GetDir extends AAnswer
 {
-    /** @var GetDir\FileInfo|null */
+    /** @var GetDir\FileInfo */
     protected $singleFile = null;
     /** @var int */
     protected $position = 0;

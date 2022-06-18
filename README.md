@@ -1,6 +1,14 @@
 Remote Request 5
 ================
 
+[![Build Status](https://travis-ci.org/alex-kalanis/remote-request.svg?branch=master)](https://travis-ci.org/alex-kalanis/remote-request)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/alex-kalanis/remote-request/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/alex-kalanis/remote-request/?branch=master)
+[![Latest Stable Version](https://poser.pugx.org/alex-kalanis/remote-request/v/stable.svg?v=1)](https://packagist.org/packages/alex-kalanis/remote-request)
+[![Minimum PHP Version](https://img.shields.io/badge/php-%3E%3D%207.3-8892BF.svg)](https://php.net/)
+[![Downloads](https://img.shields.io/packagist/dt/alex-kalanis/remote-request.svg?v1)](https://packagist.org/packages/alex-kalanis/remote-request)
+[![License](https://poser.pugx.org/alex-kalanis/remote-request/license.svg?v=1)](https://packagist.org/packages/alex-kalanis/remote-request)
+[![Code Coverage](https://scrutinizer-ci.com/g/alex-kalanis/remote-request/badges/coverage.png?b=master&v=1)](https://scrutinizer-ci.com/g/alex-kalanis/remote-request/?branch=master)
+
 Requests for local and remote servers in object way. Contains libraries for querying remote
 machines - more universal way than Curl and more verbose than file_get_contents().
 
@@ -12,7 +20,7 @@ although stream variables has been used for passing the options. So no things li
 ```json
 {
     "require": {
-        "alex-kalanis/remote-request": ">=5.0"
+        "alex-kalanis/remote-request": ">=5.1"
     }
 }
 ```

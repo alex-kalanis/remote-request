@@ -17,7 +17,9 @@ use kalanis\RemoteRequest\Protocols\Fsp;
  */
 class Install extends AQuery
 {
+    /** @var string */
     protected $filePath = '';
+    /** @var int */
     protected $timestamp = 0;
 
     protected function getCommand(): int
@@ -31,7 +33,7 @@ class Install extends AQuery
         return $this;
     }
 
-    public function setTimestamp(string $timestamp): self
+    public function setTimestamp(int $timestamp): self
     {
         $this->timestamp = $timestamp;
         return $this;
@@ -39,7 +41,7 @@ class Install extends AQuery
 
     protected function getFilePosition(): int
     {
-        return isset($this->timestamp) ? strlen($this->getExtraData()) : 0;
+        return strlen($this->getExtraData());
     }
 
     protected function getData(): string
@@ -49,6 +51,6 @@ class Install extends AQuery
 
     protected function getExtraData(): string
     {
-        return ($this->timestamp) ? Fsp\Strings::filler($this->timestamp, 4) : '' ;
+        return !empty($this->timestamp) ? Fsp\Strings::filler($this->timestamp, 4) : '' ;
     }
 }

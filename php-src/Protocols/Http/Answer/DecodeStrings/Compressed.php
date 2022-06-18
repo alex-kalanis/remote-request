@@ -15,6 +15,6 @@ class Compressed extends ADecoder
 
     public function processDecode(string $content): string
     {
-        return gzuncompress($content);
+        return strval(gzuncompress($content));
     }
 }

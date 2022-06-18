@@ -24,18 +24,18 @@ abstract class ASchema implements Interfaces\ITarget
 
     abstract protected function getSchemaType(): string;
 
-    public function setTarget(string $host = null, int $port = null, int $timeout = null)
+    public function setTarget(string $host = null, int $port = null, int $timeout = null): self
     {
-        $this->host = !is_null($host) ? $host : $this->host;
-        $this->port = !is_null($port) ? $port : $this->port;
-        $this->timeout = !is_null($timeout) ? $timeout : $this->timeout;
+        $this->host = $host ?? $this->host;
+        $this->port = $port ?? $this->port;
+        $this->timeout = $timeout ?? $this->timeout;
         return $this;
     }
 
     public function setRequest(Interfaces\ITarget $request): self
     {
         $this->host = $request->getHost();
-        $this->port = $request->getPort();
+        $this->port = $request->getPort() ?? $this->port;
         return $this;
     }
 

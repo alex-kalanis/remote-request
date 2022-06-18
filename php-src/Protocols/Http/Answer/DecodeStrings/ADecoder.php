@@ -12,6 +12,7 @@ namespace kalanis\RemoteRequest\Protocols\Http\Answer\DecodeStrings;
  */
 abstract class ADecoder
 {
+    /** @var string[] */
     protected $contentEncoded = [];
 
     public function getHeaderKey(): string

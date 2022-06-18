@@ -56,8 +56,8 @@ class SimpleQueryTest extends CommonTestClass
 
     /**
      * @param Connection\Processor $processor cim vrati vzdalena data
-     * @return Http\Answer
      * @throws RequestException
+     * @return Http\Answer
      */
     protected function queryOnMock(Connection\Processor $processor): Http\Answer
     {

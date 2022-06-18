@@ -10,6 +10,7 @@ namespace kalanis\RemoteRequest\Protocols\Fsp\Answer;
  */
 class Upload extends AAnswer
 {
+    /** @var int */
     protected $seek = 0;
 
     public function process(): parent

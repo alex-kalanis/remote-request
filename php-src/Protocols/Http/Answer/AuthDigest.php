@@ -20,6 +20,7 @@ use kalanis\RemoteRequest\Protocols\Http;
  */
 class AuthDigest extends Http\Answer
 {
+    /** @var string */
     protected $authType = '';
     /** @var string[] */
     protected $authHeader = [];
@@ -28,7 +29,7 @@ class AuthDigest extends Http\Answer
     {
         if (401 == $this->getCode()) {
             // unauth
-            $headerData = $this->getHeader('WWW-Authenticate');
+            $headerData = strval($this->getHeader('WWW-Authenticate'));
             preg_match('#^\s?([^\s]+)\s#i', $headerData, $types);
             preg_match_all('#([^\s]+)="([^"]+)"#i', $headerData, $matches);
             $this->authType = $types[1] ?: 'Basic';
@@ -49,9 +50,12 @@ class AuthDigest extends Http\Answer
         return $this->getAuthHeader('realm');
     }
 
+    /**
+     * @return string[]
+     */
     public function getQualitiesOfProtection(): array
     {
-        return explode(',', $this->getAuthHeader('qop'));
+        return explode(',', strval($this->getAuthHeader('qop')));
     }
 
     public function getRemoteRandomNumber(): ?string

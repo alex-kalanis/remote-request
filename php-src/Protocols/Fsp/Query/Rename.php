@@ -13,7 +13,9 @@ use kalanis\RemoteRequest\Protocols\Fsp;
  */
 class Rename extends AQuery
 {
+    /** @var string */
     protected $filePath = '';
+    /** @var string */
     protected $newPath = '';
 
     protected function getCommand(): int

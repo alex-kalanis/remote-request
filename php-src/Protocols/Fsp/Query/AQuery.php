@@ -13,8 +13,11 @@ use kalanis\RemoteRequest\Protocols\Fsp;
  */
 abstract class AQuery
 {
+    /** @var Fsp\Query */
     protected $query = null;
+    /** @var int */
     protected $serverKey = 0;
+    /** @var int */
     protected $localSequence = 0;
 
     public function __construct(Fsp\Query $query)

@@ -10,7 +10,9 @@ namespace kalanis\RemoteRequest\Protocols\Fsp\Answer;
  */
 class GetFile extends AAnswer
 {
+    /** @var int */
     protected $seek = 0;
+    /** @var string */
     protected $load = '';
 
     public function process(): parent

@@ -3,6 +3,9 @@
 namespace kalanis\RemoteRequest\Protocols;
 
 
+use kalanis\RemoteRequest\RequestException;
+
+
 /**
  * Class Helper
  * @package kalanis\RemoteRequest\Protocols
@@ -10,7 +13,8 @@ namespace kalanis\RemoteRequest\Protocols;
 class Helper
 {
     /**
-     * @return null|resource
+     * @throws RequestException
+     * @return resource
      */
     public static function getTempStorage()
     {
@@ -18,19 +22,25 @@ class Helper
     }
 
     /**
-     * @return null|resource
+     * @throws RequestException
+     * @return resource
      */
     public static function getMemStorage()
     {
         return static::getStorageResource('php://memory');
     }
 
+    /**
+     * @param string $path
+     * @throws RequestException
+     * @return resource
+     */
     protected static function getStorageResource(string $path)
     {
         $res = fopen($path, 'rw');
         if (false === $res) {
             // @codeCoverageIgnoreStart
-            return null;
+            throw new RequestException('Cannot open temporary storage!');
         }
         // @codeCoverageIgnoreEnd
         rewind($res);

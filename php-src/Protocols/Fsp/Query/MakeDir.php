@@ -13,6 +13,7 @@ use kalanis\RemoteRequest\Protocols\Fsp;
  */
 class MakeDir extends AQuery
 {
+    /** @var string */
     protected $dirPath = '';
 
     protected function getCommand(): int

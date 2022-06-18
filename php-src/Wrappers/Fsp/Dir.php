@@ -16,7 +16,9 @@ class Dir extends AOperations
 {
     /** @var Protocol\Answer\GetDir\FileInfo[] */
     protected $files = [];
+    /** @var string */
     protected $path = '';
+    /** @var int */
     protected $seek = 0;
 
     public function close(): bool
@@ -54,14 +56,13 @@ class Dir extends AOperations
      * @param string $path
      * @param int $mode
      * @param int $options
-     * @return bool
      * @throws RemoteRequest\RequestException
+     * @return bool
      */
     public function make(string $path, int $mode, int $options): bool
     {
         $mkDir = new Protocol\Query\MakeDir($this->runner->getQuery());
         $mkDir->setDirPath($this->parsePath($path));
-        /** @var Protocol\Answer\Protection $answer */
         $answer = $this->runner->setActionQuery($mkDir)->process();
         if (!$answer instanceof Protocol\Answer\Protection) {
             throw new RemoteRequest\RequestException($this->lang->rrFspBadMkDir(get_class($answer)));
@@ -75,8 +76,8 @@ class Dir extends AOperations
      * @param string $path
      * @param string $right
      * @param bool $allow
-     * @return bool
      * @throws RemoteRequest\RequestException
+     * @return bool
      */
     public function rights(string $path, string $right, bool $allow): bool
     {
@@ -86,7 +87,6 @@ class Dir extends AOperations
             ->setOperation($right)
             ->allowOperation($allow)
         ;
-        /** @var Protocol\Answer\Protection $answer */
         $answer = $this->runner->setActionQuery($protect)->process();
         if (!$answer instanceof Protocol\Answer\Protection) {
             throw new RemoteRequest\RequestException($this->lang->rrFspBadProtection(get_class($answer)));
@@ -97,8 +97,8 @@ class Dir extends AOperations
     /**
      * @param string $pathFrom
      * @param string $pathTo
-     * @return bool
      * @throws RemoteRequest\RequestException
+     * @return bool
      */
     public function rename(string $pathFrom, string $pathTo): bool
     {
@@ -117,8 +117,8 @@ class Dir extends AOperations
     /**
      * @param string $path
      * @param int $options
-     * @return bool
      * @throws RemoteRequest\RequestException
+     * @return bool
      */
     public function remove(string $path, int $options): bool
     {
@@ -134,8 +134,8 @@ class Dir extends AOperations
     /**
      * @param string $path
      * @param int $flags
-     * @return array
      * @throws RemoteRequest\RequestException
+     * @return array<int, int>
      */
     public function stats(string $path, int $flags): array
     {
@@ -180,8 +180,8 @@ class Dir extends AOperations
 
     /**
      * @param string $path
-     * @return Protocol\Answer\GetDir\FileInfo|null
      * @throws RemoteRequest\RequestException
+     * @return Protocol\Answer\GetDir\FileInfo|null
      */
     public function readFiles(string $path): ?Protocol\Answer\GetDir\FileInfo
     {
@@ -191,13 +191,13 @@ class Dir extends AOperations
             $this->seek++;
         }
         $file = current($this->files);
-        return $file;
+        return false !== $file ? $file : null;
     }
 
     /**
      * @param string $path
-     * @return Protocol\Answer\GetDir
      * @throws RemoteRequest\RequestException
+     * @return Protocol\Answer\GetDir
      */
     protected function readDir(string $path): Protocol\Answer\GetDir
     {
@@ -214,8 +214,8 @@ class Dir extends AOperations
     /**
      * @param Protocol\Answer\Protection $info
      * @param int|null $mode
-     * @return int
      * @throws RemoteRequest\RequestException
+     * @return int
      * @link https://www.php.net/manual/en/function.stat.php
      */
     protected function parseMode(?Protocol\Answer\Protection $info, ?int $mode): int

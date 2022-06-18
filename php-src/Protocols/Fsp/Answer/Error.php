@@ -14,8 +14,11 @@ use kalanis\RemoteRequest\RequestException;
  */
 class Error extends AAnswer
 {
+    /** @var int */
     protected $errorCode = 0;
+    /** @var string */
     protected $errorMessage = '';
+    /** @var bool */
     protected $hardWay = false;
 
     public function setHardWay(bool $hardWay): self
@@ -35,8 +38,8 @@ class Error extends AAnswer
     }
 
     /**
-     * @return RequestException
      * @throws RequestException
+     * @return RequestException
      */
     public function getError(): RequestException
     {

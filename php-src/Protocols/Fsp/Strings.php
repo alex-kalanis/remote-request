@@ -14,7 +14,7 @@ class Strings
     {
         $part = intval(round($number / 256));
         return
-            (($part > 0) ? static::mb_chr($part) : '')
+            ((0 < $part) ? static::mb_chr($part) : '')
             . chr($number % 256);
     }
 
@@ -25,8 +25,7 @@ class Strings
         $next = ($len > 1) ? substr($str, 0, $len - 1) : '' ;
         return
             ( (!empty($next)) ? ( static::mb_ord($next) * 256 ) : 0 )
-            + ( (isset($char) ) ? ord($char) : 0 )
-            ;
+            + ord($char) ;
     }
 
     public static function filler(int $input, int $length): string

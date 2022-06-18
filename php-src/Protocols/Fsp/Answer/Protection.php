@@ -13,14 +13,23 @@ use kalanis\RemoteRequest\Protocols\Fsp;
  */
 class Protection extends AAnswer
 {
+    /** @var string */
     protected $directory = '';
+    /** @var bool|null */
     protected $isOwnedByMe = null;
+    /** @var bool|null */
     protected $canListDir = null;
+    /** @var bool|null */
     protected $canReadOnlyOwner = null;
+    /** @var bool|null */
     protected $canCreateFileHere = null;
+    /** @var bool|null */
     protected $canRenameFileHere = null;
+    /** @var bool|null */
     protected $canDeleteFileHere = null;
+    /** @var bool|null */
     protected $canCreateDirHere = null;
+    /** @var bool|null */
     protected $containsReadme = null;
 
     public function process(): parent
@@ -39,9 +48,14 @@ class Protection extends AAnswer
         return $this;
     }
 
+    /**
+     * @param int $input
+     * @param int $bitPosition
+     * @return bool
+     */
     protected function parseBit($input, $bitPosition): bool
     {
-        return ($input & $bitPosition);
+        return boolval($input & $bitPosition);
     }
 
     public function getDirectory(): string

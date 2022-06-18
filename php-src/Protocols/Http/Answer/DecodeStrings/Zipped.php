@@ -15,6 +15,6 @@ class Zipped extends ADecoder
 
     public function processDecode(string $content): string
     {
-        return gzdecode($content);
+        return strval(gzdecode($content));
     }
 }

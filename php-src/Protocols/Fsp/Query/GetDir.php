@@ -13,7 +13,9 @@ use kalanis\RemoteRequest\Protocols\Fsp;
  */
 class GetDir extends AQuery
 {
+    /** @var string */
     protected $dirPath = '';
+    /** @var int */
     protected $position = 0;
 
     protected function getCommand(): int
@@ -27,7 +29,7 @@ class GetDir extends AQuery
         return $this;
     }
 
-    public function setPosition(string $position): self
+    public function setPosition(int $position): self
     {
         $this->position = $position;
         return $this;

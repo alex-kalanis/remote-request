@@ -16,7 +16,7 @@ class PfSocket extends ASocket
 {
     /**
      * @param ASchema $protocolWrapper
-     * @return false|resource
+     * @return resource
      * @throws RequestException
      * @codeCoverageIgnore because accessing remote source
      */
@@ -24,7 +24,7 @@ class PfSocket extends ASocket
     {
         // Make the request to the server
         // If possible, securely post using HTTPS, your PHP server will need to be SSL enabled
-        $filePointer = pfsockopen($protocolWrapper->getHostname(), $protocolWrapper->getPort(), $errno, $errStr, $protocolWrapper->getTimeout());
+        $filePointer = pfsockopen($protocolWrapper->getHostname(), intval($protocolWrapper->getPort()), $errno, $errStr, $protocolWrapper->getTimeout());
 
         if (!$filePointer) {
             throw new RequestException($this->lang->rrSocketCannotConnect());

@@ -28,6 +28,8 @@ interface IRRTranslations
 
     public function rrSocketCannotConnect2(string $errorMessage): string;
 
+    public function rrHelpInvalidLink(string $link): string;
+
     public function rrHelpInvalidProtocolSchema(string $schema): string;
 
     public function rrHelpInvalidRequestSchema(string $schema): string;

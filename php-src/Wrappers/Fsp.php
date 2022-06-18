@@ -26,12 +26,16 @@ class Fsp
     /** @var resource */
     public $context;
 
+    /** @var Fsp\Runner */
     protected $runner = null;
+    /** @var Fsp\Dir */
     protected $dir = null;
+    /** @var Fsp\File */
     protected $file = null;
+    /** @var bool */
     protected $showErrors = true;
 
-    public static function register()
+    public static function register(): void
     {
         if (in_array("fsp", stream_get_wrappers())) {
             stream_wrapper_unregister("fsp");
@@ -52,7 +56,7 @@ class Fsp
         try {
             $this->runner->__destruct();
         } catch (RequestException $ex) {
-            trigger_error($ex->getMessage(), E_USER_ERROR);
+            $this->errorReport($ex);
         }
     }
 
@@ -61,7 +65,7 @@ class Fsp
         try {
             return $this->dir->close();
         } catch (RequestException $ex) {
-            trigger_error($ex->getMessage(), E_USER_ERROR);
+            $this->errorReport($ex);
             return false;
         }
     }
@@ -71,20 +75,20 @@ class Fsp
         try {
             return $this->dir->open($path, $options);
         } catch (RequestException $ex) {
-            trigger_error($ex->getMessage(), E_USER_ERROR);
+            $this->errorReport($ex);
             return false;
         }
     }
 
     /**
-     * @return string|false
+     * @return string|bool
      */
     public function dir_readdir()
     {
         try {
             return $this->dir->read();
         } catch (RequestException $ex) {
-            trigger_error($ex->getMessage(), E_USER_ERROR);
+            $this->errorReport($ex);
             return false;
         }
     }
@@ -94,7 +98,7 @@ class Fsp
         try {
             return $this->dir->rewind();
         } catch (RequestException $ex) {
-            trigger_error($ex->getMessage(), E_USER_ERROR);
+            $this->errorReport($ex);
             return false;
         }
     }
@@ -110,7 +114,7 @@ class Fsp
         try {
             return $this->dir->make($path, $mode, $options);
         } catch (RequestException $ex) {
-            trigger_error($ex->getMessage(), E_USER_ERROR);
+            $this->errorReport($ex);
             return false;
         }
     }
@@ -125,7 +129,7 @@ class Fsp
         try {
             return $this->dir->rename($path_from, $path_to);
         } catch (RequestException $ex) {
-            trigger_error($ex->getMessage(), E_USER_ERROR);
+            $this->errorReport($ex);
             return false;
         }
     }
@@ -140,7 +144,7 @@ class Fsp
         try {
             return $this->dir->remove($path, $options);
         } catch (RequestException $ex) {
-            trigger_error($ex->getMessage(), E_USER_ERROR);
+            $this->errorReport($ex);
             return false;
         }
     }
@@ -198,6 +202,12 @@ class Fsp
         }
     }
 
+    /**
+     * @param string $path
+     * @param int $option
+     * @param mixed $var
+     * @return bool
+     */
     public function stream_metadata(string $path, int $option, $var): bool
     {
         try {
@@ -225,7 +235,7 @@ class Fsp
             return $this->file->stream_read($count);
         } catch (RequestException $ex) {
             $this->errorReport($ex);
-            return false;
+            return '';
         }
     }
 
@@ -249,6 +259,9 @@ class Fsp
         }
     }
 
+    /**
+     * @return array<int, int>
+     */
     public function stream_stat(): array
     {
         try {
@@ -298,14 +311,14 @@ class Fsp
         try {
             return $this->file->unlink($path);
         } catch (RequestException $ex) {
-            trigger_error($ex->getMessage(), E_USER_ERROR);
+            $this->errorReport($ex);
             return false;
         }
     }
 
-    protected function canReport($opts): void
+    protected function canReport(int $opts): void
     {
-        $this->showErrors = ($opts & STREAM_REPORT_ERRORS);
+        $this->showErrors = boolval($opts & STREAM_REPORT_ERRORS);
     }
 
     /**
@@ -318,6 +331,11 @@ class Fsp
         }
     }
 
+    /**
+     * @param string $path
+     * @param int $flags
+     * @return array<int, int>
+     */
     public function url_stat(string $path, int $flags): array
     {
         try {

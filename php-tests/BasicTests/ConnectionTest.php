@@ -113,8 +113,8 @@ class ConnectionTest extends CommonTestClass
 
     /**
      * @param string|null $message what to send to remote machine
-     * @return string
      * @throws RequestException
+     * @return string
      */
     protected function queryOnMock(?string $message): string
     {

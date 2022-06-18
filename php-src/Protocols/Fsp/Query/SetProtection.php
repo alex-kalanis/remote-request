@@ -24,8 +24,11 @@ class SetProtection extends AQuery
     const ALLOW = '+';
     const DISCARD = '-';
 
+    /** @var string */
     protected $dirPath = '';
+    /** @var string|null */
     protected $operation = null;
+    /** @var bool|null */
     protected $allow = null;
 
     protected function getCommand(): int

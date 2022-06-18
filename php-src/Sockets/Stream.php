@@ -15,10 +15,14 @@ use kalanis\RemoteRequest\Schemas\ASchema;
  */
 class Stream extends ASocket
 {
-    /** @var string[][] */
+    /** @var array<string, string|array<string, string>> */
     protected $contextOptions = [];
 
-    public function setContextOptions(array $contextOptions = [])
+    /**
+     * @param array<string, string|array<string, string>> $contextOptions
+     * @return $this
+     */
+    public function setContextOptions(array $contextOptions = []): self
     {
         $this->contextOptions = $contextOptions;
         return $this;
@@ -26,7 +30,7 @@ class Stream extends ASocket
 
     /**
      * @param ASchema $protocolWrapper
-     * @return bool|resource
+     * @return resource
      * @throws RequestException
      * @codeCoverageIgnore because accessing remote source
      */

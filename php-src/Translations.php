@@ -55,6 +55,11 @@ class Translations implements Interfaces\IRRTranslations
         return 'Cannot establish connection: ' . $errorMessage;
     }
 
+    public function rrHelpInvalidLink(string $link): string
+    {
+        return 'Cannot parse link: ' . $link;
+    }
+
     public function rrHelpInvalidProtocolSchema(string $schema): string
     {
         return 'Unknown protocol schema for known schema ' . $schema;

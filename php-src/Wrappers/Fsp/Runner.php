@@ -81,8 +81,8 @@ class Runner
 
     /**
      * Process queries to remote machine
-     * @return Protocol\Answer\AAnswer
      * @throws RequestException
+     * @return Protocol\Answer\AAnswer
      */
     public function process(): Protocol\Answer\AAnswer
     {
@@ -122,7 +122,6 @@ class Runner
         $answer = $this->setActionQuery(new Protocol\Query\Bye($this->getQuery()))
             ->process()
         ;
-        /** @var Protocol\Answer\Nothing $answer */
         if (!$answer instanceof Protocol\Answer\Nothing) {
             throw new RequestException($this->lang->rrFspBadResponseClose(get_class($answer)));
         }

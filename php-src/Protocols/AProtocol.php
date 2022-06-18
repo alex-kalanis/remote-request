@@ -24,11 +24,16 @@ abstract class AProtocol
     /** @var RemoteRequest\Interfaces\IRRTranslations */
     protected $lang = null;
 
+    /**
+     * @param RemoteRequest\Interfaces\IRRTranslations $lang
+     * @param array<string, array<string, string>|string> $contextOptions
+     * @param bool $long
+     */
     public function __construct(RemoteRequest\Interfaces\IRRTranslations $lang, array $contextOptions = [], bool $long = false)
     {
         $this->lang = $lang;
-        $pointer = empty($contextParams)
-            ? ($long ? new RemoteRequest\Sockets\Pfsocket($lang) : new RemoteRequest\Sockets\Fsocket($lang))
+        $pointer = empty($contextOptions)
+            ? ($long ? new RemoteRequest\Sockets\PfSocket($lang) : new RemoteRequest\Sockets\FSocket($lang))
             : (new RemoteRequest\Sockets\Stream($lang))->setContextOptions($contextOptions) ;
         $this->processor = new RemoteRequest\Connection\Processor($lang, $pointer);
         $this->target = $this->loadTarget();
@@ -53,8 +58,8 @@ abstract class AProtocol
     }
 
     /**
-     * @return Dummy\Answer
      * @throws RemoteRequest\RequestException
+     * @return Dummy\Answer
      * @codeCoverageIgnore because it's about querying remote machine
      */
     public function getAnswer(): Dummy\Answer

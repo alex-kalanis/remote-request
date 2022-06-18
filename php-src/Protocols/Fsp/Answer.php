@@ -18,17 +18,28 @@ class Answer extends Protocols\Dummy\Answer
     use Traits\THeader;
     use Traits\TChecksum;
 
+    /** @var int */
     protected $headChecksum = 0;
+    /** @var int */
     protected $headCommand = 0;
+    /** @var int */
     protected $headServerKey = 0;
+    /** @var int */
     protected $headSequence = 0;
+    /** @var int */
     protected $headDataLength = 0;
+    /** @var int */
     protected $headFilePosition = 0;
+    /** @var string */
     protected $header = '';
+    /** @var string */
     protected $content = '';
+    /** @var string */
     protected $extra = '';
 
+    /** @var IRRTranslations */
     protected $lang = null;
+    /** @var bool */
     public $canDump = false; // for dump info about checksums
 
     public function __construct(IRRTranslations $lang)
@@ -37,8 +48,8 @@ class Answer extends Protocols\Dummy\Answer
     }
 
     /**
-     * @return Answer
      * @throws RequestException
+     * @return Answer
      */
     public function process(): Answer
     {
@@ -55,7 +66,8 @@ class Answer extends Protocols\Dummy\Answer
      */
     protected function checkSize(): void
     {
-        $loadSize = fstat($this->body)['size'];
+        // @phpstan-ignore-next-line
+        $loadSize = is_resource($this->body) ? fstat($this->body)['size'] : strlen(strval($this->body));
         if (Protocols\Fsp::HEADER_SIZE > $loadSize) {
             throw new RequestException($this->lang->rrFspResponseShort($loadSize));
         }
@@ -66,7 +78,10 @@ class Answer extends Protocols\Dummy\Answer
 
     protected function getHeader(): void
     {
-        $this->header = stream_get_contents($this->body, Protocols\Fsp::HEADER_SIZE, 0);
+        $this->header = is_resource($this->body)
+            ? strval(stream_get_contents($this->body, Protocols\Fsp::HEADER_SIZE, 0))
+            : strval(substr(strval($this->body), 0, Protocols\Fsp::HEADER_SIZE))
+        ;
     }
 
     protected function processHeader(): void
@@ -81,10 +96,12 @@ class Answer extends Protocols\Dummy\Answer
 
     protected function processContent(): void
     {
-        $content = stream_get_contents($this->body, -1, Protocols\Fsp::HEADER_SIZE);
-        $this->content = substr($content, 0, $this->getDataLength());
-        $this->extra = substr($content, $this->getDataLength());
-        $this->extra = (false !== $this->extra) ? $this->extra : '';
+        $content = is_resource($this->body)
+            ? strval(stream_get_contents($this->body, -1, Protocols\Fsp::HEADER_SIZE))
+            : strval(substr(strval($this->body), Protocols\Fsp::HEADER_SIZE))
+        ;
+        $this->content = strval(substr($content, 0, $this->getDataLength()));
+        $this->extra = strval(substr($content, $this->getDataLength()));
     }
 
     /**

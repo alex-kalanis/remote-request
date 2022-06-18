@@ -53,8 +53,8 @@ class Processor
 
     /**
      * Process query itself
-     * @return resource|null
      * @throws RequestException
+     * @return resource|null
      */
     public function getResponse()
     {

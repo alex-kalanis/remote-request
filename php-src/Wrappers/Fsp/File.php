@@ -14,10 +14,17 @@ use kalanis\RemoteRequest\Protocols\Fsp as Protocol;
  */
 class File extends AOperations
 {
+    /** @var string */
     protected $path = '';
+    /** @var int */
     protected $size = 0;
+    /** @var int */
     protected $position = 0;
-    protected $writeMode = false; // read - false, write - true
+    /**
+     * @var bool
+     * read - false, write - true
+     */
+    protected $writeMode = false;
 
     /**
      * @param int $cast_as
@@ -58,6 +65,12 @@ class File extends AOperations
         return false;
     }
 
+    /**
+     * @param string $path
+     * @param int $option
+     * @param mixed $var
+     * @return bool
+     */
     public function stream_metadata(string $path, int $option, $var): bool
     {
         return false;
@@ -67,8 +80,8 @@ class File extends AOperations
      * @param Dir $libDir
      * @param string $path
      * @param string $mode
-     * @return bool
      * @throws RemoteRequest\RequestException
+     * @return bool
      */
     public function stream_open(Dir $libDir, string $path, string $mode): bool
     {
@@ -85,8 +98,8 @@ class File extends AOperations
 
     /**
      * @param string $mode
-     * @return bool
      * @throws RemoteRequest\RequestException
+     * @return bool
      */
     protected function parseWriteMode(string $mode): bool
     {
@@ -102,8 +115,8 @@ class File extends AOperations
 
     /**
      * @param int $count
-     * @return string
      * @throws RemoteRequest\RequestException
+     * @return string
      */
     public function stream_read(int $count): string
     {
@@ -131,7 +144,6 @@ class File extends AOperations
                 } else {
                     return false;
                 }
-                break;
 
             case SEEK_CUR:
                 if ($offset >= 0) {
@@ -140,7 +152,6 @@ class File extends AOperations
                 } else {
                     return false;
                 }
-                break;
 
             case SEEK_END:
                 if ($this->size + $offset >= 0) {
@@ -149,7 +160,6 @@ class File extends AOperations
                 } else {
                     return false;
                 }
-                break;
 
             default:
                 return false;
@@ -163,8 +173,8 @@ class File extends AOperations
 
     /**
      * @param Dir $libDir
-     * @return array
      * @throws RemoteRequest\RequestException
+     * @return array<int, int>
      */
     public function stream_stat(Dir $libDir): array
     {
@@ -183,8 +193,8 @@ class File extends AOperations
 
     /**
      * @param string $data
-     * @return int
      * @throws RemoteRequest\RequestException
+     * @return int
      */
     public function stream_write(string $data): int
     {
@@ -207,8 +217,8 @@ class File extends AOperations
 
     /**
      * @param string $path
-     * @return bool
      * @throws RemoteRequest\RequestException
+     * @return bool
      */
     public function unlink(string $path): bool
     {
