@@ -19,8 +19,8 @@ abstract class ASchema implements Interfaces\ITarget
     protected $host = '';
     /** @var int */
     protected $port = 1;
-    /** @var int */
-    protected $timeout = 30;
+    /** @var int|float */
+    protected $timeout = 30.0;
 
     abstract protected function getSchemaType(): string;
 
@@ -56,12 +56,12 @@ abstract class ASchema implements Interfaces\ITarget
 
     public function getPort(): ?int
     {
-        return intval($this->port);
+        return empty($this->port) ? null : intval($this->port);
     }
 
     public function getTimeout(): ?float
     {
-        return floatval($this->timeout);
+        return empty($this->timeout) ? null : floatval($this->timeout) ;
     }
 
     public function getProtocol(): int
