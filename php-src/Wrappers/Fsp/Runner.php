@@ -8,7 +8,6 @@ use kalanis\RemoteRequest\Interfaces\IRRTranslations;
 use kalanis\RemoteRequest\Interfaces\ISchema;
 use kalanis\RemoteRequest\Protocols\Fsp as Protocol;
 use kalanis\RemoteRequest\RequestException;
-use kalanis\RemoteRequest\Schemas;
 use kalanis\RemoteRequest\Sockets;
 
 
@@ -21,8 +20,8 @@ class Runner
 {
     /** @var IRRTranslations */
     protected $lang = null;
-    /** @var Schemas\ASchema */
-    protected $schema = null;
+    /** @var Connection\Params\AParams */
+    protected $params = null;
     /** @var Connection\Processor */
     protected $processor = null;
     /** @var Protocol\Query */
@@ -40,7 +39,7 @@ class Runner
     public function __construct(IRRTranslations $lang)
     {
         $this->lang = $lang;
-        $this->schema = Schemas\Factory::getSchema($lang, ISchema::SCHEMA_UDP);
+        $this->params = Connection\Params\Factory::getForSchema($lang, ISchema::SCHEMA_UDP);
         $this->processor = new Connection\Processor($lang, new Sockets\Socket($lang));
         $this->query = new Protocol\Query();
         $this->answer = new Protocol\Answer($lang);
@@ -68,9 +67,9 @@ class Runner
         return $this->query;
     }
 
-    public function getSchema(): Schemas\ASchema
+    public function getConnectParams(): Connection\Params\AParams
     {
-        return $this->schema;
+        return $this->params;
     }
 
     public function getTimeout(string $host): int
@@ -89,16 +88,16 @@ class Runner
         if (empty($this->actionQuery)) {
             throw new RequestException($this->lang->rrFspNoAction());
         }
-        if (empty($this->schema->getHost())) {
+        if (empty($this->params->getHost())) {
             throw new RequestException($this->lang->rrFspNoTarget());
         }
-        $this->session->setHost($this->schema->getHost());
+        $this->session->setHost($this->params->getHost());
         $this->actionQuery
             ->setKey($this->session->getKey())
             ->setSequence($this->session->getSequence())
             ->compile()
         ;
-        $response = $this->processor->setProtocolSchema($this->schema)->setData($this->query)->getResponse();
+        $response = $this->processor->setConnectionParams($this->params)->setData($this->query)->process()->getResponse();
         $answer = Protocol\Answer\AnswerFactory::getObject(
             $this->answer->setResponse(
                 $response

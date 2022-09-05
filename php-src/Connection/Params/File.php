@@ -1,6 +1,6 @@
 <?php
 
-namespace kalanis\RemoteRequest\Schemas;
+namespace kalanis\RemoteRequest\Connection\Params;
 
 
 use kalanis\RemoteRequest\Interfaces\ISchema;
@@ -8,10 +8,10 @@ use kalanis\RemoteRequest\Interfaces\ISchema;
 
 /**
  * Class File
- * @package kalanis\RemoteRequest\Schemas
+ * @package kalanis\RemoteRequest\Connection\Params
  * Properties for query to resource - wrapper for file
  */
-class File extends ASchema
+class File extends AParams
 {
     protected function getSchemaType(): string
     {

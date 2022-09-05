@@ -8,12 +8,16 @@ use kalanis\RemoteRequest\Connection;
 use kalanis\RemoteRequest\Protocols\Dummy;
 use kalanis\RemoteRequest\Protocols\Http;
 use kalanis\RemoteRequest\RequestException;
-use kalanis\RemoteRequest\Schemas;
 use kalanis\RemoteRequest\Translations;
 
 
 class TestProcessor extends Connection\Processor
 {
+    public function process(): Connection\Processor
+    {
+        return $this;
+    }
+
     public function getResponse()
     {
         return CommonTestClass::stringToResource('HTTP/0.1 900 KO' . Http::DELIMITER);
@@ -23,6 +27,11 @@ class TestProcessor extends Connection\Processor
 
 class ContentTestProcessor extends TestProcessor
 {
+    public function process(): Connection\Processor
+    {
+        return $this;
+    }
+
     public function getResponse()
     {
         return CommonTestClass::stringToResource('HTTP/0.1 901 KO' . Http::DELIMITER . Http::DELIMITER . 'abcdefghijkl');
@@ -62,7 +71,8 @@ class SimpleQueryTest extends CommonTestClass
     protected function queryOnMock(Connection\Processor $processor): Http\Answer
     {
         $processor->setData(new Dummy\Query());
-        $processor->setProtocolSchema(new Schemas\Tcp());
+        $processor->setConnectionParams(new Connection\Params\Tcp());
+        $processor->process();
         $answer = new Http\Answer(new Translations());
         return $answer->setResponse($processor->getResponse());
     }

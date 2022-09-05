@@ -1,4 +1,4 @@
-Remote Request 5
+Remote Request 6
 ================
 
 [![Build Status](https://travis-ci.org/alex-kalanis/remote-request.svg?branch=master)](https://travis-ci.org/alex-kalanis/remote-request)
@@ -20,7 +20,7 @@ although stream variables has been used for passing the options. So no things li
 ```json
 {
     "require": {
-        "alex-kalanis/remote-request": ">=5.1"
+        "alex-kalanis/remote-request": ">=6.0"
     }
 }
 ```
@@ -35,6 +35,7 @@ familiar with composer)
  - Version 3 is packaged for Composer
  - Version 4 has internal structure change after adding "new" socket and protocol.
  - Version 5 changed paths and namespaces, use streams and translations
+ - Version 6 changed naming from schema to params and allow to use one connection for passing data there and back
 
 # Usages
 
@@ -49,14 +50,14 @@ this check using Helper and setting context params (not advised).
 Basic usage (http query):
 
 ```php
-    $libSchema = new RemoteRequest\Schemas\Ssl();
-    $libSchema->setTarget('10.0.0.1', 2048);
+    $libParams = new RemoteRequest\Connection\Params\Ssl();
+    $libParams->setTarget('10.0.0.1', 2048);
 
     $libQuery = new RemoteRequest\Protocols\Http\Query(); # http internals
     $libQuery
         ->setMultipart(true)
         ->setMethod('post')
-        ->setRequestSettings($libSchema)
+        ->setRequestSettings($libParams)
         ->setPath('/api/hook/')
         ->addValues([
             'service_id' => $serviceId,
@@ -88,15 +89,15 @@ Basic usage (http query):
 
 Variant for UDP
 ```php
-    $libSchema = new RemoteRequest\Schemas\Udp(); # query params on layer 3
-    $libSchema->setTarget('udp-listener.' . DOMAIN, 514);
+    $libParams = new RemoteRequest\Connection\Params\Udp(); # query params on layer 3
+    $libParams->setTarget('udp-listener.' . DOMAIN, 514);
 
     $message = new RemoteRequest\Protocols\Dummy\Query();
     $message->maxLength = 0; // expects no response
     $message->body = 'Post message to them!';
 
     $libProtocol = new RemoteRequest\Connection\Processor();
-    $libProtocol->setProtocolSchema($libSchema)->setData($message);
+    $libProtocol->setProtocolSchema($libParams)->setData($message);
     $libProtocol->getResponse(); // just execute
 ```
 
@@ -114,13 +115,14 @@ Next - there is possible by only exchange of result classes process XML or JSON.
 Operator (both FSocket and Stream) send agent "php-agent/1.3", but it is also possible
 to change it.
 
-Schema Wrappers
+Connection Params
 --------
 
 Contains basic information about method of transferring on network layer level 2 and
-destined target of query - usually address and port.
+destined target of query - usually address and port. Also have other things necessary
+to connect another machine like schema and timeout.
 
-### Schema UDP
+### Params UDP
 
 Send it through UDP protocol.
 
@@ -130,15 +132,15 @@ windows - one for server and another for client. You write messages on client. I
 has not been shown on both windows there is dead connection inside your ma machine and it
 will have problems also with connecting external targets - and still it might be set right.
 
-### Schemas TCP / HTTP / SSL
+### Params TCP / HTTP / SSL
 
 Basically variants which send data through tcp protocol. Tcp and Http are in unsecured,
 SSL is secured (depends on php if its compiled with ssl support or defined own stream
 which pass this obstacle). Http and SSL also adds Http headers.
 
-### Schemas PHP internals - File, Php
+### Params PHP internals - File, Php
 
-Inside the wrappers there is 2 for accessing internal sources. They are meant for testing
+Inside the params there is 2 for accessing internal sources. They are meant for testing
 purposes. It is possible to test access to data and they did not need to be saved on external
 machine.
 
@@ -195,3 +197,16 @@ Uses PhpUnit tests. Download Phpunit.phar, save it to the root, make it executab
 There is excluded directory - Wrappers. They're here to access remote sources and simplify
 your life, so it isn't good idea to run tests on them. Also Helper isn't covered for same
 reason.
+
+Not PSR-7
+---------
+
+This library is not compilant with PSR-7 and it has a few reasons. At first the PSR-7 has
+been made with HTTP in mind. Then it got streams and totally discarded the completition of
+usually sent body. Some things are specific for HTTP and in other protocols are unwelcomed.
+I now write about schema:host:port and form inputs.
+
+If you really want to know more, try to implement FSP or SMB connectors via PSR-7. You will
+get a lot of headache. Or HTTP2/3, where the content is binary-encoded and runs over udp
+schema (in case of 3). You WILL have a lots of problems implement that. Not with Remote
+Request, where the responsibilities stays separated.

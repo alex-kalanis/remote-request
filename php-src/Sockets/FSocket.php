@@ -3,8 +3,8 @@
 namespace kalanis\RemoteRequest\Sockets;
 
 
+use kalanis\RemoteRequest\Interfaces\IConnectionParams;
 use kalanis\RemoteRequest\RequestException;
-use kalanis\RemoteRequest\Schemas\ASchema;
 
 
 /**
@@ -15,23 +15,23 @@ use kalanis\RemoteRequest\Schemas\ASchema;
 class FSocket extends ASocket
 {
     /**
-     * @param ASchema $protocolWrapper
+     * @param IConnectionParams $params
      * @throws RequestException
      * @return resource
      * @codeCoverageIgnore because accessing remote source
      */
-    protected function remotePointer(ASchema $protocolWrapper)
+    protected function remotePointer(IConnectionParams $params)
     {
         // Make the request to the server
         // If possible, securely post using HTTPS, your PHP server will need to be SSL enabled
-        $timeout = is_null($protocolWrapper->getTimeout()) ? 10.0 : floatval($protocolWrapper->getTimeout()); // do NOT ask - php7 + phpstan
-        $filePointer = fsockopen($protocolWrapper->getHostname(), intval($protocolWrapper->getPort()), $errno, $errStr, $timeout);
+        $timeout = is_null($params->getTimeout()) ? 10.0 : floatval($params->getTimeout()); // do NOT ask - php7 + phpstan
+        $filePointer = fsockopen($params->getSchema() . $params->getHost(), intval($params->getPort()), $errno, $errStr, $timeout);
 
         if (!$filePointer) {
             throw new RequestException($this->lang->rrSocketCannotConnect());
         }
-        if (!is_null($protocolWrapper->getTimeout())) {
-            stream_set_timeout($filePointer, intval($protocolWrapper->getTimeout()));
+        if (!is_null($params->getTimeout())) {
+            stream_set_timeout($filePointer, intval($params->getTimeout()));
         }
         return $filePointer;
     }

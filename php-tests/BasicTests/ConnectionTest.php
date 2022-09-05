@@ -9,7 +9,6 @@ use kalanis\RemoteRequest\Interfaces;
 use kalanis\RemoteRequest\Pointers;
 use kalanis\RemoteRequest\Protocols;
 use kalanis\RemoteRequest\RequestException;
-use kalanis\RemoteRequest\Schemas;
 use kalanis\RemoteRequest\Sockets;
 use kalanis\RemoteRequest\Translations;
 
@@ -26,11 +25,11 @@ class ConnectProcessorMock extends Connection\Processor
 
 class PointerProcessorMock extends Pointers\Processor
 {
-    public function processPointer($filePointer, Schemas\ASchema $wrapper): parent
+    public function processPointer($filePointer, Interfaces\IConnectionParams $schema): parent
     {
         $this->checkQuery();
         $this->checkPointer($filePointer);
-        $this->writeRequest($filePointer, $wrapper);
+        $this->writeRequest($filePointer, $schema);
         rewind($filePointer); // FOR REASON
         $this->readResponse($filePointer);
         return $this;
@@ -77,14 +76,15 @@ class ConnectionTest extends CommonTestClass
         $query = new Protocols\Dummy\Query();
         $query->body = $content;
         $query->maxLength = 2000;
-        $wrapper = new Schemas\Php();
-        $wrapper->setTarget(Schemas\Php::HOST_MEMORY);
+        $params = new Connection\Params\Php();
+        $params->setTarget(Connection\Params\Php::HOST_MEMORY);
         $processor = new ConnectProcessorMock($lang, new Sockets\Socket($lang));
-        $processor->setProtocolSchema($wrapper);
+        $processor->setConnectionParams($params);
         $processor->setData($query);
         $processor = new ConnectProcessorMock($lang, new Sockets\SharedInternal($lang));
-        $processor->setProtocolSchema($wrapper);
+        $processor->setConnectionParams($params);
         $processor->setData($query);
+        $processor->process();
         $this->assertEquals(substr($content, 0, 2000), stream_get_contents($processor->getResponse()));
     }
 
@@ -96,18 +96,20 @@ class ConnectionTest extends CommonTestClass
         $lang = new Translations();
         $content1 = str_repeat('ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz', 10);
         $content2 = str_repeat('ZYXWVUTSRQPONMLKJIHGFEDCBA9876543210zyxwvutsrqponmlkjihgfedcba', 10);
-        $wrapper = new Schemas\Php();
-        $wrapper->setTarget(Schemas\Php::HOST_MEMORY);
+        $params = new Connection\Params\Php();
+        $params->setTarget(Connection\Params\Php::HOST_MEMORY);
         $processor = new ConnectProcessorMock($lang, new Sockets\SharedInternal($lang));
-        $processor->setProtocolSchema($wrapper);
+        $processor->setConnectionParams($params);
         $query1 = new Protocols\Dummy\Query();
         $query1->body = $content1;
         $processor->setData($query1);
+        $processor->process();
         $this->assertEquals($content1, stream_get_contents($processor->getResponse()));
 
         $query2 = new Protocols\Dummy\Query();
         $query2->body = $content2;
         $processor->setData($query2);
+        $processor->process();
         $this->assertEquals($content2, stream_get_contents($processor->getResponse()));
     }
 
@@ -119,15 +121,16 @@ class ConnectionTest extends CommonTestClass
     protected function queryOnMock(?string $message): string
     {
         $lang = new Translations();
-        $wrapper = new Schemas\Php();
-        $wrapper->setTarget(Schemas\Php::HOST_MEMORY);
+        $params = new Connection\Params\Php();
+        $params->setTarget(Connection\Params\Php::HOST_MEMORY);
         $processor = new ConnectProcessorMock($lang, new Sockets\SharedInternal($lang));
-        $processor->setProtocolSchema($wrapper);
+        $processor->setConnectionParams($params);
         if (!is_null($message)) {
             $query = new Protocols\Dummy\Query();
             $query->body = $message;
             $processor->setData($query);
         }
+        $processor->process();
         $response = $processor->getResponse();
         return $response ? stream_get_contents($response) : '' ;
     }

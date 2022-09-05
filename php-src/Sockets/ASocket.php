@@ -3,9 +3,9 @@
 namespace kalanis\RemoteRequest\Sockets;
 
 
+use kalanis\RemoteRequest\Interfaces\IConnectionParams;
 use kalanis\RemoteRequest\Interfaces\IRRTranslations;
 use kalanis\RemoteRequest\RequestException;
-use kalanis\RemoteRequest\Schemas\ASchema;
 
 
 /**
@@ -39,21 +39,21 @@ abstract class ASocket
     }
 
     /**
-     * @param ASchema $protocolWrapper
+     * @param IConnectionParams $params
      * @throws RequestException
      * @return resource
      */
-    abstract protected function remotePointer(ASchema $protocolWrapper);
+    abstract protected function remotePointer(IConnectionParams $params);
 
     /**
-     * @param ASchema $protocolWrapper
+     * @param IConnectionParams $params
      * @throws RequestException
      * @return resource|null
      */
-    public function getResourcePointer(ASchema $protocolWrapper)
+    public function getResourcePointer(IConnectionParams $params)
     {
         if (empty($this->pointer)) {
-            $this->pointer = $this->remotePointer($protocolWrapper);
+            $this->pointer = $this->remotePointer($params);
         } else {
             rewind($this->pointer);
         }

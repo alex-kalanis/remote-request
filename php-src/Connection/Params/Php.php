@@ -1,6 +1,6 @@
 <?php
 
-namespace kalanis\RemoteRequest\Schemas;
+namespace kalanis\RemoteRequest\Connection\Params;
 
 
 use kalanis\RemoteRequest\Interfaces\ISchema;
@@ -8,10 +8,10 @@ use kalanis\RemoteRequest\Interfaces\ISchema;
 
 /**
  * Class Php
- * @package kalanis\RemoteRequest\Schemas
+ * @package kalanis\RemoteRequest\Connection\Params
  * Properties for query to resource - wrapper for internal calls with available read and write props
  */
-class Php extends ASchema
+class Php extends AParams
 {
     const HOST_MEMORY = 'memory';
     const HOST_TEMP = 'temp';

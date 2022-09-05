@@ -13,9 +13,9 @@ use kalanis\RemoteRequest;
  */
 class Tcp extends AProtocol
 {
-    protected function loadTarget(): RemoteRequest\Schemas\ASchema
+    protected function loadParams(): RemoteRequest\Connection\Params\AParams
     {
-        return new RemoteRequest\Schemas\Tcp();
+        return new RemoteRequest\Connection\Params\Tcp();
     }
 
     protected function loadQuery(): RemoteRequest\Protocols\Dummy\Query

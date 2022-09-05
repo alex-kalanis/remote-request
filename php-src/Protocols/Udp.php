@@ -13,9 +13,9 @@ use kalanis\RemoteRequest;
  */
 class Udp extends AProtocol
 {
-    protected function loadTarget(): RemoteRequest\Schemas\ASchema
+    protected function loadParams(): RemoteRequest\Connection\Params\AParams
     {
-        return new RemoteRequest\Schemas\Udp();
+        return new RemoteRequest\Connection\Params\Udp();
     }
 
     protected function loadQuery(): RemoteRequest\Protocols\Dummy\Query

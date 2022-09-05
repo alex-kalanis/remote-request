@@ -43,49 +43,49 @@ class LoadersTest extends CommonTestClass
     public function testTcp(): void
     {
         $protocol = new Protocols\Tcp(new Translations());
-        $this->assertInstanceOf('\kalanis\RemoteRequest\Schemas\Tcp', $protocol->getTarget());
+        $this->assertInstanceOf('\kalanis\RemoteRequest\Connection\Params\Tcp', $protocol->getParams());
         $this->assertInstanceOf('\kalanis\RemoteRequest\Protocols\Dummy\Query', $protocol->getQuery());
     }
 
     public function testUdp(): void
     {
         $protocol = new Protocols\Udp(new Translations());
-        $this->assertInstanceOf('\kalanis\RemoteRequest\Schemas\Udp', $protocol->getTarget());
+        $this->assertInstanceOf('\kalanis\RemoteRequest\Connection\Params\Udp', $protocol->getParams());
         $this->assertInstanceOf('\kalanis\RemoteRequest\Protocols\Dummy\Query', $protocol->getQuery());
     }
 
     public function testHttp(): void
     {
         $protocol = new Protocols\Http(new Translations());
-        $this->assertInstanceOf('\kalanis\RemoteRequest\Schemas\Tcp', $protocol->getTarget());
+        $this->assertInstanceOf('\kalanis\RemoteRequest\Connection\Params\Tcp', $protocol->getParams());
         $this->assertInstanceOf('\kalanis\RemoteRequest\Protocols\Http\Query', $protocol->getQuery());
     }
 
     public function testHttps(): void
     {
         $protocol = new Protocols\Https(new Translations());
-        $this->assertInstanceOf('\kalanis\RemoteRequest\Schemas\Ssl', $protocol->getTarget());
+        $this->assertInstanceOf('\kalanis\RemoteRequest\Connection\Params\Ssl', $protocol->getParams());
         $this->assertInstanceOf('\kalanis\RemoteRequest\Protocols\Http\Query', $protocol->getQuery());
     }
 
     public function testRestful(): void
     {
         $protocol = new Protocols\Restful(new Translations());
-        $this->assertInstanceOf('\kalanis\RemoteRequest\Schemas\Tcp', $protocol->getTarget());
+        $this->assertInstanceOf('\kalanis\RemoteRequest\Connection\Params\Tcp', $protocol->getParams());
         $this->assertInstanceOf('\kalanis\RemoteRequest\Protocols\Restful\Query', $protocol->getQuery());
     }
 
     public function testWebDav(): void
     {
         $protocol = new Protocols\WebDAV(new Translations());
-        $this->assertInstanceOf('\kalanis\RemoteRequest\Schemas\Tcp', $protocol->getTarget());
+        $this->assertInstanceOf('\kalanis\RemoteRequest\Connection\Params\Tcp', $protocol->getParams());
         $this->assertInstanceOf('\kalanis\RemoteRequest\Protocols\WebDAV\Query', $protocol->getQuery());
     }
 
     public function testFsp(): void
     {
         $protocol = new Protocols\Fsp(new Translations());
-        $this->assertInstanceOf('\kalanis\RemoteRequest\Schemas\Udp', $protocol->getTarget());
+        $this->assertInstanceOf('\kalanis\RemoteRequest\Connection\Params\Udp', $protocol->getParams());
         $this->assertInstanceOf('\kalanis\RemoteRequest\Protocols\Fsp\Query', $protocol->getQuery());
     }
 }

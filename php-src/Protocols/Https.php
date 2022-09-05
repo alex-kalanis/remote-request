@@ -13,8 +13,8 @@ use kalanis\RemoteRequest;
  */
 class Https extends Http
 {
-    protected function loadTarget(): RemoteRequest\Schemas\ASchema
+    protected function loadParams(): RemoteRequest\Connection\Params\AParams
     {
-        return new RemoteRequest\Schemas\Ssl();
+        return new RemoteRequest\Connection\Params\Ssl();
     }
 }

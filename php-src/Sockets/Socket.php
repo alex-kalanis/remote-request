@@ -3,8 +3,8 @@
 namespace kalanis\RemoteRequest\Sockets;
 
 
+use kalanis\RemoteRequest\Interfaces\IConnectionParams;
 use kalanis\RemoteRequest\RequestException;
-use kalanis\RemoteRequest\Schemas\ASchema;
 
 
 /**
@@ -16,16 +16,16 @@ use kalanis\RemoteRequest\Schemas\ASchema;
 class Socket extends ASocket
 {
     /**
-     * @param ASchema $protocolWrapper
+     * @param IConnectionParams $params
      * @throws RequestException
      * @return resource
      * @codeCoverageIgnore because accessing remote source via internal socket
      */
-    protected function remotePointer(ASchema $protocolWrapper)
+    protected function remotePointer(IConnectionParams $params)
     {
         // Make the request to the server
         // If possible, securely post using HTTPS, your PHP server will need to be SSL enabled
-        $filePointer = socket_create(AF_INET, SOCK_DGRAM, $protocolWrapper->getProtocol());
+        $filePointer = socket_create(AF_INET, SOCK_DGRAM, $params->getProtocolVersion());
 
         if (!$filePointer) {
             $errorCode = socket_last_error();

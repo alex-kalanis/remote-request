@@ -6,7 +6,8 @@ namespace kalanis\RemoteRequest\Interfaces;
 /**
  * Interface ISchema
  * @package kalanis\RemoteRequest\Interfaces
- * Available schemas
+ * Available schemes
+ * So the things that will be set into the address on TCP/IP layer
  */
 interface ISchema
 {

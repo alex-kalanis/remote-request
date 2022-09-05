@@ -7,7 +7,6 @@ use CommonTestClass;
 use kalanis\RemoteRequest\Connection;
 use kalanis\RemoteRequest\Interfaces;
 use kalanis\RemoteRequest\Protocols\Fsp;
-use kalanis\RemoteRequest\Schemas;
 use kalanis\RemoteRequest\Sockets;
 use kalanis\RemoteRequest\Translations;
 use kalanis\RemoteRequest\Wrappers;
@@ -27,11 +26,11 @@ class RemoteTest extends CommonTestClass
         return;
 
         $lang = new Translations();
-        $wrapper = Schemas\Factory::getSchema($lang, Interfaces\ISchema::SCHEMA_UDP);
-//        $wrapper->setTarget('ftp.vslib.cz', 21);
-//        $wrapper->setTarget('www.720k.net', 21, 60);
-//        $wrapper->setTarget('fsp.720k.net', 21, 60);
-        $wrapper->setTarget('10.0.0.30', 54321, 10);
+        $params = Connection\Params\Factory::getForSchema($lang, Interfaces\ISchema::SCHEMA_UDP);
+//        $params->setTarget('ftp.vslib.cz', 21);
+//        $params->setTarget('www.720k.net', 21, 60);
+//        $params->setTarget('fsp.720k.net', 21, 60);
+        $params->setTarget('10.0.0.30', 54321, 10);
         $processor = new Connection\Processor($lang, new Sockets\Socket($lang));
         $query = new Fsp\Query();
         $answer = new Fsp\Answer($lang);
@@ -39,7 +38,7 @@ class RemoteTest extends CommonTestClass
         $version = new Fsp\Query\Version($query);
         $version->setKey(32)->setSequence(16)->compile();
 
-        $response = $processor->setProtocolSchema($wrapper)->setData($query)->getResponse();
+        $response = $processor->setConnectionParams($params)->setData($query)->process()->getResponse();
         $result = Fsp\Answer\AnswerFactory::getObject(
             $answer->setResponse(
                 $response

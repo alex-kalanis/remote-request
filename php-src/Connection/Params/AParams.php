@@ -1,19 +1,19 @@
 <?php
 
-namespace kalanis\RemoteRequest\Schemas;
+namespace kalanis\RemoteRequest\Connection\Params;
 
 
 use kalanis\RemoteRequest\Interfaces;
 
 
 /**
- * Class ASchema
- * @package kalanis\RemoteRequest\Schemas
- * Schemas for creating a connection
- * Define known schemas for access remote resource via php internal calls
+ * Class AParams
+ * @package kalanis\RemoteRequest\Connection\Params
+ * Schemes for creating a connection
+ * Define known schemes for access remote resource via php internal calls
  * @link https://www.php.net/manual/en/wrappers.php
  */
-abstract class ASchema implements Interfaces\ITarget
+abstract class AParams implements Interfaces\IConnectionParams
 {
     /** @var string */
     protected $host = '';
@@ -39,11 +39,6 @@ abstract class ASchema implements Interfaces\ITarget
         return $this;
     }
 
-    public function getHostname(): string
-    {
-        return $this->getSchemaProtocol() . $this->getHost();
-    }
-
     /**
      * Generate correct hostname
      * This method updates IPv6 address into form that is usable by sockets
@@ -64,7 +59,7 @@ abstract class ASchema implements Interfaces\ITarget
         return empty($this->timeout) ? null : floatval($this->timeout);
     }
 
-    public function getProtocol(): int
+    public function getProtocolVersion(): int
     {
         return 0;
     }
@@ -74,7 +69,7 @@ abstract class ASchema implements Interfaces\ITarget
      * default behavior falls into TCP by PHP
      * @return string
      */
-    protected function getSchemaProtocol(): string
+    public function getSchema(): string
     {
         return in_array($this->getSchemaType(), [
                 Interfaces\ISchema::SCHEMA_FILE,

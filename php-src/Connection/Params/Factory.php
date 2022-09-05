@@ -1,6 +1,6 @@
 <?php
 
-namespace kalanis\RemoteRequest\Schemas;
+namespace kalanis\RemoteRequest\Connection\Params;
 
 
 use kalanis\RemoteRequest\Interfaces\IRRTranslations;
@@ -10,9 +10,9 @@ use kalanis\RemoteRequest\RequestException;
 
 /**
  * Class Factory
- * @package kalanis\RemoteRequest\Schemas
- * Factory for getting a correct connection schema
- * Define known schemas for access remote resource via php internal calls
+ * @package kalanis\RemoteRequest\Connection\Params
+ * Factory for getting a correct connection scheme
+ * Define known schemes for access remote resource via php internal calls
  * @link https://www.php.net/manual/en/wrappers.php
  */
 class Factory
@@ -21,9 +21,9 @@ class Factory
      * @param IRRTranslations $lang
      * @param string $schema
      * @throws RequestException
-     * @return ASchema
+     * @return AParams
      */
-    public static function getSchema(IRRTranslations $lang, string $schema): ASchema
+    public static function getForSchema(IRRTranslations $lang, string $schema): AParams
     {
         switch ($schema) {
             case ISchema::SCHEMA_FILE:

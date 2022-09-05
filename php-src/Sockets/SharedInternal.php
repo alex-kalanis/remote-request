@@ -3,8 +3,8 @@
 namespace kalanis\RemoteRequest\Sockets;
 
 
+use kalanis\RemoteRequest\Interfaces\IConnectionParams;
 use kalanis\RemoteRequest\RequestException;
-use kalanis\RemoteRequest\Schemas\ASchema;
 
 
 /**
@@ -16,14 +16,14 @@ use kalanis\RemoteRequest\Schemas\ASchema;
 class SharedInternal extends ASocket
 {
     /**
-     * @param ASchema $protocolWrapper
+     * @param IConnectionParams $params
      * @throws RequestException
      * @return resource
      * @codeCoverageIgnore because accessing volume
      */
-    protected function remotePointer(ASchema $protocolWrapper)
+    protected function remotePointer(IConnectionParams $params)
     {
-        $filePointer = fopen($protocolWrapper->getHostname(), 'r+');
+        $filePointer = fopen($params->getSchema() . $params->getHost(), 'r+');
         if (!$filePointer) {
             throw new RequestException($this->lang->rrSocketCannotConnect());
         }

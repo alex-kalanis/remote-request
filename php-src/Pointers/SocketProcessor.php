@@ -3,9 +3,9 @@
 namespace kalanis\RemoteRequest\Pointers;
 
 
+use kalanis\RemoteRequest\Interfaces\IConnectionParams;
 use kalanis\RemoteRequest\Protocols\Helper;
 use kalanis\RemoteRequest\RequestException;
-use kalanis\RemoteRequest\Schemas\ASchema;
 
 
 /**
@@ -20,15 +20,15 @@ class SocketProcessor extends Processor
 
     /**
      * @param resource $filePointer
-     * @param ASchema $wrapper
+     * @param IConnectionParams $params
      * @throws RequestException
      * @return $this
      * @codeCoverageIgnore because accessing remote source via internal socket
      */
-    protected function writeRequest($filePointer, ASchema $wrapper): parent
+    protected function writeRequest($filePointer, IConnectionParams $params): parent
     {
         $input = $this->remoteQuery ? strval(stream_get_contents($this->remoteQuery->getData(), -1, 0)) : '';
-        $result = socket_sendto($filePointer, $input, strlen($input), 0, $wrapper->getHost(), intval($wrapper->getPort()));
+        $result = socket_sendto($filePointer, $input, strlen($input), 0, $params->getHost(), intval($params->getPort()));
         if (!$result) {
             $errorCode = socket_last_error();
             $errorMessage = socket_strerror($errorCode);

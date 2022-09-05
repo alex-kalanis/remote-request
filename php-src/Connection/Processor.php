@@ -3,11 +3,9 @@
 namespace kalanis\RemoteRequest\Connection;
 
 
-use kalanis\RemoteRequest\Interfaces\IQuery;
-use kalanis\RemoteRequest\Interfaces\IRRTranslations;
+use kalanis\RemoteRequest\Interfaces;
 use kalanis\RemoteRequest\Pointers;
 use kalanis\RemoteRequest\RequestException;
-use kalanis\RemoteRequest\Schemas\ASchema;
 use kalanis\RemoteRequest\Sockets;
 
 
@@ -21,16 +19,16 @@ use kalanis\RemoteRequest\Sockets;
  */
 class Processor
 {
-    /** @var IQuery|null */
+    /** @var Interfaces\IQuery|null */
     protected $data = null;
     /** @var Pointers\Processor */
     protected $processor = null;
-    /** @var ASchema */
-    protected $schema = null;
+    /** @var Interfaces\IConnectionParams */
+    protected $params = null;
     /** @var Sockets\ASocket */
     protected $socket = null;
 
-    public function __construct(IRRTranslations $lang, Sockets\ASocket $method = null)
+    public function __construct(Interfaces\IRRTranslations $lang, Sockets\ASocket $method = null)
     {
         $this->socket = (empty($method)) ? new Sockets\FSocket($lang) : $method ;
         $this->processor = ($this->socket instanceof Sockets\Socket)
@@ -39,13 +37,19 @@ class Processor
         ;
     }
 
-    public function setProtocolSchema(ASchema $wrapper): self
+    /**
+     * @param Interfaces\IConnectionParams $params
+     * @return Processor
+     * Necessary to set only once - when you say where you need to connect
+     */
+    public function setConnectionParams(Interfaces\IConnectionParams $params): self
     {
-        $this->schema = $wrapper;
+        $this->socket->close(); // close previously used connection
+        $this->params = $params;
         return $this;
     }
 
-    public function setData(?IQuery $request): self
+    public function setData(?Interfaces\IQuery $request): self
     {
         $this->data = $request;
         return $this;
@@ -54,14 +58,24 @@ class Processor
     /**
      * Process query itself
      * @throws RequestException
+     * @return $this
+     * processPointer will make a new connection when the current one is not available
+     */
+    public function process(): self
+    {
+        $this->processor
+            ->setQuery($this->data)
+            ->processPointer($this->socket->getResourcePointer($this->params), $this->params)
+        ;
+        return $this;
+    }
+
+    /**
+     * What come back
      * @return resource|null
      */
     public function getResponse()
     {
-        return $this->processor
-                ->setQuery($this->data)
-                ->processPointer($this->socket->getResourcePointer($this->schema), $this->schema)
-                ->getContent()
-            ;
+        return $this->processor->getContent();
     }
 }

@@ -3,11 +3,11 @@
 namespace kalanis\RemoteRequest\Pointers;
 
 
+use kalanis\RemoteRequest\Interfaces\IConnectionParams;
 use kalanis\RemoteRequest\Interfaces\IQuery;
 use kalanis\RemoteRequest\Interfaces\IRRTranslations;
 use kalanis\RemoteRequest\Protocols\Helper;
 use kalanis\RemoteRequest\RequestException;
-use kalanis\RemoteRequest\Schemas\ASchema;
 
 
 /**
@@ -40,27 +40,27 @@ class Processor
 
     /**
      * @param resource|null $filePointer
-     * @param ASchema $wrapper
+     * @param IConnectionParams $params
      * @throws RequestException
      * @return $this
      * @codeCoverageIgnore because accessing remote resources, similar code is in overwrite
      */
-    public function processPointer($filePointer, ASchema $wrapper): self
+    public function processPointer($filePointer, IConnectionParams $params): self
     {
         $this->checkQuery();
         $this->checkPointer($filePointer);
-        $this->writeRequest($filePointer, $wrapper); // @phpstan-ignore-line
+        $this->writeRequest($filePointer, $params); // @phpstan-ignore-line
         $this->readResponse($filePointer); // @phpstan-ignore-line
         return $this;
     }
 
     /**
      * @param resource $filePointer
-     * @param ASchema $wrapper
+     * @param IConnectionParams $params
      * @throws RequestException
      * @return $this
      */
-    protected function writeRequest($filePointer, ASchema $wrapper): self
+    protected function writeRequest($filePointer, IConnectionParams $params): self
     {
         $this->checkQuery();
         // @phpstan-ignore-next-line

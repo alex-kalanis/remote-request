@@ -5,7 +5,6 @@ namespace kalanis\RemoteRequest;
 
 use kalanis\RemoteRequest\Connection;
 use kalanis\RemoteRequest\Interfaces;
-use kalanis\RemoteRequest\Schemas;
 use kalanis\RemoteRequest\Sockets;
 
 
@@ -115,12 +114,13 @@ class Helper
             throw new RequestException(static::$lang->rrHelpInvalidLink($this->link));
         }
         $schema = !empty($parsedLink["scheme"]) ? strtolower($parsedLink["scheme"]) : '' ;
-        $libSchema = $this->getLibSchema($schema, $parsedLink);
-        $libQuery = $this->getLibRequest($schema, $parsedLink, $libSchema);
+        $libParams = $this->getFilledConnectionParams($schema, $parsedLink);
+        $libQuery = $this->getLibRequest($schema, $parsedLink, $libParams);
         return $this->getLibResponseProcessor($schema)->setResponse(
             $this->getLibConnection($libQuery)
-                ->setProtocolSchema($libSchema)
+                ->setConnectionParams($libParams)
                 ->setData($libQuery)
+                ->process()
                 ->getResponse()
         );
     }
@@ -148,14 +148,14 @@ class Helper
      * @param string $schema
      * @param array<string, int|string> $parsedLink from parse_url()
      * @throws RequestException
-     * @return Schemas\ASchema
+     * @return Connection\Params\AParams
      */
-    protected function getLibSchema(string $schema, $parsedLink): Schemas\ASchema
+    protected function getFilledConnectionParams(string $schema, $parsedLink): Connection\Params\AParams
     {
-        $libWrapper = $this->getSchema($schema);
-        return $libWrapper->setTarget(
+        $libParams = $this->getConnectionParams($schema);
+        return $libParams->setTarget(
             strval($parsedLink["host"]),
-            empty($parsedLink["port"]) ? $libWrapper->getPort() : intval($parsedLink["port"]),
+            empty($parsedLink["port"]) ? $libParams->getPort() : intval($parsedLink["port"]),
             empty($this->connectionParams['timeout']) ? null : intval($this->connectionParams['timeout'])
         );
     }
@@ -163,22 +163,22 @@ class Helper
     /**
      * @param string $schema
      * @throws RequestException
-     * @return Schemas\ASchema
+     * @return Connection\Params\AParams
      */
-    protected function getSchema(string $schema): Schemas\ASchema
+    protected function getConnectionParams(string $schema): Connection\Params\AParams
     {
         switch ($schema) {
             case 'tcp':
-                return new Schemas\Tcp();
+                return new Connection\Params\Tcp();
             case 'udp':
             case 'fsp':
-                return new Schemas\Udp();
+                return new Connection\Params\Udp();
             case 'http':
-                return new Schemas\Tcp();
+                return new Connection\Params\Tcp();
             case 'https':
-                return new Schemas\Ssl();
+                return new Connection\Params\Ssl();
             case 'file':
-                return new Schemas\File();
+                return new Connection\Params\File();
             default:
                 throw new RequestException(static::$lang->rrHelpInvalidProtocolSchema($schema));
         }

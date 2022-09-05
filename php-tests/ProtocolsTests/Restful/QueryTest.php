@@ -4,9 +4,9 @@ namespace ProtocolsTests\Restful;
 
 
 use CommonTestClass;
+use kalanis\RemoteRequest\Connection;
 use kalanis\RemoteRequest\Protocols\Http;
 use kalanis\RemoteRequest\Protocols\Restful;
-use kalanis\RemoteRequest\Schemas;
 
 
 class QueryMock extends Restful\Query
@@ -72,9 +72,9 @@ class QueryTest extends CommonTestClass
         return $libValue;
     }
 
-    protected function prepareProtocolSchema(string $host = 'unable.example', int $port = 80): Schemas\Tcp
+    protected function prepareProtocolSchema(string $host = 'unable.example', int $port = 80): Connection\Params\Tcp
     {
-        $request = new Schemas\Tcp();
+        $request = new Connection\Params\Tcp();
         return $request->setTarget($host, $port);
     }
 }

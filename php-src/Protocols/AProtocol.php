@@ -15,8 +15,8 @@ abstract class AProtocol
 {
     /** @var RemoteRequest\Connection\Processor */
     protected $processor = null;
-    /** @var RemoteRequest\Schemas\ASchema */
-    protected $target = null;
+    /** @var RemoteRequest\Connection\Params\AParams */
+    protected $params = null;
     /** @var Dummy\Query */
     protected $query = null;
     /** @var Dummy\Answer */
@@ -36,20 +36,20 @@ abstract class AProtocol
             ? ($long ? new RemoteRequest\Sockets\PfSocket($lang) : new RemoteRequest\Sockets\FSocket($lang))
             : (new RemoteRequest\Sockets\Stream($lang))->setContextOptions($contextOptions) ;
         $this->processor = new RemoteRequest\Connection\Processor($lang, $pointer);
-        $this->target = $this->loadTarget();
+        $this->params = $this->loadParams();
         $this->query = $this->loadQuery();
         $this->answer = $this->loadAnswer();
     }
 
-    abstract protected function loadTarget(): RemoteRequest\Schemas\ASchema;
+    abstract protected function loadParams(): RemoteRequest\Connection\Params\AParams;
 
     abstract protected function loadQuery(): Dummy\Query;
 
     abstract protected function loadAnswer(): Dummy\Answer;
 
-    public function getTarget(): RemoteRequest\Schemas\ASchema
+    public function getParams(): RemoteRequest\Connection\Params\AParams
     {
-        return $this->target;
+        return $this->params;
     }
 
     public function getQuery(): Dummy\Query
@@ -65,15 +65,16 @@ abstract class AProtocol
     public function getAnswer(): Dummy\Answer
     {
         $target = $this->query;
-        if (empty($this->target->getHost())
+        if (empty($this->params->getHost())
             && ($target instanceof RemoteRequest\Interfaces\ITarget)) {
-            $this->target->setRequest($target);
+            $this->params->setTarget($target->getHost(), $target->getPort());
         }
 
         $this->answer->setResponse(
             $this->processor
-                ->setProtocolSchema($this->target)
+                ->setConnectionParams($this->params)
                 ->setData($this->query)
+                ->process()
                 ->getResponse()
         );
         return $this->answer;

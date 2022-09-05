@@ -5,16 +5,16 @@ namespace BasicTests;
 
 use CommonTestClass;
 use kalanis\RemoteRequest\Connection;
+use kalanis\RemoteRequest\Interfaces;
 use kalanis\RemoteRequest\Protocols;
 use kalanis\RemoteRequest\RequestException;
-use kalanis\RemoteRequest\Schemas;
 use kalanis\RemoteRequest\Sockets;
 use kalanis\RemoteRequest\Translations;
 
 
 class EmptyTestSocket extends Sockets\ASocket
 {
-    protected function remotePointer(Schemas\ASchema $protocolWrapper)
+    protected function remotePointer(Interfaces\IConnectionParams $schema)
     {
         return null;
     }
@@ -23,7 +23,7 @@ class EmptyTestSocket extends Sockets\ASocket
 
 class ExceptionTestSocket extends Sockets\ASocket
 {
-    protected function remotePointer(Schemas\ASchema $protocolWrapper)
+    protected function remotePointer(Interfaces\IConnectionParams $schema)
     {
         throw new RequestException($this->lang->rrSocketCannotConnect());
     }
@@ -40,10 +40,10 @@ class PointersTest extends CommonTestClass
     {
         $lang = new Translations();
         $processor = new Connection\Processor($lang, new ExceptionTestSocket($lang));
-        $processor->setProtocolSchema(new Schemas\File());
+        $processor->setConnectionParams(new Connection\Params\File());
         $processor->setData(new Protocols\Dummy\Query());
         $this->expectException(RequestException::class);
-        $processor->getResponse(); // die
+        $processor->process(); // die
     }
 
     /**
@@ -54,9 +54,9 @@ class PointersTest extends CommonTestClass
     {
         $lang = new Translations();
         $processor = new Connection\Processor($lang, new EmptyTestSocket($lang));
-        $processor->setProtocolSchema(new Schemas\File());
+        $processor->setConnectionParams(new Connection\Params\File());
         $processor->setData(new Protocols\Dummy\Query());
         $this->expectException(RequestException::class);
-        $processor->getResponse(); // die
+        $processor->process(); // die
     }
 }

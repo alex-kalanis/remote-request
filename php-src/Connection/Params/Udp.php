@@ -1,6 +1,6 @@
 <?php
 
-namespace kalanis\RemoteRequest\Schemas;
+namespace kalanis\RemoteRequest\Connection\Params;
 
 
 use kalanis\RemoteRequest\Interfaces\ISchema;
@@ -9,16 +9,16 @@ use kalanis\RemoteRequest\Interfaces\ISchema;
 /**
  * Properties for query to remote server - layer 2 protocol UDP
  * Class Udp
- * @package kalanis\RemoteRequest\Schemas
+ * @package kalanis\RemoteRequest\Connection\Params
  */
-class Udp extends ASchema
+class Udp extends AParams
 {
     protected function getSchemaType(): string
     {
         return ISchema::SCHEMA_UDP;
     }
 
-    public function getProtocol(): int
+    public function getProtocolVersion(): int
     {
         return SOL_UDP;
     }

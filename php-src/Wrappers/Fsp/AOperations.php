@@ -40,7 +40,7 @@ class AOperations
             throw new RequestException($this->lang->rrFspWrapMalformedPath($path));
         }
         if ($setTarget) {
-            $this->runner->getSchema()->setTarget(
+            $this->runner->getConnectParams()->setTarget(
                 $host,
                 !empty($port) ? intval($port) : 21,
                 $this->runner->getTimeout($host)

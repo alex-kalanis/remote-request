@@ -27,7 +27,7 @@
             <directory suffix=".php">php-src/Connection</directory>
             <directory suffix=".php">php-src/Pointers</directory>
             <directory suffix=".php">php-src/Protocols</directory>
-            <directory suffix=".php">php-src/Schemas</directory>
+            <directory suffix=".php">php-src/Schemes</directory>
             <directory suffix=".php">php-src/Sockets</directory>
             <file>php-src/RequestException.php</file>
         </include>
@@ -43,7 +43,7 @@
             <directory suffix=".php">php-src/Connection</directory>
             <directory suffix=".php">php-src/Pointers</directory>
             <directory suffix=".php">php-src/Protocols</directory>
-            <directory suffix=".php">php-src/Schemas</directory>
+            <directory suffix=".php">php-src/Schemes</directory>
             <directory suffix=".php">php-src/Sockets</directory>
             <file>php-src/RequestException.php</file>
         </whitelist>

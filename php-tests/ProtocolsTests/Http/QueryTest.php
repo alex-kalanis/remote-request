@@ -4,8 +4,8 @@ namespace ProtocolsTests\Http;
 
 
 use CommonTestClass;
+use kalanis\RemoteRequest\Connection;
 use kalanis\RemoteRequest\Protocols\Http;
-use kalanis\RemoteRequest\Schemas;
 
 
 class QueryMock extends Http\Query
@@ -74,7 +74,7 @@ class QueryTest extends CommonTestClass
         $this->assertNotEquals(false, strpos(stream_get_contents($lib->getData(), -1, 0), 'some: value'));
         $lib->removeHeader('some');
         $this->assertFalse(strpos(stream_get_contents($lib->getData(), -1, 0), 'some: value')); // not found
-        $sett = new Schemas\Ssl();
+        $sett = new Connection\Params\Ssl();
         $sett->setTarget('elsewhere.example', 2121);
         $lib->setRequestSettings($sett);
         $this->assertEquals('elsewhere.example', $lib->getHost());
@@ -231,9 +231,9 @@ class QueryTest extends CommonTestClass
         return $libValue;
     }
 
-    protected function prepareProtocolSchema(string $host = 'unable.example', int $port = 80): Schemas\Tcp
+    protected function prepareProtocolSchema(string $host = 'unable.example', int $port = 80): Connection\Params\Tcp
     {
-        $request = new Schemas\Tcp();
+        $request = new Connection\Params\Tcp();
         return $request->setTarget($host, $port);
     }
 }
