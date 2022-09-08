@@ -1,5 +1,5 @@
-Remote Request 6
-================
+Remote Request
+==============
 
 [![Build Status](https://travis-ci.org/alex-kalanis/remote-request.svg?branch=master)](https://travis-ci.org/alex-kalanis/remote-request)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/alex-kalanis/remote-request/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/alex-kalanis/remote-request/?branch=master)
@@ -201,8 +201,8 @@ reason.
 Not PSR-7
 ---------
 
-This library is not compilant with PSR-7 and it has a few reasons. At first the PSR-7 has
-been made with HTTP in mind. Then it got streams and totally discarded the completition of
+This library is not compliant with PSR-7 and it has a few reasons. At first the PSR-7 has
+been made with HTTP in mind. Then it got streams and totally discarded the filling of the
 usually sent body. Some things are specific for HTTP and in other protocols are unwelcomed.
 I now write about schema:host:port and form inputs.
 
