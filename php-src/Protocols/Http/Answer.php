@@ -93,8 +93,7 @@ class Answer extends Protocols\Dummy\Answer
         if ($onlyHeader) {
             return;
         }
-        // phpstan is only blind...
-        $headerSize += mb_strlen(Protocols\Http::DELIMITER . Protocols\Http::DELIMITER); // @phpstan-ignore-line
+        $headerSize += mb_strlen(Protocols\Http::DELIMITER . Protocols\Http::DELIMITER);
         if ($this->bodySizeMightBeTooLarge()) {
             $this->processStreamBody($message, $headerSize);
         } else {
@@ -123,7 +122,7 @@ class Answer extends Protocols\Dummy\Answer
         $lines = explode(Protocols\Http::DELIMITER, $header);
         foreach ($lines as $line) {
             if (preg_match('/HTTP\/[^\s]+\s([0-9]{3})\s(.+)/ui', $line, $matches)) {
-                $this->code = $matches[1];
+                $this->code = intval($matches[1]);
             } else {
                 if (mb_strlen($line) && (false !== mb_strpos($line, ':'))) {
                     list($key, $value) = explode(': ', $line);

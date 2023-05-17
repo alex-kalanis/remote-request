@@ -1,6 +1,10 @@
 Changelog
 =========
 
+#### 5.0.1 - 2022-02-02
+
+* Updated test environment
+
 #### 5.0.0 - 2022-02-02
 
 * Add streams underneath

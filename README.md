@@ -1,7 +1,7 @@
 Remote Request
 ==============
 
-[![Build Status](https://travis-ci.org/alex-kalanis/remote-request.svg?branch=master)](https://travis-ci.org/alex-kalanis/remote-request)
+[![Build Status](https://app.travis-ci.com/alex-kalanis/remote-request.svg?branch=master)](https://app.travis-ci.com/github/alex-kalanis/remote-request)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/alex-kalanis/remote-request/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/alex-kalanis/remote-request/?branch=master)
 [![Latest Stable Version](https://poser.pugx.org/alex-kalanis/remote-request/v/stable.svg?v=1)](https://packagist.org/packages/alex-kalanis/remote-request)
 [![Minimum PHP Version](https://img.shields.io/badge/php-%3E%3D%207.3-8892BF.svg)](https://php.net/)
@@ -15,7 +15,7 @@ machines - more universal way than Curl and more verbose than file_get_contents(
 The basic philosophy of this package is keep it simple and work with bulks of data, not streams,
 although stream variables has been used for passing the options. So no things like EventLoop.
 
-# Installation
+## Installation
 
 ```json
 {
@@ -28,7 +28,7 @@ although stream variables has been used for passing the options. So no things li
 (Refer to [Composer Documentation](https://github.com/composer/composer/blob/master/doc/00-intro.md#introduction) if you are not
 familiar with composer)
 
-# Major changes
+## Major changes
 
  - Version 1 was initial
  - Version 2 separated network layers 2 and 3 - transportation and content protocols
@@ -37,10 +37,9 @@ familiar with composer)
  - Version 5 changed paths and namespaces, use streams and translations
  - Version 6 changed naming from schema to params and allow to use one connection for passing data there and back
 
-# Usages
+## Usages
 
-RemoteRequest FSocket/Stream
-------------------
+### RemoteRequest FSocket/Stream
 
 Basic data sending through network.  In this case using method FSocket. No basic dependencies,
 secured connection wants compilation php with ssl. Beware - in that case it's necessary
@@ -115,8 +114,7 @@ Next - there is possible by only exchange of result classes process XML or JSON.
 Operator (both FSocket and Stream) send agent "php-agent/1.3", but it is also possible
 to change it.
 
-Connection Params
---------
+## Connection Params
 
 Contains basic information about method of transferring on network layer level 2 and
 destined target of query - usually address and port. Also have other things necessary
@@ -144,8 +142,7 @@ Inside the params there is 2 for accessing internal sources. They are meant for 
 purposes. It is possible to test access to data and they did not need to be saved on external
 machine.
 
-Pointers
---------
+## Pointers
 
 Nothing so fancy, but just only sources of pointers from stream processors. Both on remote
 machine and/or local storage.
@@ -170,8 +167,7 @@ manipulation functions; even if that works for it.
 Local for testing purposes. It should got some wrapper from internals. Then it's possible
 to save data there which got only pointer from PHP.
 
-Protocols
----------
+## Protocols
 
 There is defined a few basic protocols and their helpers which makes life with them easier.
 On the top there is examples of processing HTTP and UDP. Also it contains a base for querying
@@ -190,16 +186,14 @@ which shows that there is no problem with making anything readable what is set i
 files in layers. You could find more about it online. Here is simple wrapper for PHP which
 allows you use it transparently.
 
-Tests
------
+## Tests
 
 Uses PhpUnit tests. Download Phpunit.phar, save it to the root, make it executable and run.
 There is excluded directory - Wrappers. They're here to access remote sources and simplify
 your life, so it isn't good idea to run tests on them. Also Helper isn't covered for same
 reason.
 
-Not PSR-7
----------
+## Not PSR-7
 
 This library is not compliant with PSR-7 and it has a few reasons. At first the PSR-7 has
 been made with HTTP in mind. Then it got streams and totally discarded the filling of the

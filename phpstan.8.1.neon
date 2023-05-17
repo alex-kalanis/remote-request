@@ -2,12 +2,12 @@ parameters:
 	level: 9
 	paths:
 		- 'php-src'
-	scanFiles:
-		- 'php-tests/CommonTestClass.php'
+#	scanFiles:
+#		- 'php-tests/CommonTestClass.php'
 	excludePaths:
 		- 'php-tests/_autoload.php'
 		- 'php-tests/_bootstrap.php'
-		- 'php-tests/CommonTestClass.php'
+#		- 'php-tests/CommonTestClass.php'
 	bootstrapFiles:
 		- 'php-tests/_autoload.php'
 	checkGenericClassInNonGenericObjectType: false
@@ -18,3 +18,5 @@ parameters:
 		- '#should return resource but returns Socket.#'
 		# solved by internal logic - for request there is always lang set
 		- '#Static property kalanis\\RemoteRequest\\Helper\:\:\$lang#'
+		# quality WTF - strval, intval
+		- '#Parameter \#1 \$va[rl]u?e? of function [si][tn][rt]val expects#'
