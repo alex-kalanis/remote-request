@@ -48,7 +48,7 @@ trait TChecksum
      */
     protected function computeCheckSum(): int
     {
-        $sum = array_reduce(str_split($this->getChecksumPacket()), [$this, 'sumBytes'], $this->getInitialSumChunk());
+        $sum = array_reduce((array) str_split($this->getChecksumPacket()), [$this, 'sumBytes'], $this->getInitialSumChunk());
         return ($sum + ($sum >> 8)) & 0xff;
     }
 

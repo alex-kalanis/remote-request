@@ -27,7 +27,7 @@ class Dir extends AOperations
         return true;
     }
 
-    public function open(string $path, int $options): bool
+    public function open(string $path, /** @scrutinizer ignore-unused */ int $options): bool
     {
         $this->path = $path;
         return true;
@@ -59,7 +59,7 @@ class Dir extends AOperations
      * @throws RemoteRequest\RequestException
      * @return bool
      */
-    public function make(string $path, int $mode, int $options): bool
+    public function make(string $path, /** @scrutinizer ignore-unused */ int $mode, /** @scrutinizer ignore-unused */ int $options): bool
     {
         $mkDir = new Protocol\Query\MakeDir($this->runner->getQuery());
         $mkDir->setDirPath($this->parsePath($path));
@@ -120,7 +120,7 @@ class Dir extends AOperations
      * @throws RemoteRequest\RequestException
      * @return bool
      */
-    public function remove(string $path, int $options): bool
+    public function remove(string $path, /** @scrutinizer ignore-unused */ int $options): bool
     {
         $delDir = new Protocol\Query\DelDir($this->runner->getQuery());
         $delDir->setDirPath($this->parsePath($path));
@@ -137,7 +137,7 @@ class Dir extends AOperations
      * @throws RemoteRequest\RequestException
      * @return array<int, int>
      */
-    public function stats(string $path, int $flags): array
+    public function stats(string $path, /** @scrutinizer ignore-unused */ int $flags): array
     {
         $parsedPath = $this->parsePath($path);
         $slashPos = strrpos($path, '/');
@@ -218,7 +218,7 @@ class Dir extends AOperations
      * @return int
      * @link https://www.php.net/manual/en/function.stat.php
      */
-    protected function parseMode(?Protocol\Answer\Protection $info, ?int $mode): int
+    protected function parseMode(/** @scrutinizer ignore-unused */ ?Protocol\Answer\Protection $info, ?int $mode): int
     {
         switch ($mode) {
             case Protocol::RDTYPE_DIR:

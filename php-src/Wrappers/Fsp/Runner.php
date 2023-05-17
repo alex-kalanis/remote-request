@@ -72,7 +72,7 @@ class Runner
         return $this->params;
     }
 
-    public function getTimeout(string $host): int
+    public function getTimeout(/** @scrutinizer ignore-unused */ string $host): int
     {
         return 10;
         // this one will be based on info from server session

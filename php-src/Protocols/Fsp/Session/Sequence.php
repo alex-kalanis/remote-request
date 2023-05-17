@@ -39,7 +39,7 @@ class Sequence
     public function generateSequence(): self
     {
         $this->key = $this->getRandInitial();
-        $this->created = microtime(true);
+        $this->created = doubleval(microtime(true));
         return $this;
     }
 
@@ -72,7 +72,7 @@ class Sequence
 
     public function updateSequence(): self
     {
-        $this->done = microtime(true);
+        $this->done = doubleval(microtime(true));
         $this->length = $this->done - $this->created;
         return $this;
     }

@@ -1,9 +1,14 @@
 Changelog
 =========
 
-#### 5.0.1 - 2022-02-02
+#### 6.0.1 - 2023-05-17
 
 * Updated test environment
+
+#### 6.0.0 - 2022-09-08
+
+* Schema is now Connection params and passing through interface
+* Now can use one connection to pass data there and back
 
 #### 5.0.0 - 2022-02-02
 

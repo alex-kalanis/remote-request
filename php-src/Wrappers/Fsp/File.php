@@ -30,7 +30,7 @@ class File extends AOperations
      * @param int $cast_as
      * @return resource|bool
      */
-    public function stream_cast(int $cast_as)
+    public function stream_cast(/** @scrutinizer ignore-unused */ int $cast_as)
     {
         return false;
     }
@@ -60,7 +60,7 @@ class File extends AOperations
         return false;
     }
 
-    public function stream_lock(int $operation): bool
+    public function stream_lock(/** @scrutinizer ignore-unused */ int $operation): bool
     {
         return false;
     }
@@ -71,7 +71,7 @@ class File extends AOperations
      * @param mixed $var
      * @return bool
      */
-    public function stream_metadata(string $path, int $option, $var): bool
+    public function stream_metadata(/** @scrutinizer ignore-unused */ string $path, /** @scrutinizer ignore-unused */ int $option, $var): bool
     {
         return false;
     }
@@ -166,7 +166,7 @@ class File extends AOperations
         }
     }
 
-    public function stream_set_option(int $option, int $arg1, int $arg2): bool
+    public function stream_set_option(/** @scrutinizer ignore-unused */ int $option, /** @scrutinizer ignore-unused */ int $arg1, /** @scrutinizer ignore-unused */ int $arg2): bool
     {
         return false;
     }
@@ -186,7 +186,7 @@ class File extends AOperations
         return $this->position;
     }
 
-    public function stream_truncate(int $new_size): bool
+    public function stream_truncate(/** @scrutinizer ignore-unused */ int $new_size): bool
     {
         return false;
     }

@@ -25,9 +25,7 @@ class Socket extends ASocket
     {
         // Make the request to the server
         // If possible, securely post using HTTPS, your PHP server will need to be SSL enabled
-        $filePointer = socket_create(AF_INET, SOCK_DGRAM, $params->getProtocolVersion());
-
-        if (!$filePointer) {
+        if (!$filePointer = socket_create(AF_INET, SOCK_DGRAM, $params->getProtocolVersion())) {
             $errorCode = socket_last_error();
             $errorMessage = socket_strerror($errorCode);
 

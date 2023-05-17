@@ -25,9 +25,7 @@ class FSocket extends ASocket
         // Make the request to the server
         // If possible, securely post using HTTPS, your PHP server will need to be SSL enabled
         $timeout = is_null($params->getTimeout()) ? 10.0 : floatval($params->getTimeout()); // do NOT ask - php7 + phpstan
-        $filePointer = fsockopen($params->getSchema() . $params->getHost(), intval($params->getPort()), $errno, $errStr, $timeout);
-
-        if (!$filePointer) {
+        if (!$filePointer = fsockopen($params->getSchema() . $params->getHost(), intval($params->getPort()), $errno, $errStr, $timeout)) {
             throw new RequestException($this->lang->rrSocketCannotConnect());
         }
         if (!is_null($params->getTimeout())) {

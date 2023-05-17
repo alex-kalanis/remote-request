@@ -23,8 +23,7 @@ class SharedInternal extends ASocket
      */
     protected function remotePointer(IConnectionParams $params)
     {
-        $filePointer = fopen($params->getSchema() . $params->getHost(), 'r+');
-        if (!$filePointer) {
+        if (!$filePointer = fopen($params->getSchema() . $params->getHost(), 'r+')) {
             throw new RequestException($this->lang->rrSocketCannotConnect());
         }
         return $filePointer;

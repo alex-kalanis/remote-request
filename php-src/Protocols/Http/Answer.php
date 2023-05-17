@@ -103,7 +103,7 @@ class Answer extends Protocols\Dummy\Answer
 
     protected function processStringResponse(string $data): void
     {
-        if (false !== $split = mb_strpos($data, Protocols\Http::DELIMITER . Protocols\Http::DELIMITER)) {
+        if (false !== mb_strpos($data, Protocols\Http::DELIMITER . Protocols\Http::DELIMITER)) {
             list($header, $body) = explode(Protocols\Http::DELIMITER . Protocols\Http::DELIMITER, $data, 2);
             $this->parseHeader($header);
             if ($this->bodySizeMightBeTooLarge()) {
