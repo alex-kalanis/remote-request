@@ -4,6 +4,7 @@ namespace kalanis\RemoteRequest\Protocols\Http\Query;
 
 
 use kalanis\RemoteRequest\Protocols\Helper;
+use kalanis\RemoteRequest\RequestException;
 
 
 /**
@@ -40,6 +41,7 @@ class File extends Value
     }
 
     /**
+     * @throws RequestException
      * @return resource
      */
     public function getStream()

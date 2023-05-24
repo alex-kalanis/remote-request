@@ -65,7 +65,7 @@ class Dir extends AOperations
         $mkDir->setDirPath($this->parsePath($path));
         $answer = $this->runner->setActionQuery($mkDir)->process();
         if (!$answer instanceof Protocol\Answer\Protection) {
-            throw new RemoteRequest\RequestException($this->lang->rrFspBadMkDir(get_class($answer)));
+            throw new RemoteRequest\RequestException($this->getRRLang()->rrFspBadMkDir(get_class($answer)));
         }
         // TODO: send protection data - set from $mode
 //        $this->rights($path, $mode[0], true);
@@ -89,7 +89,7 @@ class Dir extends AOperations
         ;
         $answer = $this->runner->setActionQuery($protect)->process();
         if (!$answer instanceof Protocol\Answer\Protection) {
-            throw new RemoteRequest\RequestException($this->lang->rrFspBadProtection(get_class($answer)));
+            throw new RemoteRequest\RequestException($this->getRRLang()->rrFspBadProtection(get_class($answer)));
         }
         return true;
     }
@@ -109,7 +109,7 @@ class Dir extends AOperations
         ;
         $answer = $this->runner->setActionQuery($rename)->process();
         if (!$answer instanceof Protocol\Answer\Nothing) {
-            throw new RemoteRequest\RequestException($this->lang->rrFspBadRename(get_class($answer)));
+            throw new RemoteRequest\RequestException($this->getRRLang()->rrFspBadRename(get_class($answer)));
         }
         return true;
     }
@@ -126,7 +126,7 @@ class Dir extends AOperations
         $delDir->setDirPath($this->parsePath($path));
         $answer = $this->runner->setActionQuery($delDir)->process();
         if (!$answer instanceof Protocol\Answer\Nothing) {
-            throw new RemoteRequest\RequestException($this->lang->rrFspBadRmDir(get_class($answer)));
+            throw new RemoteRequest\RequestException($this->getRRLang()->rrFspBadRmDir(get_class($answer)));
         }
         return true;
     }
@@ -142,7 +142,7 @@ class Dir extends AOperations
         $parsedPath = $this->parsePath($path);
         $slashPos = strrpos($path, '/');
         if (false === $slashPos) {
-            throw new RemoteRequest\RequestException($this->lang->rrFspBadParsedPath($parsedPath));
+            throw new RemoteRequest\RequestException($this->getRRLang()->rrFspBadParsedPath($parsedPath));
         }
         $fileName = substr($path, $slashPos + 1);
         $dirPath = substr($path, 0, $slashPos);
@@ -175,7 +175,7 @@ class Dir extends AOperations
                 ];
             }
         }
-        throw new RemoteRequest\RequestException($this->lang->rrFspPathNotFound($path));
+        throw new RemoteRequest\RequestException($this->getRRLang()->rrFspPathNotFound($path));
     }
 
     /**
@@ -205,7 +205,7 @@ class Dir extends AOperations
         $rdDir->setDirPath($this->parsePath($path))->setPosition($this->seek);
         $answer = $this->runner->setActionQuery($rdDir)->process();
         if (!$answer instanceof Protocol\Answer\GetDir) {
-            throw new RemoteRequest\RequestException($this->lang->rrFspBadMkDir(get_class($answer)));
+            throw new RemoteRequest\RequestException($this->getRRLang()->rrFspBadMkDir(get_class($answer)));
         }
         $answer->process();
         return $answer;
@@ -229,7 +229,7 @@ class Dir extends AOperations
             case Protocol::RDTYPE_LINK:
                 return 0120644;
             case Protocol::RDTYPE_END:
-                throw new RemoteRequest\RequestException($this->lang->rrFspFileCannotCont());
+                throw new RemoteRequest\RequestException($this->getRRLang()->rrFspFileCannotCont());
             default:
                 return 0;
         }

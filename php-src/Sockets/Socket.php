@@ -29,7 +29,7 @@ class Socket extends ASocket
             $errorCode = socket_last_error();
             $errorMessage = socket_strerror($errorCode);
 
-            throw new RequestException($this->lang->rrSocketCannotConnect2($errorMessage), $errorCode);
+            throw new RequestException($this->getRRLang()->rrSocketCannotConnect2($errorMessage), $errorCode);
         }
         return $filePointer;
     }

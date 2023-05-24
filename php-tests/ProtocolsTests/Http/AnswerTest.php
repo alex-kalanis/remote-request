@@ -110,7 +110,7 @@ class AnswerTest extends CommonTestClass
      */
     public function testSimple(): void
     {
-        $method = new AnswerMock(new Translations());
+        $method = new AnswerMock();
         $lib = $this->prepareSimple($method->getResponseSimple());
         $this->assertEquals(900, $lib->getCode());
         $this->assertEquals('abcdefghijkl', $lib->getContent());
@@ -121,7 +121,7 @@ class AnswerTest extends CommonTestClass
      */
     public function testSimpleStream(): void
     {
-        $method = new AnswerMock(new Translations());
+        $method = new AnswerMock();
         $lib = $this->prepareSimple(CommonTestClass::stringToResource($method->getResponseSimple()));
         $this->assertEquals(900, $lib->getCode());
         $this->assertEquals('abcdefghijkl', $lib->getContent());
@@ -132,7 +132,7 @@ class AnswerTest extends CommonTestClass
      */
     public function testEmpty(): void
     {
-        $method = new AnswerMock(new Translations());
+        $method = new AnswerMock();
         $lib = $this->prepareSimple($method->getResponseEmpty());
         $this->assertEquals(901, $lib->getCode());
         $this->assertEquals('', $lib->getContent());
@@ -143,7 +143,7 @@ class AnswerTest extends CommonTestClass
      */
     public function testEmptyStream(): void
     {
-        $method = new AnswerMock(new Translations());
+        $method = new AnswerMock();
         $lib = $this->prepareSimple(CommonTestClass::stringToResource($method->getResponseEmpty()));
         $this->assertEquals(901, $lib->getCode());
         $this->assertEquals('', $lib->getContent());
@@ -154,7 +154,7 @@ class AnswerTest extends CommonTestClass
      */
     public function testHeaders(): void
     {
-        $method = new AnswerMock(new Translations());
+        $method = new AnswerMock();
         $lib = $this->prepareSimple($method->getResponseHeaders());
         $this->assertEquals(902, $lib->getCode());
         $this->assertEquals('abcdefghijkl', $lib->getContent());
@@ -174,7 +174,7 @@ class AnswerTest extends CommonTestClass
      */
     public function testChunked(): void
     {
-        $method = new AnswerMock(new Translations());
+        $method = new AnswerMock();
         $lib = $this->prepareSimple($method->getResponseChunked());
         $this->assertEquals(903, $lib->getCode());
         $this->assertEquals("Wikipedia in\r\n\r\nchunks.", $lib->getContent());
@@ -187,7 +187,7 @@ class AnswerTest extends CommonTestClass
      */
     public function testDeflated(): void
     {
-        $method = new AnswerMock(new Translations());
+        $method = new AnswerMock();
         $lib = $this->prepareSimple($method->getResponseDeflated());
         $this->assertEquals(904, $lib->getCode());
         $this->assertEquals("abcdefghijklmnopqrstuvwxyz012456789", $lib->getContent());
@@ -200,7 +200,7 @@ class AnswerTest extends CommonTestClass
      */
     public function testLargeHeader(): void
     {
-        $method = new AnswerMock(new Translations());
+        $method = new AnswerMock();
         $this->expectException(RequestException::class);
         $this->prepareSimple(CommonTestClass::stringToResource($method->getResponseLargeHeader()));
     }
@@ -210,9 +210,8 @@ class AnswerTest extends CommonTestClass
      */
     public function testAuthBasic(): void
     {
-        $lang = new Translations();
-        $method = new AnswerMock($lang);
-        $lib = (new Http\Answer\AuthDigest($lang))->setResponse($method->getResponseAuthDigest());
+        $method = new AnswerMock();
+        $lib = (new Http\Answer\AuthDigest())->setResponse($method->getResponseAuthDigest());
         $lib->processContent();
         $this->assertEquals(401, $lib->getCode());
         $this->assertEquals('Digest', $lib->getAuthType());
@@ -228,9 +227,8 @@ class AnswerTest extends CommonTestClass
      */
     public function testAuthString(): void
     {
-        $lang = new Translations();
-        $method = new AnswerMock($lang);
-        $lib = (new XAuthDigest($lang))->setResponse($method->getResponseAuthDigest());
+        $method = new AnswerMock();
+        $lib = (new XAuthDigest())->setResponse($method->getResponseAuthDigest());
         $lib->processContent();
         $this->assertEquals(401, $lib->getCode());
         $this->assertEquals('Digest', $lib->getAuthType());
@@ -246,9 +244,8 @@ class AnswerTest extends CommonTestClass
      */
     public function testAuthStream(): void
     {
-        $lang = new Translations();
-        $method = new AnswerMock($lang);
-        $lib = (new XAuthDigest($lang))->setResponse(CommonTestClass::stringToResource($method->getResponseAuthDigest()));
+        $method = new AnswerMock();
+        $lib = (new XAuthDigest())->setResponse(CommonTestClass::stringToResource($method->getResponseAuthDigest()));
         $lib->processContent();
         $this->assertEquals(401, $lib->getCode());
         $this->assertEquals('Digest', $lib->getAuthType());
@@ -260,7 +257,7 @@ class AnswerTest extends CommonTestClass
     }
 
     /**
-     * @param string|resource $content
+     * @param resource|string|null $content
      * @throws RequestException
      * @return Http\Answer
      */

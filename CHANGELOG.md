@@ -1,6 +1,13 @@
 Changelog
 =========
 
+#### 6.1.0 - 2023-05-25
+
+* Params ordering in constructors, Translations are not mandatory anymore in the most cases
+* Getter for remote query object
+* Segment length as result of method, not constant
+* Classes lookup with ::class
+
 #### 6.0.1 - 2023-05-17
 
 * Updated test environment

@@ -14,7 +14,7 @@ use kalanis\RemoteRequest\Interfaces\ISocket;
  */
 class Factory
 {
-    public static function getPointer(IRRTranslations $lang, int $type = ISocket::SOCKET_STREAM): ASocket
+    public static function getPointer(int $type = ISocket::SOCKET_STREAM, ?IRRTranslations $lang = null): ASocket
     {
         switch ($type) {
             case ISocket::SOCKET_INTERNAL:

@@ -9,7 +9,6 @@ use kalanis\RemoteRequest\Interfaces;
 use kalanis\RemoteRequest\Protocols;
 use kalanis\RemoteRequest\RequestException;
 use kalanis\RemoteRequest\Sockets;
-use kalanis\RemoteRequest\Translations;
 
 
 class EmptyTestSocket extends Sockets\ASocket
@@ -25,7 +24,7 @@ class ExceptionTestSocket extends Sockets\ASocket
 {
     protected function remotePointer(Interfaces\IConnectionParams $schema)
     {
-        throw new RequestException($this->lang->rrSocketCannotConnect());
+        throw new RequestException($this->getRRLang()->rrSocketCannotConnect());
     }
 }
 
@@ -38,8 +37,7 @@ class PointersTest extends CommonTestClass
      */
     public function testCallException(): void
     {
-        $lang = new Translations();
-        $processor = new Connection\Processor($lang, new ExceptionTestSocket($lang));
+        $processor = new Connection\Processor(new ExceptionTestSocket());
         $processor->setConnectionParams(new Connection\Params\File());
         $processor->setData(new Protocols\Dummy\Query());
         $this->expectException(RequestException::class);
@@ -52,8 +50,7 @@ class PointersTest extends CommonTestClass
      */
     public function testCallNoPointer(): void
     {
-        $lang = new Translations();
-        $processor = new Connection\Processor($lang, new EmptyTestSocket($lang));
+        $processor = new Connection\Processor(new EmptyTestSocket());
         $processor->setConnectionParams(new Connection\Params\File());
         $processor->setData(new Protocols\Dummy\Query());
         $this->expectException(RequestException::class);

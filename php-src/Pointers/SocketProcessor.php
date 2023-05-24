@@ -12,18 +12,15 @@ use kalanis\RemoteRequest\RequestException;
  * Class SocketProcessor
  * @package kalanis\RemoteRequest\Pointers
  * Query to the remote server - read into provided output
+ * @codeCoverageIgnore because accessing remote source via internal socket
  */
 class SocketProcessor extends Processor
 {
-    /** @var int how many bytes for load split */
-    const PART_SPLIT = 2045;
-
     /**
      * @param resource $filePointer
      * @param IConnectionParams $params
      * @throws RequestException
      * @return $this
-     * @codeCoverageIgnore because accessing remote source via internal socket
      */
     protected function writeRequest($filePointer, IConnectionParams $params): parent
     {
@@ -32,7 +29,7 @@ class SocketProcessor extends Processor
         if (!$result) {
             $errorCode = socket_last_error();
             $errorMessage = socket_strerror($errorCode);
-            throw new RequestException($this->lang->rrPointSentProblem($errorMessage), $errorCode);
+            throw new RequestException($this->getRRLang()->rrPointSentProblem($errorMessage), $errorCode);
         }
         return $this;
     }
@@ -41,17 +38,16 @@ class SocketProcessor extends Processor
      * @param resource $filePointer
      * @throws RequestException
      * @return $this
-     * @codeCoverageIgnore because accessing remote source via internal socket
      */
     protected function readResponse($filePointer): parent
     {
         $this->remoteResponse = null;
         $reply = null;
-        $result = socket_recv($filePointer, $reply , static::PART_SPLIT , MSG_WAITALL);
+        $result = socket_recv($filePointer, $reply, $this->bytesPerSegment(), MSG_WAITALL);
         if (false === $result) { // because could return size 0 bytes
             $errorCode = socket_last_error();
             $errorMessage = socket_strerror($errorCode);
-            throw new RequestException($this->lang->rrPointReceivedProblem($errorMessage), $errorCode);
+            throw new RequestException($this->getRRLang()->rrPointReceivedProblem($errorMessage), $errorCode);
         }
         if (!is_null($reply)) {
             $response = Helper::getTempStorage();
@@ -60,5 +56,14 @@ class SocketProcessor extends Processor
             $this->remoteResponse = $response;
         }
         return $this;
+    }
+
+    /**
+     * How many bytes of loaded segment
+     * @return int
+     */
+    protected function bytesPerSegment(): int
+    {
+        return 2045;
     }
 }

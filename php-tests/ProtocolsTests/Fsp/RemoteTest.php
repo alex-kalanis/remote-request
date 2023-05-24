@@ -26,14 +26,14 @@ class RemoteTest extends CommonTestClass
         return;
 
         $lang = new Translations();
-        $params = Connection\Params\Factory::getForSchema($lang, Interfaces\ISchema::SCHEMA_UDP);
+        $params = Connection\Params\Factory::getForSchema(Interfaces\ISchema::SCHEMA_UDP, $lang);
 //        $params->setTarget('ftp.vslib.cz', 21);
 //        $params->setTarget('www.720k.net', 21, 60);
 //        $params->setTarget('fsp.720k.net', 21, 60);
         $params->setTarget('10.0.0.30', 54321, 10);
-        $processor = new Connection\Processor($lang, new Sockets\Socket($lang));
+        $processor = new Connection\Processor(new Sockets\Socket());
         $query = new Fsp\Query();
-        $answer = new Fsp\Answer($lang);
+        $answer = new Fsp\Answer();
         $answer->canDump = true;
         $version = new Fsp\Query\Version($query);
         $version->setKey(32)->setSequence(16)->compile();

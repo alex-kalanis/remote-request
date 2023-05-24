@@ -27,7 +27,7 @@ class Http extends AProtocol
 
     protected function loadAnswer(): RemoteRequest\Protocols\Dummy\Answer
     {
-        $lib = new Http\Answer($this->lang);
+        $lib = new Http\Answer($this->rrLang);
         $lib->addStringDecoding(new Http\Answer\DecodeStrings\Chunked());
         $lib->addStringDecoding(new Http\Answer\DecodeStrings\Zipped());
         $lib->addStringDecoding(new Http\Answer\DecodeStrings\Compressed());

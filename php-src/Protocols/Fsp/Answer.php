@@ -6,6 +6,7 @@ namespace kalanis\RemoteRequest\Protocols\Fsp;
 use kalanis\RemoteRequest\Interfaces\IRRTranslations;
 use kalanis\RemoteRequest\Protocols;
 use kalanis\RemoteRequest\RequestException;
+use kalanis\RemoteRequest\Traits\TLang;
 
 
 /**
@@ -15,6 +16,7 @@ use kalanis\RemoteRequest\RequestException;
  */
 class Answer extends Protocols\Dummy\Answer
 {
+    use TLang;
     use Traits\THeader;
     use Traits\TChecksum;
 
@@ -37,14 +39,12 @@ class Answer extends Protocols\Dummy\Answer
     /** @var string */
     protected $extra = '';
 
-    /** @var IRRTranslations */
-    protected $lang = null;
     /** @var bool */
     public $canDump = false; // for dump info about checksums
 
-    public function __construct(IRRTranslations $lang)
+    public function __construct(?IRRTranslations $lang = null)
     {
-        $this->lang = $lang;
+        $this->setRRLang($lang);
     }
 
     /**
@@ -69,10 +69,10 @@ class Answer extends Protocols\Dummy\Answer
         // @phpstan-ignore-next-line
         $loadSize = is_resource($this->body) ? fstat($this->body)['size'] : strlen(strval($this->body));
         if (Protocols\Fsp::HEADER_SIZE > $loadSize) {
-            throw new RequestException($this->lang->rrFspResponseShort($loadSize));
+            throw new RequestException($this->getRRLang()->rrFspResponseShort($loadSize));
         }
         if (Protocols\Fsp::MAX_PACKET_SIZE < $loadSize) {
-            throw new RequestException($this->lang->rrFspResponseLarge($loadSize));
+            throw new RequestException($this->getRRLang()->rrFspResponseLarge($loadSize));
         }
     }
 
@@ -121,7 +121,7 @@ class Answer extends Protocols\Dummy\Answer
         }
         // @codeCoverageIgnoreEnd
         if ($checksum != $this->headChecksum ) {
-            throw new RequestException($this->lang->rrFspInvalidChecksum($checksum, $this->headChecksum));
+            throw new RequestException($this->getRRLang()->rrFspInvalidChecksum($checksum, $this->headChecksum));
         }
     }
 

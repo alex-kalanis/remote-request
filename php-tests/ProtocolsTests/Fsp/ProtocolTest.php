@@ -7,7 +7,6 @@ use CommonTestClass;
 use kalanis\RemoteRequest\Connection;
 use kalanis\RemoteRequest\Protocols\Fsp;
 use kalanis\RemoteRequest\RequestException;
-use kalanis\RemoteRequest\Translations;
 
 
 class ProtocolQueryMock
@@ -163,9 +162,8 @@ class ProtocolTest extends CommonTestClass
      */
     public function testAnswerSimple(): void
     {
-        $lang = new Translations();
-        $lib = new ProcessorMock($lang);
-        $read = new Fsp\Answer($lang);
+        $lib = new ProcessorMock();
+        $read = new Fsp\Answer();
 //        $read->canDump = true;
         $read->setResponse($lib->getResponseSimple())->process();
         $this->assertEquals(Fsp::CC_GET_FILE, $read->getCommand());
@@ -180,9 +178,8 @@ class ProtocolTest extends CommonTestClass
      */
     public function testAnswerFailChecksumSimple(): void
     {
-        $lang = new Translations();
-        $lib = new ProcessorMock($lang);
-        $read = new Fsp\Answer($lang);
+        $lib = new ProcessorMock();
+        $read = new Fsp\Answer();
         $this->expectException(RequestException::class);
         $read->setResponse($lib->getResponseFailedChk())->process();
     }
@@ -192,9 +189,8 @@ class ProtocolTest extends CommonTestClass
      */
     public function testAnswerShort(): void
     {
-        $lang = new Translations();
-        $mock = new ProcessorMock($lang);
-        $read = new Fsp\Answer($lang);
+        $mock = new ProcessorMock();
+        $read = new Fsp\Answer();
         $this->expectException(RequestException::class);
         $read->setResponse($mock->getResponseShort())->process();
         Fsp\Answer\AnswerFactory::getObject($read)->process();
@@ -206,9 +202,8 @@ class ProtocolTest extends CommonTestClass
      */
     public function testAnswerLong(): void
     {
-        $lang = new Translations();
-        $mock = new ProcessorMock($lang);
-        $read = new Fsp\Answer($lang);
+        $mock = new ProcessorMock();
+        $read = new Fsp\Answer();
         $this->expectException(RequestException::class);
         $read->setResponse($mock->getResponseLong())->process();
         Fsp\Answer\AnswerFactory::getObject($read)->process();
@@ -221,9 +216,8 @@ class ProtocolTest extends CommonTestClass
      */
     public function testAnswerReal(): void
     {
-        $lang = new Translations();
-        $lib = new ProcessorMock($lang);
-        $read = new Fsp\Answer($lang);
+        $lib = new ProcessorMock();
+        $read = new Fsp\Answer();
 //        $read->canDump = true;
         $read->setResponse($lib->getResponseReal())->process();
         $this->assertEquals(Fsp::CC_VERSION, $read->getCommand());

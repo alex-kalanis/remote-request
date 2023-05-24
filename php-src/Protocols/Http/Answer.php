@@ -6,6 +6,7 @@ namespace kalanis\RemoteRequest\Protocols\Http;
 use kalanis\RemoteRequest\Interfaces\IRRTranslations;
 use kalanis\RemoteRequest\Protocols;
 use kalanis\RemoteRequest\RequestException;
+use kalanis\RemoteRequest\Traits\TLang;
 
 
 /**
@@ -18,11 +19,10 @@ use kalanis\RemoteRequest\RequestException;
  */
 class Answer extends Protocols\Dummy\Answer
 {
+    use TLang;
     use Answer\DecodeStreams\TDecoding;
     use Answer\DecodeStrings\TDecoding;
 
-    /** @var IRRTranslations */
-    protected $lang = null;
     /** @var string[][] */
     protected $headers = [];
     /** @var int */
@@ -36,9 +36,9 @@ class Answer extends Protocols\Dummy\Answer
     /** @var int */
     protected $seekPos = 1000; // must be reasonably lower than seekSize - because it's necessary to find delimiters even on edges
 
-    public function __construct(IRRTranslations $lang)
+    public function __construct(?IRRTranslations $lang = null)
     {
-        $this->lang = $lang;
+        $this->setRRLang($lang);
     }
 
     protected function clearValues(): void
@@ -86,7 +86,7 @@ class Answer extends Protocols\Dummy\Answer
             $onlyHeader = true;
         }
         if ($headerSize > $this->maxHeaderSize) {
-            throw new RequestException($this->lang->rrHttpAnswerHeaderTooLarge($this->maxHeaderSize, $headerSize));
+            throw new RequestException($this->getRRLang()->rrHttpAnswerHeaderTooLarge($this->maxHeaderSize, $headerSize));
         }
         rewind($message);
         $this->parseHeader(strval(stream_get_contents($message, $headerSize, 0)));
@@ -101,6 +101,10 @@ class Answer extends Protocols\Dummy\Answer
         }
     }
 
+    /**
+     * @param string $data
+     * @throws RequestException
+     */
     protected function processStringResponse(string $data): void
     {
         if (false !== mb_strpos($data, Protocols\Http::DELIMITER . Protocols\Http::DELIMITER)) {
@@ -143,6 +147,7 @@ class Answer extends Protocols\Dummy\Answer
     /**
      * @param resource $body
      * @param int $headerSize
+     * @throws RequestException
      */
     protected function processStreamBody($body, int $headerSize): void
     {
@@ -152,6 +157,10 @@ class Answer extends Protocols\Dummy\Answer
         $this->body = $this->processStreamDecode($res);
     }
 
+    /**
+     * @param string $body
+     * @throws RequestException
+     */
     protected function processStreamBodyFromString(string $body): void
     {
         $res = Protocols\Helper::getTempStorage();
@@ -160,6 +169,10 @@ class Answer extends Protocols\Dummy\Answer
         $this->body = $this->processStreamDecode($res);
     }
 
+    /**
+     * @param string $body
+     * @throws RequestException
+     */
     protected function processStringBody(string $body): void
     {
         $res = Protocols\Helper::getMemStorage();

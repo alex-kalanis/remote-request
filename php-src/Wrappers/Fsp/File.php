@@ -45,7 +45,7 @@ class File extends AOperations
             $inFile->setFilePath($this->parsePath($this->path));
             $answer = $this->runner->setActionQuery($inFile)->process();
             if (!$answer instanceof Protocol\Answer\Nothing) {
-                throw new RemoteRequest\RequestException($this->lang->rrFspBadResponsePublish(get_class($answer)));
+                throw new RemoteRequest\RequestException($this->getRRLang()->rrFspBadResponsePublish(get_class($answer)));
             }
         }
     }
@@ -110,7 +110,7 @@ class File extends AOperations
         if (in_array($mod, ['w', 'a', 'x', 'c'])) {
             return true;
         }
-        throw new RemoteRequest\RequestException($this->lang->rrFspBadFileMode($mode));
+        throw new RemoteRequest\RequestException($this->getRRLang()->rrFspBadFileMode($mode));
     }
 
     /**
@@ -124,10 +124,10 @@ class File extends AOperations
         $readFile->setFilePath($this->parsePath($this->path))->setOffset($this->position)->setLimit($count);
         $answer = $this->runner->setActionQuery($readFile)->process();
         if (!$answer instanceof Protocol\Answer\GetFile) {
-            throw new RemoteRequest\RequestException($this->lang->rrFspBadResponseRead(get_class($answer)));
+            throw new RemoteRequest\RequestException($this->getRRLang()->rrFspBadResponseRead(get_class($answer)));
         }
         if ($answer->getSeek() != $this->position) {
-            throw new RemoteRequest\RequestException($this->lang->rrFspReadWrongSeek($this->position, $answer->getSeek()));
+            throw new RemoteRequest\RequestException($this->getRRLang()->rrFspReadWrongSeek($this->position, $answer->getSeek()));
         }
         $ret = $answer->getContent();
         $this->position += strlen($ret);
@@ -199,17 +199,17 @@ class File extends AOperations
     public function stream_write(string $data): int
     {
         if (!$this->writeMode) {
-            throw new RemoteRequest\RequestException($this->lang->rrFspFileCannotWrite());
+            throw new RemoteRequest\RequestException($this->getRRLang()->rrFspFileCannotWrite());
         }
         $upFile = new Protocol\Query\Upload($this->runner->getQuery());
         $upFile->setFilePath($this->parsePath($this->path))->setOffset($this->position)->setData($data);
         $answer = $this->runner->setActionQuery($upFile)->process();
         if (!$answer instanceof Protocol\Answer\Upload) {
-            throw new RemoteRequest\RequestException($this->lang->rrFspBadResponseUpload(get_class($answer)));
+            throw new RemoteRequest\RequestException($this->getRRLang()->rrFspBadResponseUpload(get_class($answer)));
         }
         $dataLen = strlen($data);
         if ($answer->getSeek() != $this->position + $dataLen) {
-            throw new RemoteRequest\RequestException($this->lang->rrFspWriteWrongSeek($this->position + $dataLen, $answer->getSeek()));
+            throw new RemoteRequest\RequestException($this->getRRLang()->rrFspWriteWrongSeek($this->position + $dataLen, $answer->getSeek()));
         }
         $this->position = $answer->getSeek();
         return $dataLen;
@@ -226,7 +226,7 @@ class File extends AOperations
         $delFile->setFilePath($this->parsePath($path));
         $answer = $this->runner->setActionQuery($delFile)->process();
         if (!$answer instanceof Protocol\Answer\Nothing) {
-            throw new RemoteRequest\RequestException($this->lang->rrFspBadResponseUnlink(get_class($answer)));
+            throw new RemoteRequest\RequestException($this->getRRLang()->rrFspBadResponseUnlink(get_class($answer)));
         }
         return true;
     }

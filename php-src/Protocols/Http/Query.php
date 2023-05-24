@@ -6,6 +6,7 @@ namespace kalanis\RemoteRequest\Protocols\Http;
 use kalanis\RemoteRequest\Interfaces;
 use kalanis\RemoteRequest\Protocols;
 use kalanis\RemoteRequest\Protocols\Http;
+use kalanis\RemoteRequest\RequestException;
 
 
 /**
@@ -236,6 +237,10 @@ class Query extends Protocols\Dummy\Query implements Interfaces\ITarget
         return 'PHPFsock------------------' . $this->generateRandomString();
     }
 
+    /**
+     * @throws RequestException
+     * @return $this
+     */
     protected function prepareQuery(): self
     {
         if (!$this->isInline()) {
@@ -306,6 +311,10 @@ class Query extends Protocols\Dummy\Query implements Interfaces\ITarget
         return $string;
     }
 
+    /**
+     * @throws RequestException
+     * @return string
+     */
     protected function createMultipartRequest(): string
     {
         foreach ($this->content as $key => $value) {

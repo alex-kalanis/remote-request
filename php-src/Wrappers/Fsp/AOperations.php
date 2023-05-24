@@ -5,6 +5,7 @@ namespace kalanis\RemoteRequest\Wrappers\Fsp;
 
 use kalanis\RemoteRequest\Interfaces\IRRTranslations;
 use kalanis\RemoteRequest\RequestException;
+use kalanis\RemoteRequest\Traits\TLang;
 
 
 /**
@@ -14,14 +15,14 @@ use kalanis\RemoteRequest\RequestException;
  */
 class AOperations
 {
-    /** @var IRRTranslations */
-    protected $lang = null;
+    use TLang;
+
     /** @var Runner */
     protected $runner = null;
 
-    public function __construct(IRRTranslations $lang, Runner $runner)
+    public function __construct(Runner $runner, IRRTranslations $lang)
     {
-        $this->lang = $lang;
+        $this->setRRLang($lang);
         $this->runner = $runner;
     }
 
@@ -37,7 +38,7 @@ class AOperations
         $port = parse_url($path, PHP_URL_PORT);
         $into = parse_url($path, PHP_URL_PATH);
         if (empty($host) || empty($into)) {
-            throw new RequestException($this->lang->rrFspWrapMalformedPath($path));
+            throw new RequestException($this->getRRLang()->rrFspWrapMalformedPath($path));
         }
         if ($setTarget) {
             $this->runner->getConnectParams()->setTarget(

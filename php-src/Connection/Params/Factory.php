@@ -18,12 +18,12 @@ use kalanis\RemoteRequest\RequestException;
 class Factory
 {
     /**
-     * @param IRRTranslations $lang
      * @param string $schema
+     * @param IRRTranslations $lang
      * @throws RequestException
      * @return AParams
      */
-    public static function getForSchema(IRRTranslations $lang, string $schema): AParams
+    public static function getForSchema(string $schema, IRRTranslations $lang): AParams
     {
         switch ($schema) {
             case ISchema::SCHEMA_FILE:

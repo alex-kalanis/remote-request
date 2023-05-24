@@ -5,6 +5,7 @@ namespace kalanis\RemoteRequest\Protocols\Fsp\Session;
 
 use kalanis\RemoteRequest\Interfaces\IRRTranslations;
 use kalanis\RemoteRequest\RequestException;
+use kalanis\RemoteRequest\Traits\TLang;
 
 
 /**
@@ -14,8 +15,8 @@ use kalanis\RemoteRequest\RequestException;
  */
 class Sequence
 {
-    /** @var IRRTranslations */
-    protected $lang = null;
+    use TLang;
+
     /** @var int */
     protected $key = 0;
     /** @var float */
@@ -25,15 +26,15 @@ class Sequence
     /** @var float */
     protected $length = 0.0;
 
-    public static function newSequence(IRRTranslations $lang): self
+    public static function newSequence(?IRRTranslations $lang = null): self
     {
         $lib = new static($lang);
         return $lib->generateSequence();
     }
 
-    final public function __construct(IRRTranslations $lang)
+    final public function __construct(?IRRTranslations $lang = null)
     {
-        $this->lang = $lang;
+        $this->setRRLang($lang);
     }
 
     public function generateSequence(): self
@@ -65,7 +66,7 @@ class Sequence
     public function checkSequence(int $sequence): self
     {
         if ($this->key != $sequence) {
-            throw new RequestException($this->lang->rrFspWrongSequence($sequence, $this->key));
+            throw new RequestException($this->getRRLang()->rrFspWrongSequence($sequence, $this->key));
         }
         return $this;
     }

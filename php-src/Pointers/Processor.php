@@ -8,6 +8,7 @@ use kalanis\RemoteRequest\Interfaces\IQuery;
 use kalanis\RemoteRequest\Interfaces\IRRTranslations;
 use kalanis\RemoteRequest\Protocols\Helper;
 use kalanis\RemoteRequest\RequestException;
+use kalanis\RemoteRequest\Traits\TLang;
 
 
 /**
@@ -17,19 +18,16 @@ use kalanis\RemoteRequest\RequestException;
  */
 class Processor
 {
-    /** @var int how many bytes for load split */
-    const PART_SPLIT = 1024;
+    use TLang;
 
-    /** @var IRRTranslations */
-    protected $lang = null;
     /** @var IQuery|null */
     protected $remoteQuery = null;
     /** @var resource|null */
     protected $remoteResponse = null;
 
-    public function __construct(IRRTranslations $lang)
+    public function __construct(?IRRTranslations $lang = null)
     {
-        $this->lang = $lang;
+        $this->setRRLang($lang);
     }
 
     public function setQuery(?IQuery $content): self
@@ -47,7 +45,6 @@ class Processor
      */
     public function processPointer($filePointer, IConnectionParams $params): self
     {
-        $this->checkQuery();
         $this->checkPointer($filePointer);
         $this->writeRequest($filePointer, $params); // @phpstan-ignore-line
         $this->readResponse($filePointer); // @phpstan-ignore-line
@@ -62,9 +59,7 @@ class Processor
      */
     protected function writeRequest($filePointer, IConnectionParams $params): self
     {
-        $this->checkQuery();
-        // @phpstan-ignore-next-line
-        $srcStream = $this->remoteQuery->getData(); // always exists - checked
+        $srcStream = $this->getQuery()->getData(); // always exists - checked
         rewind($srcStream);
         stream_copy_to_stream($srcStream, $filePointer);
         return $this;
@@ -77,13 +72,11 @@ class Processor
      */
     protected function readResponse($filePointer): self
     {
-        $this->checkQuery();
         $this->remoteResponse = null;
 
         // Read the server response
         $response = Helper::getTempStorage();
-        // @phpstan-ignore-next-line
-        $bytesLeft = $this->remoteQuery->getMaxAnswerLength(); // always exists - checked
+        $bytesLeft = $this->getQuery()->getMaxAnswerLength(); // always exists - checked
         stream_copy_to_stream($filePointer, $response, (is_null($bytesLeft) ? -1 : $bytesLeft), 0);
         rewind($response);
         $this->remoteResponse = $response;
@@ -92,13 +85,15 @@ class Processor
 
     /**
      * @throws RequestException
+     * @return IQuery
      */
-    protected function checkQuery(): void
+    protected function getQuery(): IQuery
     {
         if (empty($this->remoteQuery)
             || !($this->remoteQuery instanceof IQuery)) {
-            throw new RequestException($this->lang->rrPointUnknownTarget());
+            throw new RequestException($this->getRRLang()->rrPointUnknownTarget());
         }
+        return $this->remoteQuery;
     }
 
     /**
@@ -109,7 +104,7 @@ class Processor
     {
         if (empty($filePointer)
             || !is_resource($filePointer)) {
-            throw new RequestException($this->lang->rrPointNoStreamPointer());
+            throw new RequestException($this->getRRLang()->rrPointNoStreamPointer());
         }
     }
 

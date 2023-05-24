@@ -26,7 +26,7 @@ class PfSocket extends ASocket
         // If possible, securely post using HTTPS, your PHP server will need to be SSL enabled
         $timeout = is_null($params->getTimeout()) ? 10.0 : floatval($params->getTimeout()); // do NOT ask - php7 + phpstan
         if (!$filePointer = pfsockopen($params->getSchema() . $params->getHost(), intval($params->getPort()), $errno, $errStr, $timeout)) {
-            throw new RequestException($this->lang->rrSocketCannotConnect());
+            throw new RequestException($this->getRRLang()->rrSocketCannotConnect());
         }
         if (!is_null($params->getTimeout())) {
             stream_set_timeout($filePointer, intval($params->getTimeout()));

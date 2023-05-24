@@ -5,6 +5,7 @@ namespace kalanis\RemoteRequest\Protocols\Fsp;
 
 use kalanis\RemoteRequest\Interfaces\IRRTranslations;
 use kalanis\RemoteRequest\RequestException;
+use kalanis\RemoteRequest\Traits\TLang;
 
 
 /**
@@ -14,8 +15,8 @@ use kalanis\RemoteRequest\RequestException;
  */
 class Session
 {
-    /** @var IRRTranslations */
-    protected $lang = null;
+    use TLang;
+
     /** @var string|null */
     protected $host = null;
     /** @var int[] */
@@ -23,9 +24,9 @@ class Session
     /** @var array<string, array<int, Session\Sequence>> */
     protected static $sequence = [];
 
-    public function __construct(IRRTranslations $lang)
+    public function __construct(?IRRTranslations $lang = null)
     {
-        $this->lang = $lang;
+        $this->setRRLang($lang);
     }
 
     public function setHost(string $host): self
@@ -122,7 +123,7 @@ class Session
      */
     protected function sequencer(): Session\Sequence
     {
-        return Session\Sequence::newSequence($this->lang);
+        return Session\Sequence::newSequence($this->getRRLang());
     }
 
     /**
@@ -134,7 +135,7 @@ class Session
         $this->checkHost();
         $last = end(static::$sequence[$this->host]);
         if (false === $last) {
-            throw new RequestException($this->lang->rrFspEmptySequence());
+            throw new RequestException($this->getRRLang()->rrFspEmptySequence());
         }
         return $last;
     }
@@ -146,7 +147,7 @@ class Session
     protected function checkHost(): self
     {
         if (empty($this->host)) {
-            throw new RequestException($this->lang->rrFspEmptyHost());
+            throw new RequestException($this->getRRLang()->rrFspEmptyHost());
         }
         return $this;
     }

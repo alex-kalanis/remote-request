@@ -40,15 +40,18 @@ class Fsp
         if (in_array("fsp", stream_get_wrappers())) {
             stream_wrapper_unregister("fsp");
         }
-        stream_wrapper_register("fsp", "\RemoteRequest\Wrappers\Fsp");
+        stream_wrapper_register("fsp", Fsp::class);
     }
 
+    /**
+     * @throws RequestException
+     */
     public function __construct()
     {
         $lang = new Translations();
         $this->runner = new Fsp\Runner($lang);
-        $this->dir = new Fsp\Dir($lang, $this->runner);
-        $this->file = new Fsp\File($lang, $this->runner);
+        $this->dir = new Fsp\Dir($this->runner, $lang);
+        $this->file = new Fsp\File($this->runner, $lang);
     }
 
     public function __destruct()

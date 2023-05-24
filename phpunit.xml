@@ -29,6 +29,7 @@
             <directory suffix=".php">php-src/Protocols</directory>
             <directory suffix=".php">php-src/Schemes</directory>
             <directory suffix=".php">php-src/Sockets</directory>
+            <directory suffix=".php">php-src/Traits</directory>
             <file>php-src/RequestException.php</file>
         </include>
         <report>
@@ -45,6 +46,7 @@
             <directory suffix=".php">php-src/Protocols</directory>
             <directory suffix=".php">php-src/Schemes</directory>
             <directory suffix=".php">php-src/Sockets</directory>
+            <directory suffix=".php">php-src/Traits</directory>
             <file>php-src/RequestException.php</file>
         </whitelist>
     </filter>
@@ -61,6 +63,7 @@
             <directory>php-tests/ProtocolsTests/Http</directory>
             <directory>php-tests/ProtocolsTests/Restful</directory>
             <directory>php-tests/ProtocolsTests/Fsp</directory>
+            <directory>php-tests/TraitsTests</directory>
             <exclude>php-tests/ProtocolsTests/Fsp/RemoteTest.php</exclude>
         </testsuite>
         <testsuite name="Basic">

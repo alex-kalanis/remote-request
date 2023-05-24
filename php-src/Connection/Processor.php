@@ -28,7 +28,7 @@ class Processor
     /** @var Sockets\ASocket */
     protected $socket = null;
 
-    public function __construct(Interfaces\IRRTranslations $lang, Sockets\ASocket $method = null)
+    public function __construct(?Sockets\ASocket $method = null, ?Interfaces\IRRTranslations $lang = null)
     {
         $this->socket = (empty($method)) ? new Sockets\FSocket($lang) : $method ;
         $this->processor = ($this->socket instanceof Sockets\Socket)

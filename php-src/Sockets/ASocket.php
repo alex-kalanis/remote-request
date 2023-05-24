@@ -6,6 +6,7 @@ namespace kalanis\RemoteRequest\Sockets;
 use kalanis\RemoteRequest\Interfaces\IConnectionParams;
 use kalanis\RemoteRequest\Interfaces\IRRTranslations;
 use kalanis\RemoteRequest\RequestException;
+use kalanis\RemoteRequest\Traits\TLang;
 
 
 /**
@@ -15,14 +16,14 @@ use kalanis\RemoteRequest\RequestException;
  */
 abstract class ASocket
 {
+    use TLang;
+
     /** @var resource|null */
     protected $pointer = null;
-    /** @var IRRTranslations */
-    protected $lang = null;
 
-    public function __construct(IRRTranslations $lang)
+    public function __construct(?IRRTranslations $lang = null)
     {
-        $this->lang = $lang;
+        $this->setRRLang($lang);
     }
 
     public function __destruct()

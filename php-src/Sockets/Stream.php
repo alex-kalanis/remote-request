@@ -55,7 +55,7 @@ class Stream extends ASocket
         $timeout = is_null($params->getTimeout()) ? 10.0 : floatval($params->getTimeout()); // do NOT ask - php7 + phpstan
 
         if (!$filePointer = stream_socket_client($link, $errno, $errStr, $timeout, STREAM_CLIENT_CONNECT, $context)) {
-            throw new RequestException($this->lang->rrSocketCannotConnect());
+            throw new RequestException($this->getRRLang()->rrSocketCannotConnect());
         }
 
         if (!is_null($params->getTimeout())) {

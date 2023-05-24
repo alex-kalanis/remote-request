@@ -19,11 +19,11 @@ class ConnectionParamsTest extends CommonTestClass
     public function testInit(): void
     {
         $lang = new Translations();
-        $this->assertInstanceOf('\kalanis\RemoteRequest\Connection\Params\File', Connection\Params\Factory::getForSchema($lang, ISchema::SCHEMA_FILE));
-        $this->assertInstanceOf('\kalanis\RemoteRequest\Connection\Params\Php', Connection\Params\Factory::getForSchema($lang, ISchema::SCHEMA_PHP));
-        $this->assertInstanceOf('\kalanis\RemoteRequest\Connection\Params\Tcp', Connection\Params\Factory::getForSchema($lang, ISchema::SCHEMA_TCP));
-        $this->assertInstanceOf('\kalanis\RemoteRequest\Connection\Params\Udp', Connection\Params\Factory::getForSchema($lang, ISchema::SCHEMA_UDP));
-        $this->assertInstanceOf('\kalanis\RemoteRequest\Connection\Params\Ssl', Connection\Params\Factory::getForSchema($lang, ISchema::SCHEMA_SSL));
+        $this->assertInstanceOf(Connection\Params\File::class, Connection\Params\Factory::getForSchema(ISchema::SCHEMA_FILE, $lang));
+        $this->assertInstanceOf(Connection\Params\Php::class, Connection\Params\Factory::getForSchema(ISchema::SCHEMA_PHP, $lang));
+        $this->assertInstanceOf(Connection\Params\Tcp::class, Connection\Params\Factory::getForSchema(ISchema::SCHEMA_TCP, $lang));
+        $this->assertInstanceOf(Connection\Params\Udp::class, Connection\Params\Factory::getForSchema(ISchema::SCHEMA_UDP, $lang));
+        $this->assertInstanceOf(Connection\Params\Ssl::class, Connection\Params\Factory::getForSchema(ISchema::SCHEMA_SSL, $lang));
     }
 
     public function testSimple(): void
@@ -87,6 +87,6 @@ class ConnectionParamsTest extends CommonTestClass
     public function testFail(): void
     {
         $this->expectException(RequestException::class);
-        Connection\Params\Factory::getForSchema(new Translations(), 'unknown');
+        Connection\Params\Factory::getForSchema('unknown', new Translations());
     }
 }

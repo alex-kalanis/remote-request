@@ -8,7 +8,6 @@ use kalanis\RemoteRequest\Connection;
 use kalanis\RemoteRequest\Protocols\Dummy;
 use kalanis\RemoteRequest\Protocols\Http;
 use kalanis\RemoteRequest\RequestException;
-use kalanis\RemoteRequest\Translations;
 
 
 class TestProcessor extends Connection\Processor
@@ -47,7 +46,7 @@ class SimpleQueryTest extends CommonTestClass
      */
     public function testSetsSimple(): void
     {
-        $result = $this->queryOnMock(new TestProcessor(new Translations()));
+        $result = $this->queryOnMock(new TestProcessor());
         $this->assertEquals(900, $result->getCode());
         $this->assertEquals('', $result->getContent());
     }
@@ -58,7 +57,7 @@ class SimpleQueryTest extends CommonTestClass
      */
     public function testSetsBody(): void
     {
-        $result = $this->queryOnMock(new ContentTestProcessor(new Translations()));
+        $result = $this->queryOnMock(new ContentTestProcessor());
         $this->assertEquals(901, $result->getCode());
         $this->assertEquals('abcdefghijkl', $result->getContent());
     }
@@ -73,7 +72,7 @@ class SimpleQueryTest extends CommonTestClass
         $processor->setData(new Dummy\Query());
         $processor->setConnectionParams(new Connection\Params\Tcp());
         $processor->process();
-        $answer = new Http\Answer(new Translations());
+        $answer = new Http\Answer();
         return $answer->setResponse($processor->getResponse());
     }
 }

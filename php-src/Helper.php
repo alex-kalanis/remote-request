@@ -127,7 +127,7 @@ class Helper
 
     protected function getLibConnection(Protocols\Dummy\Query $libQuery): Connection\Processor
     {
-        return new Connection\Processor(static::$lang, $this->getLibSockets($libQuery));
+        return new Connection\Processor($this->getLibSockets($libQuery), static::$lang);
     }
 
     protected function getLibSockets(Protocols\Dummy\Query $libQuery): ?Sockets\ASocket

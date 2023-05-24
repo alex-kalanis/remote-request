@@ -13,6 +13,8 @@ use kalanis\RemoteRequest;
  */
 abstract class AProtocol
 {
+    use RemoteRequest\Traits\TLang;
+
     /** @var RemoteRequest\Connection\Processor */
     protected $processor = null;
     /** @var RemoteRequest\Connection\Params\AParams */
@@ -21,21 +23,19 @@ abstract class AProtocol
     protected $query = null;
     /** @var Dummy\Answer */
     protected $answer = null;
-    /** @var RemoteRequest\Interfaces\IRRTranslations */
-    protected $lang = null;
 
     /**
-     * @param RemoteRequest\Interfaces\IRRTranslations $lang
      * @param array<string, array<string, string>|string> $contextOptions
      * @param bool $long
+     * @param RemoteRequest\Interfaces\IRRTranslations|null $lang
      */
-    public function __construct(RemoteRequest\Interfaces\IRRTranslations $lang, array $contextOptions = [], bool $long = false)
+    public function __construct(array $contextOptions = [], bool $long = false, ?RemoteRequest\Interfaces\IRRTranslations $lang = null)
     {
-        $this->lang = $lang;
+        $this->setRRLang($lang);
         $pointer = empty($contextOptions)
             ? ($long ? new RemoteRequest\Sockets\PfSocket($lang) : new RemoteRequest\Sockets\FSocket($lang))
             : (new RemoteRequest\Sockets\Stream($lang))->setContextOptions($contextOptions) ;
-        $this->processor = new RemoteRequest\Connection\Processor($lang, $pointer);
+        $this->processor = new RemoteRequest\Connection\Processor($pointer, $lang);
         $this->params = $this->loadParams();
         $this->query = $this->loadQuery();
         $this->answer = $this->loadAnswer();

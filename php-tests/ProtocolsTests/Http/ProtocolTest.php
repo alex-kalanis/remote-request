@@ -6,6 +6,7 @@ namespace ProtocolsTests\Http;
 use CommonTestClass;
 use kalanis\RemoteRequest\Protocols\Helper;
 use kalanis\RemoteRequest\Protocols\Http;
+use kalanis\RemoteRequest\RequestException;
 
 
 class ProtocolTest extends CommonTestClass
@@ -32,6 +33,9 @@ class ProtocolTest extends CommonTestClass
         $this->assertEquals('text/plain', $libValue2->getMimeType());
     }
 
+    /**
+     * @throws RequestException
+     */
     public function testValueFileStream1(): void
     {
         $libValue = $this->prepareTestFile('lkjhgfdsa');

@@ -9,6 +9,7 @@ use kalanis\RemoteRequest\Interfaces\ISchema;
 use kalanis\RemoteRequest\Protocols\Fsp as Protocol;
 use kalanis\RemoteRequest\RequestException;
 use kalanis\RemoteRequest\Sockets;
+use kalanis\RemoteRequest\Traits\TLang;
 
 
 /**
@@ -18,8 +19,8 @@ use kalanis\RemoteRequest\Sockets;
  */
 class Runner
 {
-    /** @var IRRTranslations */
-    protected $lang = null;
+    use TLang;
+
     /** @var Connection\Params\AParams */
     protected $params = null;
     /** @var Connection\Processor */
@@ -34,13 +35,14 @@ class Runner
     protected $actionQuery = null;
 
     /**
+     * @param IRRTranslations $lang
      * @throws RequestException
      */
     public function __construct(IRRTranslations $lang)
     {
-        $this->lang = $lang;
-        $this->params = Connection\Params\Factory::getForSchema($lang, ISchema::SCHEMA_UDP);
-        $this->processor = new Connection\Processor($lang, new Sockets\Socket($lang));
+        $this->setRRLang($lang);
+        $this->params = Connection\Params\Factory::getForSchema(ISchema::SCHEMA_UDP, $lang);
+        $this->processor = new Connection\Processor(new Sockets\Socket($lang), $lang);
         $this->query = new Protocol\Query();
         $this->answer = new Protocol\Answer($lang);
         $this->session = new Protocol\Session($lang);
@@ -86,10 +88,10 @@ class Runner
     public function process(): Protocol\Answer\AAnswer
     {
         if (empty($this->actionQuery)) {
-            throw new RequestException($this->lang->rrFspNoAction());
+            throw new RequestException($this->getRRLang()->rrFspNoAction());
         }
         if (empty($this->params->getHost())) {
-            throw new RequestException($this->lang->rrFspNoTarget());
+            throw new RequestException($this->getRRLang()->rrFspNoTarget());
         }
         $this->session->setHost($this->params->getHost());
         $this->actionQuery
@@ -122,7 +124,7 @@ class Runner
             ->process()
         ;
         if (!$answer instanceof Protocol\Answer\Nothing) {
-            throw new RequestException($this->lang->rrFspBadResponseClose(get_class($answer)));
+            throw new RequestException($this->getRRLang()->rrFspBadResponseClose(get_class($answer)));
         }
         $this->session->clear();
     }

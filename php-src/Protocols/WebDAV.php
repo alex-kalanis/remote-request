@@ -23,6 +23,6 @@ class WebDAV extends Http
 
     protected function loadAnswer(): RemoteRequest\Protocols\Dummy\Answer
     {
-        return new WebDAV\Answer($this->lang);
+        return new WebDAV\Answer($this->rrLang);
     }
 }
