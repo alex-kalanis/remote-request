@@ -113,6 +113,7 @@ class AnswerTest extends CommonTestClass
         $method = new AnswerMock();
         $lib = $this->prepareSimple($method->getResponseSimple());
         $this->assertEquals(900, $lib->getCode());
+        $this->assertEquals('KO', $lib->getReason());
         $this->assertEquals('abcdefghijkl', $lib->getContent());
     }
 
@@ -124,6 +125,7 @@ class AnswerTest extends CommonTestClass
         $method = new AnswerMock();
         $lib = $this->prepareSimple(CommonTestClass::stringToResource($method->getResponseSimple()));
         $this->assertEquals(900, $lib->getCode());
+        $this->assertEquals('KO', $lib->getReason());
         $this->assertEquals('abcdefghijkl', $lib->getContent());
     }
 

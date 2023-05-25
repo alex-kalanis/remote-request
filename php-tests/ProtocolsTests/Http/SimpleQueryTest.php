@@ -17,6 +17,10 @@ class TestProcessor extends Connection\Processor
         return $this;
     }
 
+    /**
+     * @throws RequestException
+     * @return resource|null
+     */
     public function getResponse()
     {
         return CommonTestClass::stringToResource('HTTP/0.1 900 KO' . Http::DELIMITER);
@@ -31,6 +35,10 @@ class ContentTestProcessor extends TestProcessor
         return $this;
     }
 
+    /**
+     * @throws RequestException
+     * @return resource|null
+     */
     public function getResponse()
     {
         return CommonTestClass::stringToResource('HTTP/0.1 901 KO' . Http::DELIMITER . Http::DELIMITER . 'abcdefghijkl');

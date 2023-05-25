@@ -7,6 +7,7 @@ use CommonTestClass;
 use kalanis\RemoteRequest\Connection;
 use kalanis\RemoteRequest\Protocols\Http;
 use kalanis\RemoteRequest\Protocols\WebDAV;
+use kalanis\RemoteRequest\RequestException;
 
 
 class QueryMock extends WebDAV\Query
@@ -24,6 +25,9 @@ class QueryMock extends WebDAV\Query
 
 class QueryTest extends CommonTestClass
 {
+    /**
+     * @throws RequestException
+     */
     public function testSimple(): void
     {
         $lib = $this->prepareQuerySimple();
@@ -44,6 +48,9 @@ class QueryTest extends CommonTestClass
             , stream_get_contents($lib->getData(), -1, 0));
     }
 
+    /**
+     * @throws RequestException
+     */
     public function testFiles(): void
     {
         $lib = $this->prepareQuerySimple();
@@ -87,6 +94,7 @@ class QueryTest extends CommonTestClass
     protected function prepareProtocolSchema(string $host = 'unable.example', int $port = 80): Connection\Params\Tcp
     {
         $request = new Connection\Params\Tcp();
-        return $request->setTarget($host, $port);
+        $request->setTarget($host, $port);
+        return $request;
     }
 }

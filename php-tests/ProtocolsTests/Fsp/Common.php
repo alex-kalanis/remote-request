@@ -15,7 +15,7 @@ class Common
 
     public static function makeDummyString(array $values)
     {
-        return implode('', array_map(['\ProtocolsTests\Fsp\Common', 'makeDummyChars'], $values));
+        return implode('', array_map([Common::class, 'makeDummyChars'], $values));
     }
 
     public static function makeDummyChars($input): string

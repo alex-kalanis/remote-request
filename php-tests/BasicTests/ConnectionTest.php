@@ -58,6 +58,9 @@ class ConnectionTest extends CommonTestClass
         $this->queryOnMock(null);
     }
 
+    /**
+     * @throws RequestException
+     */
     public function testSetsLongData(): void
     {
         $content = str_repeat('ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz', 200);

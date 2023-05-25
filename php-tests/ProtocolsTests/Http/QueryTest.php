@@ -6,6 +6,7 @@ namespace ProtocolsTests\Http;
 use CommonTestClass;
 use kalanis\RemoteRequest\Connection;
 use kalanis\RemoteRequest\Protocols\Http;
+use kalanis\RemoteRequest\RequestException;
 
 
 class QueryMock extends Http\Query
@@ -54,6 +55,9 @@ class QueryAuthDigestMock extends Http\Query\AuthDigest
 
 class QueryTest extends CommonTestClass
 {
+    /**
+     * @throws RequestException
+     */
     public function testQuerySimple(): void
     {
         $lib = $this->prepareSimple();
@@ -81,6 +85,9 @@ class QueryTest extends CommonTestClass
         $this->assertEquals(2121, $lib->getPort());
     }
 
+    /**
+     * @throws RequestException
+     */
     public function testQueryWithInline(): void
     {
         $lib = $this->prepareSimple();
@@ -95,6 +102,9 @@ class QueryTest extends CommonTestClass
             , stream_get_contents($lib->getData(), -1, 0));
     }
 
+    /**
+     * @throws RequestException
+     */
     public function testQueryWithContent(): void
     {
         $lib = $this->prepareSimple();
@@ -118,6 +128,9 @@ class QueryTest extends CommonTestClass
             , stream_get_contents($lib->getData(), -1, 0));
     }
 
+    /**
+     * @throws RequestException
+     */
     public function testQueryWithContentPost(): void
     {
         $lib = $this->prepareSimple();
@@ -150,6 +163,9 @@ class QueryTest extends CommonTestClass
             , stream_get_contents($lib->getData(), -1, 0));
     }
 
+    /**
+     * @throws RequestException
+     */
     public function testQueryWithContentFiles(): void
     {
         $lib = $this->prepareSimple();
@@ -163,6 +179,9 @@ class QueryTest extends CommonTestClass
             , stream_get_contents($lib->getData(), -1, 0));
     }
 
+    /**
+     * @throws RequestException
+     */
     public function testQueryWithAuth(): void
     {
         $lib = $this->prepareAuthBasic();
@@ -175,6 +194,9 @@ class QueryTest extends CommonTestClass
             , stream_get_contents($lib->getData(), -1, 0));
     }
 
+    /**
+     * @throws RequestException
+     */
     public function testQueryWithDigest(): void
     {
         $lib = $this->prepareAuthDigest();
@@ -234,6 +256,7 @@ class QueryTest extends CommonTestClass
     protected function prepareProtocolSchema(string $host = 'unable.example', int $port = 80): Connection\Params\Tcp
     {
         $request = new Connection\Params\Tcp();
-        return $request->setTarget($host, $port);
+        $request->setTarget($host, $port);
+        return $request;
     }
 }

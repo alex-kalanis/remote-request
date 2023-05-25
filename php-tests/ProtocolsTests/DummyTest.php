@@ -5,6 +5,7 @@ namespace ProtocolsTests;
 
 use CommonTestClass;
 use kalanis\RemoteRequest\Protocols\Dummy;
+use kalanis\RemoteRequest\RequestException;
 
 
 class DummyTest extends CommonTestClass
@@ -21,6 +22,9 @@ class DummyTest extends CommonTestClass
         $this->assertNull($libValue->getMaxAnswerLength());
     }
 
+    /**
+     * @throws RequestException
+     */
     public function testAnswerSimple(): void
     {
         $libValue = new Dummy\Answer();

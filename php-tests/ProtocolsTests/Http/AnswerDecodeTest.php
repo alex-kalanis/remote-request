@@ -6,10 +6,14 @@ namespace ProtocolsTests\Http;
 use CommonTestClass;
 use kalanis\RemoteRequest\Protocols\Helper;
 use kalanis\RemoteRequest\Protocols\Http;
+use kalanis\RemoteRequest\RequestException;
 
 
 class AnswerDecodeTest extends CommonTestClass
 {
+    /**
+     * @throws RequestException
+     */
     public function testStreamAbstract(): void
     {
         $lib = new XDecoder();
@@ -93,6 +97,7 @@ class AnswerDecodeTest extends CommonTestClass
     }
 
     /**
+     * @throws RequestException
      * @requires extension zlib
      */
     public function testStreamRaw(): void
@@ -106,6 +111,7 @@ class AnswerDecodeTest extends CommonTestClass
     }
 
     /**
+     * @throws RequestException
      * @requires extension zlib
      */
     public function testStreamThru(): void

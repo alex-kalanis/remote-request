@@ -12,8 +12,8 @@ Remote Request
 Requests for local and remote servers in object way. Contains libraries for querying remote
 machines - more universal way than Curl and more verbose than file_get_contents().
 
-The basic philosophy of this package is keep it simple and work with bulks of data, not streams,
-although stream variables has been used for passing the options. So no things like EventLoop.
+The basic philosophy of this package is keep it simple and work with bulks of data, although
+there are streams underneath and stream variables has been used for passing the options.
 
 ## Installation
 
@@ -54,7 +54,6 @@ Basic usage (http query):
 
     $libQuery = new RemoteRequest\Protocols\Http\Query(); # http internals
     $libQuery
-        ->setMultipart(true)
         ->setMethod('post')
         ->setRequestSettings($libParams)
         ->setPath('/api/hook/')
@@ -65,7 +64,7 @@ Basic usage (http query):
     ;
 
     $libProcessor = new RemoteRequest\Connection\Processor(); # tcp/ip http/ssl
-    $libProcessor->setProtocolSchema($libSchema);
+    $libProcessor->setConnectionParams($libParams);
     $libProcessor->setData($libQuery);
 
     $libHttpAnswer = new RemoteRequest\Protocols\Http\Answer();
@@ -87,6 +86,7 @@ Basic usage (http query):
 ```
 
 Variant for UDP
+
 ```php
     $libParams = new RemoteRequest\Connection\Params\Udp(); # query params on layer 3
     $libParams->setTarget('udp-listener.' . DOMAIN, 514);
@@ -197,8 +197,11 @@ reason.
 
 This library is not compliant with PSR-7 and it has a few reasons. At first the PSR-7 has
 been made with HTTP in mind. Then it got streams and totally discarded the filling of the
-usually sent body. Some things are specific for HTTP and in other protocols are unwelcomed.
-I now write about schema:host:port and form inputs.
+usually sent body. Some things are specific for HTTP and in other protocols are unwelcome.
+I now write about schema:host:port and form inputs. Then you have "StreamInterface" in which
+you got the message body. Not separated by values, not set boundaries to header, just raw
+data. It also does not behave like a normal stream, so using "stream_copy_to_stream" does
+not work.
 
 If you really want to know more, try to implement FSP or SMB connectors via PSR-7. You will
 get a lot of headache. Or HTTP2/3, where the content is binary-encoded and runs over udp

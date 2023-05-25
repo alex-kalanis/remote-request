@@ -27,6 +27,8 @@ class Answer extends Protocols\Dummy\Answer
     protected $headers = [];
     /** @var int */
     protected $code = 0;
+    /** @var string */
+    protected $reason = '';
     /** @var int */
     protected $maxHeaderSize = 17000; // over 16384 - 16K
     /** @var int */
@@ -74,7 +76,7 @@ class Answer extends Protocols\Dummy\Answer
         $onlyHeader = false;
         rewind($message);
         while ($data = fread($message, $this->seekSize)) {
-            if (false !== $pos = mb_strpos($data, Protocols\Http::DELIMITER . Protocols\Http::DELIMITER)) {
+            if (false !== $pos = strpos($data, Protocols\Http::DELIMITER . Protocols\Http::DELIMITER)) {
                 $headerSize = $position + $pos;
                 break;
             }
@@ -93,7 +95,7 @@ class Answer extends Protocols\Dummy\Answer
         if ($onlyHeader) {
             return;
         }
-        $headerSize += mb_strlen(Protocols\Http::DELIMITER . Protocols\Http::DELIMITER);
+        $headerSize += strlen(Protocols\Http::DELIMITER . Protocols\Http::DELIMITER);
         if ($this->bodySizeMightBeTooLarge()) {
             $this->processStreamBody($message, $headerSize);
         } else {
@@ -107,7 +109,7 @@ class Answer extends Protocols\Dummy\Answer
      */
     protected function processStringResponse(string $data): void
     {
-        if (false !== mb_strpos($data, Protocols\Http::DELIMITER . Protocols\Http::DELIMITER)) {
+        if (false !== strpos($data, Protocols\Http::DELIMITER . Protocols\Http::DELIMITER)) {
             list($header, $body) = explode(Protocols\Http::DELIMITER . Protocols\Http::DELIMITER, $data, 2);
             $this->parseHeader($header);
             if ($this->bodySizeMightBeTooLarge()) {
@@ -127,8 +129,9 @@ class Answer extends Protocols\Dummy\Answer
         foreach ($lines as $line) {
             if (preg_match('/HTTP\/[^\s]+\s([0-9]{3})\s(.+)/ui', $line, $matches)) {
                 $this->code = intval($matches[1]);
+                $this->reason = strval($matches[2]);
             } else {
-                if (mb_strlen($line) && (false !== mb_strpos($line, ':'))) {
+                if (strlen($line) && (false !== strpos($line, ':'))) {
                     list($key, $value) = explode(': ', $line);
                     if (!isset($this->headers[$key])) {
                         $this->headers[$key] = [];
@@ -207,6 +210,11 @@ class Answer extends Protocols\Dummy\Answer
     public function getCode(): int
     {
         return intval($this->code);
+    }
+
+    public function getReason(): string
+    {
+        return strval($this->reason);
     }
 
     public function isSuccessful(): bool

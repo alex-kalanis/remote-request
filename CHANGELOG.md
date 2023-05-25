@@ -1,6 +1,10 @@
 Changelog
 =========
 
+#### 6.2.0 - 2023-05-26
+
+* Http response shows reason (in the way with preparation for another package)
+
 #### 6.1.0 - 2023-05-25
 
 * Params ordering in constructors, Translations are not mandatory anymore in the most cases

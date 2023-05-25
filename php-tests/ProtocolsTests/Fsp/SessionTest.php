@@ -87,9 +87,6 @@ class SessionTest extends CommonTestClass
         $mock->getSequence();
     }
 
-    /**
-     * @throws RequestException
-     */
     public function testKeyNotFound(): void
     {
         $mock = new SessionMock();

@@ -33,7 +33,7 @@ class Query extends Protocols\Dummy\Query implements Interfaces\ITarget
     /** @var bool */
     protected $inline = false;
     /** @var string */
-    protected $userAgent = 'php-agent/1.2';
+    protected $userAgent = 'php-agent/1.3';
     /** @var string[] */
     protected $headers = [];
     /** @var resource */
@@ -313,9 +313,8 @@ class Query extends Protocols\Dummy\Query implements Interfaces\ITarget
 
     /**
      * @throws RequestException
-     * @return string
      */
-    protected function createMultipartRequest(): string
+    protected function createMultipartRequest(): void
     {
         foreach ($this->content as $key => $value) {
             $this->contentLength += intval(fwrite($this->contentStream, '--' . $this->boundary . Http::DELIMITER));
@@ -333,7 +332,6 @@ class Query extends Protocols\Dummy\Query implements Interfaces\ITarget
             }
         }
         $this->contentLength += intval(fwrite($this->contentStream, '--' . $this->boundary . '--' . Http::DELIMITER));
-        return '';
     }
 
     /**
