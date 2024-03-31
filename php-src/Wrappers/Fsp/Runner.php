@@ -21,18 +21,12 @@ class Runner
 {
     use TLang;
 
-    /** @var Connection\Params\AParams */
-    protected $params = null;
-    /** @var Connection\Processor */
-    protected $processor = null;
-    /** @var Protocol\Query */
-    protected $query = null;
-    /** @var Protocol\Answer */
-    protected $answer = null;
-    /** @var Protocol\Session */
-    protected $session = null;
-    /** @var Protocol\Query\AQuery|null */
-    protected $actionQuery = null;
+    protected Connection\Params\AParams $params;
+    protected Connection\Processor $processor;
+    protected Protocol\Query $query;
+    protected Protocol\Answer $answer;
+    protected Protocol\Session $session;
+    protected ?Protocol\Query\AQuery $actionQuery = null;
 
     /**
      * @param IRRTranslations $lang
@@ -64,6 +58,18 @@ class Runner
         return $this;
     }
 
+    /**
+     * @throws RequestException
+     * @return Protocol\Query\AQuery
+     */
+    protected function getActionQuery(): Protocol\Query\AQuery
+    {
+        if (!$this->actionQuery) {
+            throw new RequestException($this->getRRLang()->rrFspNoAction());
+        }
+        return $this->actionQuery;
+    }
+
     public function getQuery(): Protocol\Query
     {
         return $this->query;
@@ -87,14 +93,11 @@ class Runner
      */
     public function process(): Protocol\Answer\AAnswer
     {
-        if (empty($this->actionQuery)) {
-            throw new RequestException($this->getRRLang()->rrFspNoAction());
-        }
         if (empty($this->params->getHost())) {
             throw new RequestException($this->getRRLang()->rrFspNoTarget());
         }
         $this->session->setHost($this->params->getHost());
-        $this->actionQuery
+        $this->getActionQuery()
             ->setKey($this->session->getKey())
             ->setSequence($this->session->getSequence())
             ->compile()

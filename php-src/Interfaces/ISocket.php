@@ -10,9 +10,9 @@ namespace kalanis\RemoteRequest\Interfaces;
  */
 interface ISocket
 {
-    const SOCKET_INTERNAL = 1;
-    const SOCKET_STREAM = 2;
-    const SOCKET_FSOCKET = 3;
-    const SOCKET_PFSOCKET = 4;
-    const SOCKET_SOCKET = 5;
+    public const SOCKET_INTERNAL = 1;
+    public const SOCKET_STREAM = 2;
+    public const SOCKET_FSOCKET = 3;
+    public const SOCKET_PFSOCKET = 4;
+    public const SOCKET_SOCKET = 5;
 }

@@ -14,8 +14,7 @@ use kalanis\RemoteRequest\Translations;
  */
 trait TLang
 {
-    /** @var IRRTranslations|null */
-    protected $rrLang = null;
+    protected ?IRRTranslations $rrLang = null;
 
     public function setRRLang(?IRRTranslations $rrLang = null): void
     {

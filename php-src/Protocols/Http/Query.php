@@ -16,32 +16,24 @@ use kalanis\RemoteRequest\RequestException;
  */
 class Query extends Protocols\Dummy\Query implements Interfaces\ITarget
 {
-    /** @var string */
-    protected $host = '';
-    /** @var int */
-    protected $port = 80;
-    /** @var string */
-    protected $path = '';
-    /** @var string */
-    protected $method = 'POST';
+    protected string $host = '';
+    protected int $port = 80;
+    protected string $path = '';
+    protected string $method = 'POST';
     /** @var string[] */
-    protected $availableMethods = ['GET', 'POST', 'PUT', 'DELETE'];
+    protected array $availableMethods = ['GET', 'POST', 'PUT', 'DELETE'];
     /** @var string[] */
-    protected $multipartMethods = ['POST', 'PUT'];
+    protected array $multipartMethods = ['POST', 'PUT'];
     /** @var Query\Value[] */
-    protected $content = [];
-    /** @var bool */
-    protected $inline = false;
-    /** @var string */
-    protected $userAgent = 'php-agent/1.3';
+    protected array $content = [];
+    protected bool $inline = false;
+    protected string $userAgent = 'php-agent/1.3';
     /** @var string[] */
-    protected $headers = [];
+    protected array $headers = [];
     /** @var resource */
     protected $contentStream = null;
-    /** @var int */
-    protected $contentLength = 0;
-    /** @var string|null */
-    protected $boundary = null;
+    protected int $contentLength = 0;
+    protected ?string $boundary = null;
 
     public function __construct()
     {

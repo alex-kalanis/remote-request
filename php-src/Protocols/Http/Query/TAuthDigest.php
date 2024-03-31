@@ -14,27 +14,17 @@ trait TAuthDigest
 {
     use TAuth;
 
-    /** @var string */
-    protected $username = '';
-    /** @var string */
-    protected $password = '';
-    /** @var string */
-    protected $realm = '';
-    /** @var string */
-    protected $remoteRandomNumber = '';
-    /** @var string */
-    protected $localRandomNumber = '';
-    /** @var string */
-    protected $returnToServer = '';
-    /** @var string */
-    protected $qualityOfProtection = '';
-    /** @var string */
-    protected $algorithm = 'md5';
-    /** @var string */
-    protected $requestCounter = '';
+    protected string $username = '';
+    protected string $password = '';
+    protected string $realm = '';
+    protected string $remoteRandomNumber = '';
+    protected string $localRandomNumber = '';
+    protected string $returnToServer = '';
+    protected string $qualityOfProtection = '';
+    protected string $algorithm = 'md5';
+    protected string $requestCounter = '';
 
-    /** @var int */
-    protected static $queriesCounter = 1;
+    protected static int $queriesCounter = 1;
 
     public function setCredentials(string $username, string $password, string $realm): void
     {

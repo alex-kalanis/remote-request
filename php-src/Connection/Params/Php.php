@@ -13,8 +13,8 @@ use kalanis\RemoteRequest\Interfaces\ISchema;
  */
 class Php extends AParams
 {
-    const HOST_MEMORY = 'memory';
-    const HOST_TEMP = 'temp';
+    public const HOST_MEMORY = 'memory';
+    public const HOST_TEMP = 'temp';
 
     protected function getSchemaType(): string
     {

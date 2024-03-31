@@ -11,7 +11,7 @@ namespace kalanis\RemoteRequest\Protocols\Http\Answer\DecodeStrings;
  */
 class Deflated extends ADecoder
 {
-    protected $contentEncoded = ['deflate', 'x-deflate'];
+    protected array $contentEncoded = ['deflate', 'x-deflate'];
 
     public function processDecode(string $content): string
     {

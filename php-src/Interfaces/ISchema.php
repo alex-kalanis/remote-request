@@ -11,9 +11,9 @@ namespace kalanis\RemoteRequest\Interfaces;
  */
 interface ISchema
 {
-    const SCHEMA_FILE = 'file';
-    const SCHEMA_PHP = 'php';
-    const SCHEMA_TCP = 'tcp';
-    const SCHEMA_UDP = 'udp';
-    const SCHEMA_SSL = 'ssl';
+    public const SCHEMA_FILE = 'file';
+    public const SCHEMA_PHP = 'php';
+    public const SCHEMA_TCP = 'tcp';
+    public const SCHEMA_UDP = 'udp';
+    public const SCHEMA_SSL = 'ssl';
 }

@@ -20,27 +20,17 @@ class Answer extends Protocols\Dummy\Answer
     use Traits\THeader;
     use Traits\TChecksum;
 
-    /** @var int */
-    protected $headChecksum = 0;
-    /** @var int */
-    protected $headCommand = 0;
-    /** @var int */
-    protected $headServerKey = 0;
-    /** @var int */
-    protected $headSequence = 0;
-    /** @var int */
-    protected $headDataLength = 0;
-    /** @var int */
-    protected $headFilePosition = 0;
-    /** @var string */
-    protected $header = '';
-    /** @var string */
-    protected $content = '';
-    /** @var string */
-    protected $extra = '';
+    protected int $headChecksum = 0;
+    protected int $headCommand = 0;
+    protected int $headServerKey = 0;
+    protected int $headSequence = 0;
+    protected int $headDataLength = 0;
+    protected int $headFilePosition = 0;
+    protected string $header = '';
+    protected string $content = '';
+    protected string $extra = '';
 
-    /** @var bool */
-    public $canDump = false; // for dump info about checksums
+    public bool $canDump = false; // for dump info about checksums
 
     public function __construct(?IRRTranslations $lang = null)
     {

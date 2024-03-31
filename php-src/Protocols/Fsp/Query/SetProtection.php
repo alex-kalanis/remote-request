@@ -13,23 +13,20 @@ use kalanis\RemoteRequest\Protocols\Fsp;
  */
 class SetProtection extends AQuery
 {
-    const CAN_CREATE_FILE = 'c';
-    const CAN_DELETE_FILE = 'd';
-    const CAN_GET_FILE = 'g';
-    const CAN_PRESERVE_FILE = 'p'; // backward compatibility
-    const CAN_CREATE_DIR = 'c';
-    const CAN_LIST_DIR = 'd';
-    const CAN_RENAME_FILE = 'g';
+    public const CAN_CREATE_FILE = 'c';
+    public const CAN_DELETE_FILE = 'd';
+    public const CAN_GET_FILE = 'g';
+    public const CAN_PRESERVE_FILE = 'p'; // backward compatibility
+    public const CAN_CREATE_DIR = 'c';
+    public const CAN_LIST_DIR = 'd';
+    public const CAN_RENAME_FILE = 'g';
 
-    const ALLOW = '+';
-    const DISCARD = '-';
+    public const ALLOW = '+';
+    public const DISCARD = '-';
 
-    /** @var string */
-    protected $dirPath = '';
-    /** @var string|null */
-    protected $operation = null;
-    /** @var bool|null */
-    protected $allow = null;
+    protected string $dirPath = '';
+    protected string $operation = '';
+    protected ?bool $allow = null;
 
     protected function getCommand(): int
     {

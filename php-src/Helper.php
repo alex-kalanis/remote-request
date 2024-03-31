@@ -16,14 +16,12 @@ use kalanis\RemoteRequest\Sockets;
  */
 class Helper
 {
-    /** @var Interfaces\IRRTranslations */
-    protected static $lang = null; // translations
-    /** @var string */
-    protected $link = ''; // target
+    protected static ?Interfaces\IRRTranslations $lang = null; // translations
+    protected string $link = ''; // target
     /** @var string|string[]|array<string|int, string|int> */
     protected $postContent = ''; // what to say to the target
     /** @var array<string, string|int|bool|null> */
-    protected $connectionParams = [
+    protected array $connectionParams = [
         'timeout' => 30,
         'maxLength' => 0,
         'method' => 'get',
@@ -34,7 +32,7 @@ class Helper
         'seek' => 0,
     ];
     /** @var array<string, array<string, string>|string> */
-    protected $contextParams = [];
+    protected array $contextParams = [];
 
     /**
      * @param string $link link to remote source (server, page, ...)
@@ -58,12 +56,15 @@ class Helper
 
     public static function fillLang(?Interfaces\IRRTranslations $lang = null): void
     {
-        if ($lang) {
-            static::$lang = $lang;
-        }
+        static::$lang = $lang;
+    }
+
+    public static function getLang(): Interfaces\IRRTranslations
+    {
         if (empty(static::$lang)) {
             static::$lang = new Translations();
         }
+        return static::$lang;
     }
 
     public function setLink(string $link): self
@@ -111,7 +112,7 @@ class Helper
         static::fillLang();
         $parsedLink = parse_url($this->link);
         if (false === $parsedLink) {
-            throw new RequestException(static::$lang->rrHelpInvalidLink($this->link));
+            throw new RequestException(static::getLang()->rrHelpInvalidLink($this->link));
         }
         $schema = !empty($parsedLink["scheme"]) ? strtolower($parsedLink["scheme"]) : '' ;
         $libParams = $this->getFilledConnectionParams($schema, $parsedLink);
@@ -127,20 +128,20 @@ class Helper
 
     protected function getLibConnection(Protocols\Dummy\Query $libQuery): Connection\Processor
     {
-        return new Connection\Processor($this->getLibSockets($libQuery), static::$lang);
+        return new Connection\Processor($this->getLibSockets($libQuery), static::getLang());
     }
 
     protected function getLibSockets(Protocols\Dummy\Query $libQuery): ?Sockets\ASocket
     {
         if (!empty($this->contextParams)) {
-            $processing = new Sockets\Stream(static::$lang);
+            $processing = new Sockets\Stream(static::getLang());
             return $processing->setContextOptions($this->contextParams);
         } elseif ($this->connectionParams['permanent']) {
-            return new Sockets\PfSocket(static::$lang);
+            return new Sockets\PfSocket(static::getLang());
         } elseif ($libQuery instanceof Protocols\Fsp\Query) {
-            return new Sockets\Socket(static::$lang);
+            return new Sockets\Socket(static::getLang());
         } else {
-            return new Sockets\FSocket(static::$lang);
+            return new Sockets\FSocket(static::getLang());
         }
     }
 
@@ -156,7 +157,7 @@ class Helper
         return $libParams->setTarget(
             strval($parsedLink["host"]),
             empty($parsedLink["port"]) ? $libParams->getPort() : intval($parsedLink["port"]),
-            empty($this->connectionParams['timeout']) ? null : intval($this->connectionParams['timeout'])
+            empty($this->connectionParams['timeout']) ? null : floatval($this->connectionParams['timeout'])
         );
     }
 
@@ -180,7 +181,7 @@ class Helper
             case 'file':
                 return new Connection\Params\File();
             default:
-                throw new RequestException(static::$lang->rrHelpInvalidProtocolSchema($schema));
+                throw new RequestException(static::getLang()->rrHelpInvalidProtocolSchema($schema));
         }
     }
 
@@ -230,7 +231,7 @@ class Helper
                     ->addValues(empty($this->postContent) ? [] : (array) $this->postContent)
                 ;
             default:
-                throw new RequestException(static::$lang->rrHelpInvalidRequestSchema($schema));
+                throw new RequestException(static::getLang()->rrHelpInvalidRequestSchema($schema));
         }
     }
 
@@ -253,12 +254,12 @@ class Helper
             case 'file':
                 return new Protocols\Dummy\Answer();
             case 'fsp':
-                return new Protocols\Fsp\Answer(static::$lang);
+                return new Protocols\Fsp\Answer(static::getLang());
             case 'http':
             case 'https':
-                return new Protocols\Http\Answer(static::$lang);
+                return new Protocols\Http\Answer(static::getLang());
             default:
-                throw new RequestException(static::$lang->rrHelpInvalidResponseSchema($schema));
+                throw new RequestException(static::getLang()->rrHelpInvalidResponseSchema($schema));
         }
     }
 }

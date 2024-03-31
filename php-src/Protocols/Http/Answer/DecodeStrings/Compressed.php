@@ -11,7 +11,7 @@ namespace kalanis\RemoteRequest\Protocols\Http\Answer\DecodeStrings;
  */
 class Compressed extends ADecoder
 {
-    protected $contentEncoded = ['compress', 'x-compress'];
+    protected array $contentEncoded = ['compress', 'x-compress'];
 
     public function processDecode(string $content): string
     {

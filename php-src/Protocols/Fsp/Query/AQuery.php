@@ -13,12 +13,9 @@ use kalanis\RemoteRequest\Protocols\Fsp;
  */
 abstract class AQuery
 {
-    /** @var Fsp\Query */
-    protected $query = null;
-    /** @var int */
-    protected $serverKey = 0;
-    /** @var int */
-    protected $localSequence = 0;
+    protected Fsp\Query $query;
+    protected int $serverKey = 0;
+    protected int $localSequence = 0;
 
     public function __construct(Fsp\Query $query)
     {

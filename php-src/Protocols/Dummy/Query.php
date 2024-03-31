@@ -15,10 +15,8 @@ use kalanis\RemoteRequest\RequestException;
  */
 class Query implements Interfaces\IQuery
 {
-    /** @var string */
-    public $body = '';
-    /** @var int|null */
-    public $maxLength = null;
+    public string $body = '';
+    public ?int $maxLength = null;
 
     public function setExpectedAnswerSize(?int $maxLength = null): self
     {

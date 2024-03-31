@@ -13,24 +13,15 @@ use kalanis\RemoteRequest\Protocols\Fsp;
  */
 class Version extends AAnswer
 {
-    /** @var string */
-    protected $version = '';
-    /** @var bool|null */
-    protected $serverLogs = null;
-    /** @var bool|null */
-    protected $readOnly = null;
-    /** @var bool|null */
-    protected $reverseLookup = null;
-    /** @var bool|null */
-    protected $privateMode = null;
-    /** @var bool|null */
-    protected $thruControl = null;
-    /** @var bool|null */
-    protected $acceptExtra = null;
-    /** @var int */
-    protected $thruMaxAllowed = 0;
-    /** @var int */
-    protected $thruMaxPayload = 0;
+    protected string $version = '';
+    protected ?bool $serverLogs = null;
+    protected ?bool $readOnly = null;
+    protected ?bool $reverseLookup = null;
+    protected ?bool $privateMode = null;
+    protected ?bool $thruControl = null;
+    protected ?bool $acceptExtra = null;
+    protected int $thruMaxAllowed = 0;
+    protected int $thruMaxPayload = 0;
 
     public function process(): parent
     {
@@ -53,12 +44,7 @@ class Version extends AAnswer
         return $this;
     }
 
-    /**
-     * @param int $input
-     * @param int $bitPosition
-     * @return bool
-     */
-    protected function parseBit($input, $bitPosition): bool
+    protected function parseBit(int $input, int $bitPosition): bool
     {
         return boolval($input & $bitPosition);
     }

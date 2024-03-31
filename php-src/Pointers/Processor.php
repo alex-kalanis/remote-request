@@ -20,8 +20,7 @@ class Processor
 {
     use TLang;
 
-    /** @var IQuery|null */
-    protected $remoteQuery = null;
+    protected ?IQuery $remoteQuery = null;
     /** @var resource|null */
     protected $remoteResponse = null;
 

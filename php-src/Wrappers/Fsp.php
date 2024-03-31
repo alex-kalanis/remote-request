@@ -26,14 +26,10 @@ class Fsp
     /** @var resource */
     public $context;
 
-    /** @var Fsp\Runner */
-    protected $runner = null;
-    /** @var Fsp\Dir */
-    protected $dir = null;
-    /** @var Fsp\File */
-    protected $file = null;
-    /** @var bool */
-    protected $showErrors = true;
+    protected Fsp\Runner $runner;
+    protected Fsp\Dir $dir;
+    protected Fsp\File $file;
+    protected bool $showErrors = true;
 
     public static function register(): void
     {

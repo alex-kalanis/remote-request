@@ -13,24 +13,15 @@ use kalanis\RemoteRequest\Protocols\Fsp;
  */
 class Protection extends AAnswer
 {
-    /** @var string */
-    protected $directory = '';
-    /** @var bool|null */
-    protected $isOwnedByMe = null;
-    /** @var bool|null */
-    protected $canListDir = null;
-    /** @var bool|null */
-    protected $canReadOnlyOwner = null;
-    /** @var bool|null */
-    protected $canCreateFileHere = null;
-    /** @var bool|null */
-    protected $canRenameFileHere = null;
-    /** @var bool|null */
-    protected $canDeleteFileHere = null;
-    /** @var bool|null */
-    protected $canCreateDirHere = null;
-    /** @var bool|null */
-    protected $containsReadme = null;
+    protected string $directory = '';
+    protected ?bool $isOwnedByMe = null;
+    protected ?bool $canListDir = null;
+    protected ?bool $canReadOnlyOwner = null;
+    protected ?bool $canCreateFileHere = null;
+    protected ?bool $canRenameFileHere = null;
+    protected ?bool $canDeleteFileHere = null;
+    protected ?bool $canCreateDirHere = null;
+    protected ?bool $containsReadme = null;
 
     public function process(): parent
     {

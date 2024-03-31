@@ -15,11 +15,9 @@ use kalanis\RemoteRequest\Protocols\Fsp as Protocol;
 class Dir extends AOperations
 {
     /** @var Protocol\Answer\GetDir\FileInfo[] */
-    protected $files = [];
-    /** @var string */
-    protected $path = '';
-    /** @var int */
-    protected $seek = 0;
+    protected array $files = [];
+    protected string $path = '';
+    protected int $seek = 0;
 
     public function close(): bool
     {

@@ -17,10 +17,8 @@ class File extends Value
 {
     /** @var string|resource */
     protected $content = '';
-    /** @var string */
-    public $filename = 'binary';
-    /** @var string */
-    public $mime = 'octet/stream';
+    public string $filename = 'binary';
+    public string $mime = 'octet/stream';
 
     public function getFilename(): string
     {

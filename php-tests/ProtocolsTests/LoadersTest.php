@@ -57,14 +57,22 @@ class LoadersTest extends CommonTestClass
 
     public function testHttp(): void
     {
-        $protocol = new Protocols\Http();
+        $protocol = new Protocols\Http([], true);
         $this->assertInstanceOf(Connection\Params\Tcp::class, $protocol->getParams());
         $this->assertInstanceOf(Protocols\Http\Query::class, $protocol->getQuery());
     }
 
     public function testHttps(): void
     {
-        $protocol = new Protocols\Https();
+        $protocol = new Protocols\Https([
+            'ssl' => [
+//                'verify_peer' => !DEVEL_ENVIRONMENT, // You could skip all of the trouble by changing this to false, but it's WAY uncool for security reasons. // kecy...
+//                'cafile' => '/etc/ssl/certs/cacert.pem',
+//                'CN_match' => 'example.com', // Change this to your certificates Common Name (or just comment this line out if not needed)
+//                'ciphers' => 'HIGH:!SSLv2:!SSLv3',
+                'disable_compression' => true,
+            ],
+        ]);
         $this->assertInstanceOf(Connection\Params\Ssl::class, $protocol->getParams());
         $this->assertInstanceOf(Protocols\Http\Query::class, $protocol->getQuery());
     }

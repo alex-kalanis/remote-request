@@ -24,19 +24,14 @@ class Answer extends Protocols\Dummy\Answer
     use Answer\DecodeStrings\TDecoding;
 
     /** @var string[][] */
-    protected $headers = [];
-    /** @var int */
-    protected $code = 0;
-    /** @var string */
-    protected $reason = '';
-    /** @var int */
-    protected $maxHeaderSize = 17000; // over 16384 - 16K
-    /** @var int */
-    protected $maxStringSize = 10000;
+    protected array $headers = [];
+    protected int $code = 0;
+    protected string $reason = '';
+    protected int $maxHeaderSize = 17000; // over 16384 - 16K
+    protected int $maxStringSize = 10000;
     /** @var int<0, max> */
-    protected $seekSize = 1024; // in how big block we will look for delimiters
-    /** @var int */
-    protected $seekPos = 1000; // must be reasonably lower than seekSize - because it's necessary to find delimiters even on edges
+    protected int $seekSize = 1024; // in how big block we will look for delimiters
+    protected int $seekPos = 1000; // must be reasonably lower than seekSize - because it's necessary to find delimiters even on edges
 
     public function __construct(?IRRTranslations $lang = null)
     {

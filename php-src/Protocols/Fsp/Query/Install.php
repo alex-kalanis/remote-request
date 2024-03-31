@@ -17,10 +17,8 @@ use kalanis\RemoteRequest\Protocols\Fsp;
  */
 class Install extends AQuery
 {
-    /** @var string */
-    protected $filePath = '';
-    /** @var int */
-    protected $timestamp = 0;
+    protected string $filePath = '';
+    protected int $timestamp = 0;
 
     protected function getCommand(): int
     {

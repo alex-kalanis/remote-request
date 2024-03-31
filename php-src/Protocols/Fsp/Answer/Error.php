@@ -14,12 +14,9 @@ use kalanis\RemoteRequest\RequestException;
  */
 class Error extends AAnswer
 {
-    /** @var int */
-    protected $errorCode = 0;
-    /** @var string */
-    protected $errorMessage = '';
-    /** @var bool */
-    protected $hardWay = false;
+    protected int $errorCode = 0;
+    protected string $errorMessage = '';
+    protected bool $hardWay = false;
 
     public function setHardWay(bool $hardWay): self
     {

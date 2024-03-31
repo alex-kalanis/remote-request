@@ -13,7 +13,7 @@ use kalanis\RemoteRequest;
  */
 class Http extends AProtocol
 {
-    const DELIMITER = "\r\n";
+    public const DELIMITER = "\r\n";
 
     protected function loadParams(): RemoteRequest\Connection\Params\AParams
     {

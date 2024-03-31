@@ -13,10 +13,8 @@ use kalanis\RemoteRequest\Protocols\Fsp;
  */
 class GetDir extends AQuery
 {
-    /** @var string */
-    protected $dirPath = '';
-    /** @var int */
-    protected $position = 0;
+    protected string $dirPath = '';
+    protected int $position = 0;
 
     protected function getCommand(): int
     {

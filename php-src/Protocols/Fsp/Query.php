@@ -22,23 +22,15 @@ class Query extends Protocols\Dummy\Query
     use Traits\THeader;
     use Traits\TChecksum;
 
-    /** @var int */
-    public $maxLength = Protocols\Fsp::MAX_PACKET_SIZE;
-    /** @var int */
-    protected $headCommand = 0;
-    /** @var int */
-    protected $headServerKey = 0;
-    /** @var int */
-    protected $headSequence = 0;
-    /** @var int */
-    protected $headFilePosition = 0;
-    /** @var string */
-    protected $contentData = '';
-    /** @var string */
-    protected $contentExtraData = '';
+    public ?int $maxLength = Protocols\Fsp::MAX_PACKET_SIZE;
+    protected int $headCommand = 0;
+    protected int $headServerKey = 0;
+    protected int $headSequence = 0;
+    protected int $headFilePosition = 0;
+    protected string $contentData = '';
+    protected string $contentExtraData = '';
 
-    /** @var string */
-    private $preparedPacket = '';
+    private string $preparedPacket = '';
 
     public function setKey(int $key = 0): self
     {

@@ -15,16 +15,13 @@ use kalanis\RemoteRequest\Interfaces;
  */
 abstract class AParams implements Interfaces\IConnectionParams
 {
-    /** @var string */
-    protected $host = '';
-    /** @var int */
-    protected $port = 1;
-    /** @var int|float */
-    protected $timeout = 30.0;
+    protected string $host = '';
+    protected int $port = 1;
+    protected float $timeout = 30.0;
 
     abstract protected function getSchemaType(): string;
 
-    public function setTarget(string $host = null, int $port = null, int $timeout = null): self
+    public function setTarget(?string $host = null, ?int $port = null, ?float $timeout = null): self
     {
         $this->host = $host ?? $this->host;
         $this->port = $port ?? $this->port;

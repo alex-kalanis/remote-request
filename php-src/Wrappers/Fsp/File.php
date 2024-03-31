@@ -14,17 +14,14 @@ use kalanis\RemoteRequest\Protocols\Fsp as Protocol;
  */
 class File extends AOperations
 {
-    /** @var string */
-    protected $path = '';
-    /** @var int */
-    protected $size = 0;
-    /** @var int */
-    protected $position = 0;
+    protected string $path = '';
+    protected int $size = 0;
+    protected int $position = 0;
     /**
      * @var bool
      * read - false, write - true
      */
-    protected $writeMode = false;
+    protected bool $writeMode = false;
 
     /**
      * @param int $cast_as

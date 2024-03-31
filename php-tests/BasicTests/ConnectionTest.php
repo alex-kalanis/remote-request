@@ -113,6 +113,21 @@ class ConnectionTest extends CommonTestClass
     }
 
     /**
+     * @throws RequestException
+     */
+    public function testNoConnectionParams(): void
+    {
+        $content1 = str_repeat('ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz', 10);
+        $processor = new ConnectProcessorMock(new Sockets\SharedInternal());
+        // no connection params set
+        $query1 = new Protocols\Dummy\Query();
+        $query1->body = $content1;
+        $processor->setData($query1);
+        $this->expectException(RequestException::class);
+        $processor->process();
+    }
+
+    /**
      * @param string|null $message what to send to remote machine
      * @throws RequestException
      * @return string

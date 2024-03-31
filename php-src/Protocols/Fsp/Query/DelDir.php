@@ -13,8 +13,7 @@ use kalanis\RemoteRequest\Protocols\Fsp;
  */
 class DelDir extends AQuery
 {
-    /** @var string */
-    protected $dirPath = '';
+    protected string $dirPath = '';
 
     protected function getCommand(): int
     {

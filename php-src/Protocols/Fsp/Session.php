@@ -17,12 +17,11 @@ class Session
 {
     use TLang;
 
-    /** @var string|null */
-    protected $host = null;
+    protected ?string $host = null;
     /** @var int[] */
-    protected static $key = null;
+    protected static array $key = [];
     /** @var array<string, array<int, Session\Sequence>> */
-    protected static $sequence = [];
+    protected static array $sequence = [];
 
     public function __construct(?IRRTranslations $lang = null)
     {

@@ -13,12 +13,9 @@ use kalanis\RemoteRequest\Protocols\Fsp;
  */
 class Upload extends AQuery
 {
-    /** @var string */
-    protected $filePath = '';
-    /** @var string */
-    protected $data = '';
-    /** @var int */
-    protected $offset = 0;
+    protected string $filePath = '';
+    protected string $data = '';
+    protected int $offset = 0;
 
     protected function getCommand(): int
     {

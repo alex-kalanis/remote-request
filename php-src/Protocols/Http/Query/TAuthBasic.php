@@ -12,10 +12,8 @@ trait TAuthBasic
 {
     use TAuth;
 
-    /** @var string */
-    protected $username = '';
-    /** @var string */
-    protected $password = '';
+    protected string $username = '';
+    protected string $password = '';
 
     public function setCredentials(string $username, string $password = ''): void
     {

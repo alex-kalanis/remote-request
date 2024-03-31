@@ -10,7 +10,7 @@ namespace kalanis\RemoteRequest\Protocols\Http\Answer\DecodeStreams;
 trait TDecoding
 {
     /** @var ADecoder[] */
-    protected $streamsDecoders = [];
+    protected array $streamsDecoders = [];
 
     public function addStreamDecoder(ADecoder $decoder): self
     {

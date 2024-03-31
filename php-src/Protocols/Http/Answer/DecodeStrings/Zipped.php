@@ -11,7 +11,7 @@ namespace kalanis\RemoteRequest\Protocols\Http\Answer\DecodeStrings;
  */
 class Zipped extends ADecoder
 {
-    protected $contentEncoded = ['gzip', 'x-gzip'];
+    protected array $contentEncoded = ['gzip', 'x-gzip'];
 
     public function processDecode(string $content): string
     {

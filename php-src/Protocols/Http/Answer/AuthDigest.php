@@ -20,10 +20,9 @@ use kalanis\RemoteRequest\Protocols\Http;
  */
 class AuthDigest extends Http\Answer
 {
-    /** @var string */
-    protected $authType = '';
+    protected string $authType = '';
     /** @var string[] */
-    protected $authHeader = [];
+    protected array $authHeader = [];
 
     public function processContent(): self
     {

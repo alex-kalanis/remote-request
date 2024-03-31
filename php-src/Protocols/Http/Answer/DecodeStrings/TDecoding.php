@@ -10,7 +10,7 @@ namespace kalanis\RemoteRequest\Protocols\Http\Answer\DecodeStrings;
 trait TDecoding
 {
     /** @var ADecoder[] */
-    protected $stringDecoders = [];
+    protected array $stringDecoders = [];
 
     public function addStringDecoding(ADecoder $decoder): self
     {

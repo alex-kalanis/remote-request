@@ -17,14 +17,10 @@ class Sequence
 {
     use TLang;
 
-    /** @var int */
-    protected $key = 0;
-    /** @var float */
-    protected $created = 0.0;
-    /** @var float */
-    protected $done = 0.0;
-    /** @var float */
-    protected $length = 0.0;
+    protected int $key = 0;
+    protected float $created = 0.0;
+    protected float $done = 0.0;
+    protected float $length = 0.0;
 
     public static function newSequence(?IRRTranslations $lang = null): self
     {

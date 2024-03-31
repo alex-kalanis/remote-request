@@ -15,14 +15,10 @@ abstract class AProtocol
 {
     use RemoteRequest\Traits\TLang;
 
-    /** @var RemoteRequest\Connection\Processor */
-    protected $processor = null;
-    /** @var RemoteRequest\Connection\Params\AParams */
-    protected $params = null;
-    /** @var Dummy\Query */
-    protected $query = null;
-    /** @var Dummy\Answer */
-    protected $answer = null;
+    protected RemoteRequest\Connection\Processor $processor;
+    protected RemoteRequest\Connection\Params\AParams $params;
+    protected Dummy\Query $query;
+    protected Dummy\Answer $answer;
 
     /**
      * @param array<string, array<string, string>|string> $contextOptions

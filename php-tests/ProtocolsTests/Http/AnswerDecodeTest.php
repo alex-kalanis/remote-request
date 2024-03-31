@@ -188,7 +188,7 @@ class XStringDecoderDeflate
 
 class XDecoder extends Http\Answer\DecodeStreams\ADecoder
 {
-    protected $contentEncoded = ['custom'];
+    protected array $contentEncoded = ['custom'];
 
     public function processDecode($content)
     {

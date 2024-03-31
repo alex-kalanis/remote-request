@@ -16,7 +16,7 @@ use SplFileInfo;
 class FileInfo extends SplFileInfo
 {
     /** @var array<int, string> */
-    protected static $types = [
+    protected static array $types = [
         Fsp::RDTYPE_DIR => 'dir',
         Fsp::RDTYPE_FILE => 'file',
         Fsp::RDTYPE_LINK => 'link',
@@ -24,18 +24,12 @@ class FileInfo extends SplFileInfo
         Fsp::RDTYPE_END => 'end',
     ];
 
-    /** @var string */
-    protected $path = '';
-    /** @var string */
-    protected $file_name = '';
-    /** @var string */
-    protected $link_name = '';
-    /** @var int */
-    protected $size = 0;
-    /** @var int */
-    protected $time = 0;
-    /** @var int */
-    protected $type = 0;
+    protected string $path = '';
+    protected string $file_name = '';
+    protected string $link_name = '';
+    protected int $size = 0;
+    protected int $time = 0;
+    protected int $type = 0;
 
     public function setData(string $data, string $path = ''): self
     {

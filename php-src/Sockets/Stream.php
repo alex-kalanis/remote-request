@@ -16,7 +16,7 @@ use kalanis\RemoteRequest\RequestException;
 class Stream extends ASocket
 {
     /** @var array<string, string|array<string, string>> */
-    protected $contextOptions = [];
+    protected array $contextOptions = [];
 
     /**
      * @param array<string, string|array<string, string>> $contextOptions

@@ -25,12 +25,10 @@ namespace kalanis\RemoteRequest\Protocols\Fsp\Answer;
  */
 class GetDir extends AAnswer
 {
-    /** @var GetDir\FileInfo */
-    protected $singleFile = null;
-    /** @var int */
-    protected $position = 0;
+    protected GetDir\FileInfo $singleFile;
+    protected int $position = 0;
     /** @var GetDir\FileInfo[] */
-    protected $files = [];
+    protected array $files = [];
 
     protected function customInit(): void
     {

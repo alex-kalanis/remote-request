@@ -13,8 +13,7 @@ use kalanis\RemoteRequest\Protocols\Fsp;
  */
 class Stat extends AQuery
 {
-    /** @var string */
-    protected $filePath = '';
+    protected string $filePath = '';
 
     protected function getCommand(): int
     {

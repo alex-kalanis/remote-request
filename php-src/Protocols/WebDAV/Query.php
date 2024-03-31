@@ -14,7 +14,7 @@ use kalanis\RemoteRequest\Protocols;
 class Query extends Protocols\Http\Query
 {
     /** @var string[] */
-    protected $availableMethods = ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'COPY', 'LOCK', 'MKCOL', 'MOVE', 'PROPFIND', 'PROPPATCH', 'UNLOCK'];
+    protected array $availableMethods = ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'COPY', 'LOCK', 'MKCOL', 'MOVE', 'PROPFIND', 'PROPPATCH', 'UNLOCK'];
 
     public function isInline(): bool
     {

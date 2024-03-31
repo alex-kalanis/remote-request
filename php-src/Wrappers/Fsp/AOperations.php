@@ -17,8 +17,7 @@ class AOperations
 {
     use TLang;
 
-    /** @var Runner */
-    protected $runner = null;
+    protected Runner $runner;
 
     public function __construct(Runner $runner, IRRTranslations $lang)
     {

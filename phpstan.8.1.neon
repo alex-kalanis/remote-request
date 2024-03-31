@@ -16,7 +16,5 @@ parameters:
 		# solved by unit tests - php7 has resources, not Socket class
 		- '#expects Socket, resource given.#'
 		- '#should return resource but returns Socket.#'
-		# solved by internal logic - for request there is always lang set
-		- '#Static property kalanis\\RemoteRequest\\Helper\:\:\$lang#'
 		# quality WTF - strval, intval
 		- '#Parameter \#1 \$va[rl]u?e? of function [si][tn][rt]val expects#'

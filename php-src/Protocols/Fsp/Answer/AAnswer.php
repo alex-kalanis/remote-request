@@ -13,8 +13,7 @@ use kalanis\RemoteRequest\Protocols\Fsp;
  */
 abstract class AAnswer
 {
-    /** @var Fsp\Answer */
-    protected $answer = null;
+    protected Fsp\Answer $answer;
 
     public function __construct(Fsp\Answer $answer)
     {
