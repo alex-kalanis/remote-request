@@ -14,6 +14,8 @@ machines - more universal way than Curl and more verbose than file_get_contents(
 
 The basic philosophy of this package is keep it simple and work with bulks of data, although
 there are streams underneath and stream variables has been used for passing the options.
+And that's the main difference - due streams underneath you can work with really large bulk
+of data. You are not too limited by size of memory.
 
 ## Installation
 
@@ -191,7 +193,7 @@ reason.
 
 ## Not PSR-7
 
-This library is not compliant with PSR-7 and it has a few reasons. At first the PSR-7 has
+This library is not compliant with PSR-7 and that is for a few reasons. At first the PSR-7 has
 been made with HTTP in mind. Then it got streams and totally discarded the filling of the
 usually sent body. Some things are specific for HTTP and in other protocols are unwelcome.
 I now write about schema:host:port and form inputs. Then you have "StreamInterface" in which

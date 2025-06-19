@@ -1,38 +1,10 @@
 <?php
 
-namespace ProtocolsTests\Fsp;
+namespace tests\ProtocolsTests\Fsp;
 
 
-use CommonTestClass;
-use kalanis\RemoteRequest\Protocols\Fsp;
+use tests\CommonTestClass;
 use kalanis\RemoteRequest\RequestException;
-
-
-class SequenceMock extends Fsp\Session\Sequence
-{
-    protected function getRandInitial(): int
-    {
-        return 75;
-    }
-}
-
-
-class SessionMock extends Fsp\Session
-{
-    protected function getRandInitial(): int
-    {
-        return 64;
-    }
-
-    protected function sequencer($withInit = true): Fsp\Session\Sequence
-    {
-        $lib = new SequenceMock($this->getRRLang());
-        if ($withInit) {
-            $lib->generateSequence();
-        }
-        return $lib;
-    }
-}
 
 
 class SessionTest extends CommonTestClass
@@ -42,7 +14,7 @@ class SessionTest extends CommonTestClass
      */
     public function testSeqPass(): void
     {
-        $mock = SequenceMock::newSequence();
+        $mock = Session\SequenceMock::newSequence();
         $this->assertEquals(75, $mock->getKey());
         $mock->checkSequence(75);
         $mock->updateSequence();
@@ -53,7 +25,7 @@ class SessionTest extends CommonTestClass
      */
     public function testSeqFail(): void
     {
-        $mock = new SequenceMock();
+        $mock = new Session\SequenceMock();
         $this->expectException(RequestException::class);
         $mock->checkSequence(75);
     }
@@ -63,7 +35,7 @@ class SessionTest extends CommonTestClass
      */
     public function testKeyNone(): void
     {
-        $mock = new SessionMock();
+        $mock = new Session\SessionMock();
         $this->assertFalse($mock->hasKey());
     }
 
@@ -72,7 +44,7 @@ class SessionTest extends CommonTestClass
      */
     public function testKeyFail(): void
     {
-        $mock = new SessionMock();
+        $mock = new Session\SessionMock();
         $this->expectException(RequestException::class);
         $mock->getKey();
     }
@@ -82,14 +54,14 @@ class SessionTest extends CommonTestClass
      */
     public function testSequenceFail(): void
     {
-        $mock = new SessionMock();
+        $mock = new Session\SessionMock();
         $this->expectException(RequestException::class);
         $mock->getSequence();
     }
 
     public function testKeyNotFound(): void
     {
-        $mock = new SessionMock();
+        $mock = new Session\SessionMock();
         $mock->setHost('asdf');
         $this->assertFalse($mock->hasKey());
     }
@@ -99,7 +71,7 @@ class SessionTest extends CommonTestClass
      */
     public function testKeyFound(): void
     {
-        $mock = new SessionMock();
+        $mock = new Session\SessionMock();
         $mock->setHost('asdf');
         $this->assertEquals(64, $mock->getKey());
         $mock->setKey(37);
@@ -113,7 +85,7 @@ class SessionTest extends CommonTestClass
      */
     public function testSequenceFound(): void
     {
-        $mock = new SessionMock();
+        $mock = new Session\SessionMock();
         $mock->clear();
         $mock->setHost('asdf');
         $this->assertEquals(75, $mock->getSequence());
@@ -127,7 +99,7 @@ class SessionTest extends CommonTestClass
      */
     public function testSequenceNotSet(): void
     {
-        $mock = new SessionMock();
+        $mock = new Session\SessionMock();
         $mock->clear();
         $mock->setHost('asdf');
         $this->expectException(RequestException::class);
@@ -139,7 +111,7 @@ class SessionTest extends CommonTestClass
      */
     public function testSequences(): void
     {
-        $mock = new SessionMock();
+        $mock = new Session\SessionMock();
         $mock->clear();
         $mock->setHost('asdf');
         $this->assertEquals(75, $mock->getSequence());

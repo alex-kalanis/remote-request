@@ -1,26 +1,12 @@
 <?php
 
-namespace ProtocolsTests\WebDav;
+namespace tests\ProtocolsTests\WebDav;
 
 
-use CommonTestClass;
+use tests\CommonTestClass;
 use kalanis\RemoteRequest\Connection;
-use kalanis\RemoteRequest\Protocols\Http;
-use kalanis\RemoteRequest\Protocols\WebDAV;
+use kalanis\RemoteRequest\Protocols;
 use kalanis\RemoteRequest\RequestException;
-
-
-class QueryMock extends WebDAV\Query
-{
-    /**
-     * Overwrite because random string in testing does not work
-     * @return string
-     */
-    protected function generateBoundary(): string
-    {
-        return '--PHPFSock--';
-    }
-}
 
 
 class QueryTest extends CommonTestClass
@@ -71,7 +57,7 @@ class QueryTest extends CommonTestClass
             , stream_get_contents($lib->getData(), -1, 0));
     }
 
-    protected function prepareQuerySimple(): WebDAV\Query
+    protected function prepareQuerySimple(): Protocols\WebDAV\Query
     {
         $lib = new QueryMock();
         $lib->setMethod('get');
@@ -83,9 +69,9 @@ class QueryTest extends CommonTestClass
         return $lib;
     }
 
-    protected function prepareTestFile($content): Http\Query\File
+    protected function prepareTestFile($content): Protocols\Http\Query\File
     {
-        $libValue = new Http\Query\File($content);
+        $libValue = new Protocols\Http\Query\File($content);
         $libValue->filename = 'dummy.txt';
         $libValue->mime = 'text/plain';
         return $libValue;

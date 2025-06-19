@@ -1,9 +1,9 @@
 <?php
 
-namespace ProtocolsTests;
+namespace tests\ProtocolsTests;
 
 
-use CommonTestClass;
+use tests\CommonTestClass;
 use kalanis\RemoteRequest\Protocols\Dummy;
 use kalanis\RemoteRequest\RequestException;
 

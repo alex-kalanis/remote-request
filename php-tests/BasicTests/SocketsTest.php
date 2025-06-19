@@ -1,9 +1,9 @@
 <?php
 
-namespace BasicTests;
+namespace tests\BasicTests;
 
 
-use CommonTestClass;
+use tests\CommonTestClass;
 use kalanis\RemoteRequest\Interfaces;
 use kalanis\RemoteRequest\Sockets;
 

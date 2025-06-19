@@ -1,20 +1,20 @@
 parameters:
-	level: 9
-	paths:
-		- 'php-src'
-#	scanFiles:
-#		- 'php-tests/CommonTestClass.php'
-	excludePaths:
-		- 'php-tests/_autoload.php'
-		- 'php-tests/_bootstrap.php'
-#		- 'php-tests/CommonTestClass.php'
-	bootstrapFiles:
-		- 'php-tests/_autoload.php'
-	checkGenericClassInNonGenericObjectType: false
-	treatPhpDocTypesAsCertain: false
-	ignoreErrors:
-		# solved by unit tests - php7 has resources, not Socket class
-		- '#expects Socket, resource given.#'
-		- '#should return resource but returns Socket.#'
-		# quality WTF - strval, intval
-		- '#Parameter \#1 \$va[rl]u?e? of function [si][tn][rt]val expects#'
+    level: 9
+    paths:
+        - 'php-src'
+#    scanFiles:
+#        - 'php-tests/CommonTestClass.php'
+    excludePaths:
+        - 'php-tests/_autoload.php'
+        - 'php-tests/_bootstrap.php'
+#        - 'php-tests/CommonTestClass.php'
+    bootstrapFiles:
+        - 'php-tests/_autoload.php'
+    checkGenericClassInNonGenericObjectType: false
+    treatPhpDocTypesAsCertain: false
+    ignoreErrors:
+        # solved by unit tests - php7 has resources, not Socket class
+        - '#expects Socket, resource given.#'
+        - '#should return resource but returns Socket.#'
+        # quality WTF - strval, intval
+        - '#Parameter \#1 \$va[rl]u?e? of function [si][tn][rt]val expects#'

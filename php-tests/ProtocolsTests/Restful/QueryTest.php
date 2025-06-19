@@ -1,18 +1,13 @@
 <?php
 
-namespace ProtocolsTests\Restful;
+namespace tests\ProtocolsTests\Restful;
 
 
-use CommonTestClass;
+use tests\CommonTestClass;
 use kalanis\RemoteRequest\Connection;
 use kalanis\RemoteRequest\Protocols\Http;
 use kalanis\RemoteRequest\Protocols\Restful;
 use kalanis\RemoteRequest\RequestException;
-
-
-class QueryMock extends Restful\Query
-{
-}
 
 
 class QueryTest extends CommonTestClass

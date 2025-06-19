@@ -1,43 +1,49 @@
 {
-  "name": "alex-kalanis/remote-request",
-  "description": "PHP libraries for make queries onto remote servers",
-  "keywords": [
-    "restapi",
-    "rest",
-    "http",
-    "fsp",
-    "tcp",
-    "udp",
-    "curl",
-    "server",
-    "socket",
-    "fsocket",
-    "request"
-  ],
-  "license": "BSD-3-Clause",
-  "type": "library",
-  "require": {
-    "php": ">=7.4.0",
-    "ext-json": "*",
-    "ext-mbstring": "*",
-    "ext-sockets": "*"
-  },
-  "require-dev": {
-    "shipmonk/composer-dependency-analyser": "^1.4",
-    "phpstan/phpstan": "^1.0",
-    "phpstan/phpstan-phpunit": "^1.0",
-    "friendsofphp/php-cs-fixer": "^3.0",
-    "phpunit/phpunit": ">=7.2 <=9"
-  },
-  "suggest": {
-  },
-  "autoload": {
-    "psr-4": {
-      "kalanis\\RemoteRequest\\": "php-src/"
-    }
-  },
-  "scripts": {
-  },
-  "minimum-stability": "dev",
-  "prefer-stable": true
+    "name": "alex-kalanis/remote-request",
+    "description": "PHP libraries for make queries onto remote servers",
+    "keywords": [
+        "restapi",
+        "rest",
+        "http",
+        "fsp",
+        "tcp",
+        "udp",
+        "curl",
+        "server",
+        "socket",
+        "fsocket",
+        "request"
+    ],
+    "license": "BSD-3-Clause",
+    "type": "library",
+    "require": {
+        "php": ">=7.4.0",
+        "ext-json": "*",
+        "ext-mbstring": "*",
+        "ext-sockets": "*",
+        "ext-zlib": "*"
+    },
+    "require-dev": {
+        "shipmonk/composer-dependency-analyser": "^1.4",
+        "phpstan/phpstan": "^1.0",
+        "phpstan/phpstan-phpunit": "^1.0",
+        "friendsofphp/php-cs-fixer": "^3.0",
+        "phpunit/phpunit": ">=9.0 <11"
+    },
+    "suggest": {
+    },
+    "autoload": {
+        "psr-4": {
+            "kalanis\\RemoteRequest\\": "php-src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "tests\\": "php-tests/"
+        }
+    },
+    "scripts": {
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }

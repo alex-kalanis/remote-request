@@ -1,5 +1,7 @@
 <?php
 
+namespace tests;
+
 class CommonTestClass extends \PHPUnit\Framework\TestCase
 {
     /**

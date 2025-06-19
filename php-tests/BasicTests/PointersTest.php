@@ -1,32 +1,12 @@
 <?php
 
-namespace BasicTests;
+namespace tests\BasicTests;
 
 
-use CommonTestClass;
+use tests\CommonTestClass;
 use kalanis\RemoteRequest\Connection;
-use kalanis\RemoteRequest\Interfaces;
 use kalanis\RemoteRequest\Protocols;
 use kalanis\RemoteRequest\RequestException;
-use kalanis\RemoteRequest\Sockets;
-
-
-class EmptyTestSocket extends Sockets\ASocket
-{
-    protected function remotePointer(Interfaces\IConnectionParams $schema)
-    {
-        return null;
-    }
-}
-
-
-class ExceptionTestSocket extends Sockets\ASocket
-{
-    protected function remotePointer(Interfaces\IConnectionParams $schema)
-    {
-        throw new RequestException($this->getRRLang()->rrSocketCannotConnect());
-    }
-}
 
 
 class PointersTest extends CommonTestClass
@@ -37,7 +17,7 @@ class PointersTest extends CommonTestClass
      */
     public function testCallException(): void
     {
-        $processor = new Connection\Processor(new ExceptionTestSocket());
+        $processor = new Connection\Processor(new Pointers\ExceptionTestSocket());
         $processor->setConnectionParams(new Connection\Params\File());
         $processor->setData(new Protocols\Dummy\Query());
         $this->expectException(RequestException::class);
@@ -50,7 +30,7 @@ class PointersTest extends CommonTestClass
      */
     public function testCallNoPointer(): void
     {
-        $processor = new Connection\Processor(new EmptyTestSocket());
+        $processor = new Connection\Processor(new Pointers\EmptyTestSocket());
         $processor->setConnectionParams(new Connection\Params\File());
         $processor->setData(new Protocols\Dummy\Query());
         $this->expectException(RequestException::class);

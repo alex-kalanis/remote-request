@@ -1,38 +1,14 @@
 <?php
 
-namespace BasicTests;
+namespace tests\BasicTests;
 
 
-use CommonTestClass;
+use tests\CommonTestClass;
+use tests\BasicTests\Connection as test;
 use kalanis\RemoteRequest\Connection;
-use kalanis\RemoteRequest\Interfaces;
-use kalanis\RemoteRequest\Pointers;
 use kalanis\RemoteRequest\Protocols;
 use kalanis\RemoteRequest\RequestException;
 use kalanis\RemoteRequest\Sockets;
-
-
-class ConnectProcessorMock extends Connection\Processor
-{
-    public function __construct(?Sockets\ASocket $method = null, ?Interfaces\IRRTranslations $lang = null)
-    {
-        parent::__construct($method, $lang);
-        $this->processor = new PointerProcessorMock($lang);
-    }
-}
-
-
-class PointerProcessorMock extends Pointers\Processor
-{
-    public function processPointer($filePointer, Interfaces\IConnectionParams $schema): parent
-    {
-        $this->checkPointer($filePointer);
-        $this->writeRequest($filePointer, $schema);
-        rewind($filePointer); // FOR REASON
-        $this->readResponse($filePointer);
-        return $this;
-    }
-}
 
 
 class ConnectionTest extends CommonTestClass
@@ -78,10 +54,10 @@ class ConnectionTest extends CommonTestClass
         $query->maxLength = 2000;
         $params = new Connection\Params\Php();
         $params->setTarget(Connection\Params\Php::HOST_MEMORY);
-        $processor = new ConnectProcessorMock(new Sockets\Socket());
+        $processor = new test\ConnectProcessorMock(new Sockets\Socket());
         $processor->setConnectionParams($params);
         $processor->setData($query);
-        $processor = new ConnectProcessorMock(new Sockets\SharedInternal());
+        $processor = new test\ConnectProcessorMock(new Sockets\SharedInternal());
         $processor->setConnectionParams($params);
         $processor->setData($query);
         $processor->process();
@@ -97,7 +73,7 @@ class ConnectionTest extends CommonTestClass
         $content2 = str_repeat('ZYXWVUTSRQPONMLKJIHGFEDCBA9876543210zyxwvutsrqponmlkjihgfedcba', 10);
         $params = new Connection\Params\Php();
         $params->setTarget(Connection\Params\Php::HOST_MEMORY);
-        $processor = new ConnectProcessorMock(new Sockets\SharedInternal());
+        $processor = new test\ConnectProcessorMock(new Sockets\SharedInternal());
         $processor->setConnectionParams($params);
         $query1 = new Protocols\Dummy\Query();
         $query1->body = $content1;
@@ -118,7 +94,7 @@ class ConnectionTest extends CommonTestClass
     public function testNoConnectionParams(): void
     {
         $content1 = str_repeat('ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz', 10);
-        $processor = new ConnectProcessorMock(new Sockets\SharedInternal());
+        $processor = new test\ConnectProcessorMock(new Sockets\SharedInternal());
         // no connection params set
         $query1 = new Protocols\Dummy\Query();
         $query1->body = $content1;
@@ -136,7 +112,7 @@ class ConnectionTest extends CommonTestClass
     {
         $params = new Connection\Params\Php();
         $params->setTarget(Connection\Params\Php::HOST_MEMORY);
-        $processor = new ConnectProcessorMock(new Sockets\SharedInternal());
+        $processor = new test\ConnectProcessorMock(new Sockets\SharedInternal());
         $processor->setConnectionParams($params);
         if (!is_null($message)) {
             $query = new Protocols\Dummy\Query();

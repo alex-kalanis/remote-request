@@ -1,9 +1,9 @@
 <?php
 
-namespace ProtocolsTests\Http;
+namespace tests\ProtocolsTests\Http;
 
 
-use CommonTestClass;
+use tests\CommonTestClass;
 use kalanis\RemoteRequest\Protocols\Helper;
 use kalanis\RemoteRequest\Protocols\Http;
 use kalanis\RemoteRequest\RequestException;
@@ -16,7 +16,7 @@ class AnswerDecodeTest extends CommonTestClass
      */
     public function testStreamAbstract(): void
     {
-        $lib = new XDecoder();
+        $lib = new AnswerDecode\XDecoder();
         $this->assertFalse($lib->canDecode(''));
         $this->assertTrue($lib->canDecode('custom'));
 
@@ -77,7 +77,7 @@ class AnswerDecodeTest extends CommonTestClass
      */
     public function testStringCompress(): void
     {
-        $lib = new XStringDecoderCompress();
+        $lib = new AnswerDecode\XStringDecoderCompress();
         $lib->addStringDecoding(new Http\Answer\DecodeStrings\Compressed());
         $lib->addStringDecoding(new Http\Answer\DecodeStrings\Zipped());
         $string = 'abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -89,7 +89,7 @@ class AnswerDecodeTest extends CommonTestClass
      */
     public function testStringRaw(): void
     {
-        $lib = new XStringDecoderDeflate();
+        $lib = new AnswerDecode\XStringDecoderDeflate();
         $lib->addStringDecoding(new Http\Answer\DecodeStrings\Compressed());
         $lib->addStringDecoding(new Http\Answer\DecodeStrings\Zipped());
         $string = 'abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -102,7 +102,7 @@ class AnswerDecodeTest extends CommonTestClass
      */
     public function testStreamRaw(): void
     {
-        $lib = new XStreamDecoder();
+        $lib = new AnswerDecode\XStreamDecoder();
         $string = 'abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $stream = Helper::getMemStorage();
         fwrite($stream, $string);
@@ -116,7 +116,7 @@ class AnswerDecodeTest extends CommonTestClass
      */
     public function testStreamThru(): void
     {
-        $lib = new XStreamDecoder();
+        $lib = new AnswerDecode\XStreamDecoder();
         $string = 'abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $stream = Helper::getMemStorage();
         fwrite($stream, $string);
@@ -126,74 +126,7 @@ class AnswerDecodeTest extends CommonTestClass
 
         // added one
         rewind($stream);
-        $lib->addStreamDecoder(new XDecoder());
+        $lib->addStreamDecoder(new AnswerDecode\XDecoder());
         $this->assertEquals($string . '---!!!', stream_get_contents($lib->processStreamDecode($stream), -1, 0));
-    }
-}
-
-
-class XStreamDecoder
-{
-    use Http\Answer\DecodeStreams\TDecoding;
-
-    public function getAllHeaders(): array
-    {
-        return [
-            'Server' => ['PhpUnit/9.3.0'],
-            'Content-Length' => ['25'],
-            'Content-Type' => ['text/plain'],
-            'Content-Encoding' => ['compress,deflate,gzip,custom'],
-            'Transfer-Encoding' => ['chunked'],
-            'Connection' => ['Closed'],
-        ];
-    }
-}
-
-
-class XStringDecoderCompress
-{
-    use Http\Answer\DecodeStrings\TDecoding;
-
-    public function getAllHeaders(): array
-    {
-        return [
-            'Server' => ['PhpUnit/9.3.0'],
-            'Content-Length' => ['25'],
-            'Content-Type' => ['text/plain'],
-            'Content-Encoding' => ['compress'],
-            'Transfer-Encoding' => ['chunked'],
-            'Connection' => ['Closed'],
-        ];
-    }
-}
-
-
-class XStringDecoderDeflate
-{
-    use Http\Answer\DecodeStrings\TDecoding;
-
-    public function getAllHeaders(): array
-    {
-        return [
-            'Server' => ['PhpUnit/9.3.0'],
-            'Content-Length' => ['25'],
-            'Content-Type' => ['text/plain'],
-            'Content-Encoding' => ['deflate'],
-            'Transfer-Encoding' => ['chunked'],
-            'Connection' => ['Closed'],
-        ];
-    }
-}
-
-
-class XDecoder extends Http\Answer\DecodeStreams\ADecoder
-{
-    protected array $contentEncoded = ['custom'];
-
-    public function processDecode($content)
-    {
-        fseek($content, 0, SEEK_END);
-        fwrite($content, '---!!!');
-        return $content;
     }
 }

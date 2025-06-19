@@ -1,49 +1,13 @@
 <?php
 
-namespace ProtocolsTests\Http;
+namespace tests\ProtocolsTests\Http;
 
 
-use CommonTestClass;
+use tests\CommonTestClass;
 use kalanis\RemoteRequest\Connection;
 use kalanis\RemoteRequest\Protocols\Dummy;
 use kalanis\RemoteRequest\Protocols\Http;
 use kalanis\RemoteRequest\RequestException;
-
-
-class TestProcessor extends Connection\Processor
-{
-    public function process(): Connection\Processor
-    {
-        return $this;
-    }
-
-    /**
-     * @throws RequestException
-     * @return resource|null
-     */
-    public function getResponse()
-    {
-        return CommonTestClass::stringToResource('HTTP/0.1 900 KO' . Http::DELIMITER);
-    }
-}
-
-
-class ContentTestProcessor extends TestProcessor
-{
-    public function process(): Connection\Processor
-    {
-        return $this;
-    }
-
-    /**
-     * @throws RequestException
-     * @return resource|null
-     */
-    public function getResponse()
-    {
-        return CommonTestClass::stringToResource('HTTP/0.1 901 KO' . Http::DELIMITER . Http::DELIMITER . 'abcdefghijkl');
-    }
-}
 
 
 class SimpleQueryTest extends CommonTestClass
@@ -54,7 +18,7 @@ class SimpleQueryTest extends CommonTestClass
      */
     public function testSetsSimple(): void
     {
-        $result = $this->queryOnMock(new TestProcessor());
+        $result = $this->queryOnMock(new SimpleQuery\TestProcessor());
         $this->assertEquals(900, $result->getCode());
         $this->assertEquals('', $result->getContent());
     }
@@ -65,7 +29,7 @@ class SimpleQueryTest extends CommonTestClass
      */
     public function testSetsBody(): void
     {
-        $result = $this->queryOnMock(new ContentTestProcessor());
+        $result = $this->queryOnMock(new SimpleQuery\ContentTestProcessor());
         $this->assertEquals(901, $result->getCode());
         $this->assertEquals('abcdefghijkl', $result->getContent());
     }

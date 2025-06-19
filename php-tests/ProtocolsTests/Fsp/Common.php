@@ -1,6 +1,6 @@
 <?php
 
-namespace ProtocolsTests\Fsp;
+namespace tests\ProtocolsTests\Fsp;
 
 
 class Common

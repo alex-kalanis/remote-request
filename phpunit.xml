@@ -1,14 +1,9 @@
 <phpunit
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/9.3/phpunit.xsd"
+        xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.5/phpunit.xsd"
         bootstrap="php-tests/_bootstrap.php"
         backupGlobals="false"
-        backupStaticAttributes="false"
         colors="true"
-        convertErrorsToExceptions="true"
-        convertNoticesToExceptions="true"
-        convertWarningsToExceptions="true"
-        forceCoversAnnotation="false"
         processIsolation="false"
         stopOnError="false"
         stopOnFailure="false"
@@ -19,7 +14,11 @@
         timeoutForMediumTests="10"
         timeoutForLargeTests="60"
         defaultTestSuite="ALL"
-        verbose="true">
+        displayDetailsOnTestsThatTriggerWarnings="true"
+        cacheDirectory=".phpunit.cache"
+        backupStaticProperties="false"
+        requireCoverageMetadata="false"
+>
 
     <!-- phpunit 9+ -->
     <coverage>
@@ -37,23 +36,6 @@
             <text outputFile="php://stdout" showUncoveredFiles="false"/>
         </report>
     </coverage>
-
-    <!-- phpunit 8- -->
-    <filter>
-        <whitelist>
-            <directory suffix=".php">php-src/Connection</directory>
-            <directory suffix=".php">php-src/Pointers</directory>
-            <directory suffix=".php">php-src/Protocols</directory>
-            <directory suffix=".php">php-src/Schemes</directory>
-            <directory suffix=".php">php-src/Sockets</directory>
-            <directory suffix=".php">php-src/Traits</directory>
-            <file>php-src/RequestException.php</file>
-        </whitelist>
-    </filter>
-    <logging>
-        <log type="coverage-text" target="php://stdout" showUncoveredFiles="false" />
-        <log type="coverage-clover" target="php-tests/data/clover.xml" />
-    </logging>
 
     <!-- rest as usual -->
     <testsuites>

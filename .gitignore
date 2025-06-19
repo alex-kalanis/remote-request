@@ -14,9 +14,16 @@ __pycache__
 /*.egg
 
 # checks
-phpunit
-phpunit*
 .phpunit*
+phpunit
+phpunit-*
+.phpunit.cache/*
 
 # external libs
 php-tests/external/
+php-tests/data/clover.xml
+discard/
+
+# environment
+docker-compose.yml
+phpdocker/

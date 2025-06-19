@@ -1,56 +1,12 @@
 <?php
 
-namespace ProtocolsTests\Http;
+namespace tests\ProtocolsTests\Http;
 
 
-use CommonTestClass;
+use tests\CommonTestClass;
 use kalanis\RemoteRequest\Connection;
 use kalanis\RemoteRequest\Protocols\Http;
 use kalanis\RemoteRequest\RequestException;
-
-
-class QueryMock extends Http\Query
-{
-    /**
-     * Overwrite because random string in testing does not work
-     * @return string
-     */
-    protected function generateBoundary(): string
-    {
-        return '--PHPFSock--';
-    }
-}
-
-
-class QueryAuthBasicMock extends Http\Query\AuthBasic
-{
-    /**
-     * Overwrite because random string in testing does not work
-     * @return string
-     */
-    protected function generateBoundary(): string
-    {
-        return '--PHPFSock--';
-    }
-}
-
-
-class QueryAuthDigestMock extends Http\Query\AuthDigest
-{
-    /**
-     * Overwrite because random string in testing does not work
-     * @return string
-     */
-    protected function generateBoundary(): string
-    {
-        return '--PHPFSock--';
-    }
-
-    protected function getRandomString(): string
-    {
-        return '0a4f113b';
-    }
-}
 
 
 class QueryTest extends CommonTestClass
@@ -208,7 +164,7 @@ class QueryTest extends CommonTestClass
 
     protected function prepareSimple(): Http\Query
     {
-        $lib = new QueryMock();
+        $lib = new Query\QueryMock();
         $lib->setMethod('get');
         $lib->setPath('/example');
         $lib->setInline(false);
@@ -220,7 +176,7 @@ class QueryTest extends CommonTestClass
 
     protected function prepareAuthBasic(): Http\Query
     {
-        $lib = new QueryAuthBasicMock();
+        $lib = new Query\QueryAuthBasicMock();
         $lib->setMethod('get');
         $lib->setPath('/example');
         $lib->setInline(false);
@@ -233,7 +189,7 @@ class QueryTest extends CommonTestClass
 
     protected function prepareAuthDigest(): Http\Query
     {
-        $lib = new QueryAuthDigestMock();
+        $lib = new Query\QueryAuthDigestMock();
         $lib->setMethod('get');
         $lib->setPath('/dir/index.html');
         $lib->setInline(false);

@@ -1,9 +1,9 @@
 <?php
 
-namespace ProtocolsTests\Fsp;
+namespace tests\ProtocolsTests\Fsp;
 
 
-use CommonTestClass;
+use tests\CommonTestClass;
 use kalanis\RemoteRequest\Connection;
 use kalanis\RemoteRequest\Interfaces;
 use kalanis\RemoteRequest\Protocols\Fsp;

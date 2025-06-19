@@ -1,6 +1,15 @@
 Changelog
 =========
 
+#### 6.3.1 - 2025-06-20
+
+* Update tests to newer version
+
+#### 6.3.0 - 2024-03-31
+
+* Bump versions of php
+* Added dependency analyzer
+
 #### 6.2.0 - 2023-05-26
 
 * Http response shows reason (in the way with preparation for another package)
