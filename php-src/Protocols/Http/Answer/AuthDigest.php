@@ -31,7 +31,7 @@ class AuthDigest extends Http\Answer
             $headerData = strval($this->getHeader('WWW-Authenticate'));
             preg_match('#^\s?([^\s]+)\s#i', $headerData, $types);
             preg_match_all('#([^\s]+)="([^"]+)"#i', $headerData, $matches);
-            $this->authType = $types[1] ?: 'Basic';
+            $this->authType = $types[1] ?? 'Basic';
             foreach ($matches[0] as $key => $info) {
                 $this->authHeader[$matches[1][$key]] = $matches[2][$key];
             }

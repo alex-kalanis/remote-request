@@ -29,7 +29,7 @@ class Answer extends Protocols\Dummy\Answer
     protected string $reason = '';
     protected int $maxHeaderSize = 17000; // over 16384 - 16K
     protected int $maxStringSize = 10000;
-    /** @var int<0, max> */
+    /** @var int<1, max> */
     protected int $seekSize = 1024; // in how big block we will look for delimiters
     protected int $seekPos = 1000; // must be reasonably lower than seekSize - because it's necessary to find delimiters even on edges
 
